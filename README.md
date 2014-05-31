@@ -1,15 +1,15 @@
 footprint
 =========
 
-Footprint of hoxily.
+Footprints of hoxily.
 
-Sorry for the inconvenience of language and culture. You need a translator like Google or even recognize Chinese yourself. I *do not* translate these footprints.
+Sorry for the inconvenience of language and culture. You need a translator like Google or even understand Chinese yourself. I **do not** translate these footprints.
 
-Photoes of footprint are not provided here. There will be only texts due to storage limitation. And texts are more easy to spread.
+Photos of footprint are not provided here. There will be only texts due to storage limitation. And texts are more easy to spread.
 
 May these footprints helpful.
 
-# Index
+# Indexes
 ## 2004
 [LINK to year 2004](./2004/index.md "Index of year 2004")
 ## 2005
@@ -34,5 +34,5 @@ May these footprints helpful.
 [LINK to year 2014](./2014/index.md "Index of year 2014")
 
 # Copyright
-See [License](./LICENSE "the Unlicense")
+See [License](./LICENSE "the Unlicense").
 
