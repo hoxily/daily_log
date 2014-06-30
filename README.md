@@ -1,5 +1,7 @@
 footprint
 =========
+["Those who cannot remember the past are condemned to repeat it." -- George Santayana](http://en.wikipedia.org/wiki/George_Santayana "George Santayana - Wikipedia, the free encyclopedia")
+
 
 Footprints of hoxily.
 
