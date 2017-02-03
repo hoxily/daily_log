@@ -1,0 +1,46 @@
+2014-03-19 working log
+
+todo：
+3. A文件的解码入库。
+1. 撸一份符合江苏盐城这边国家指导报报文文件格的说明书出来。去他妈的《全国城市精细化天气预报产品文件格式》！
+2. 盐城市网络调整（网关从10.125.1.254变为10.125.1.1），需要对应调整NetGear路由器与7台虚拟机与物理机。
+----
+2014/3/18 19:35:24:WebTransInput:Try http://image.weather.gov.cn/product/2014/201403/20140318/APWF/SEVP_NMC_APWF_SFER_EAIRP_ACHN_LNO_P9_20140318000002424.JPG fail :未能解析此远程名称: 'image.weather.gov.cn'
+远程进入YCQX-TRANS里面，执行 ping www.baidu.com 返回Ping 请求找不到主机 www.baidu.com。请检查该名称，然后重试。
+C:\Users\ym>nslookup www.baidu.com
+DNS request timed out.
+    timeout was 2 seconds.
+服务器: UnKnown
+Address: 10.125.1.115
+DNS request timed out.
+    timeout was 2 seconds.
+DNS request timed out.
+    timeout was 2 seconds.
+DNS request timed out.
+    timeout was 2 seconds.
+DNS request timed out.
+    timeout was 2 seconds.
+*** 请求 UnKnown 超时
+
+C:\Users\ym>nslookup www.baidu.com 8.8.8.8
+服务器: google-public-dns-a.google.com
+Address: 8.8.8.8
+非权威应答:
+名称: www.a.shifen.com
+Addresses: 115.239.210.26
+          115.239.210.27
+Aliases: www.baidu.com
+
+这说明YCQX-DC1（10.125.1.115）出问题了。
+检查YCQX-DC1的网关设置：发现还是旧的10.125.1.254，改之，OK！
+我得一个一个较对过去，检查这几台机器的网关设置是不是正确。
+检查完毕
+
+----
+初javascript坑了，提示Syntax Error： unexpected token [
+结果原因是
+var keyList[2] = keyList[2].split(',');
+本来是想新声明一个变量，后来想干脆覆盖，但是var没有删去。
+它应该提醒我声明时变量名不合法呀。那我就很快找到原因了。
+----
+aspx页面判断请求方法是否是POST方法，不是看Page.IsPostBack是否为true，而是看Request.HTTPMethod == "POST"

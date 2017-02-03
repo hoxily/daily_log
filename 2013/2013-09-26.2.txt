@@ -1,0 +1,5 @@
+GPPLite Codec Sample
+编解码器样例。
+\\10.125.1.202\Share\CodecSample
+
+给GPPLite添加 TransWebDef，增加抓取WEB Page的能力。

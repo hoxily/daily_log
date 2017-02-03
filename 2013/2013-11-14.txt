@@ -1,0 +1,10 @@
+2013-11-14 working log
+
+sql server 2012 安装程序，安装26MB的Windows Update时提示，需要重新启动计算机，一个或多个受影响的文件具有挂起的操作。安装过程完成后，必须重新启动计算机。
+由于GetResourceByID每次只能获取一个Resource，所以还得有其他方法获得ID列表，包括获取所有Resource的ID列表，以及指定了ParentClass的Resource的ID列表。
+由于Resource表重新设计，以上方法无效了。
+----
+输入：
+ResourceID， TimeFrom， TimeTo， StationID
+输出：
+如果指定了StationID，那么

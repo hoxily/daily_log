@@ -1,0 +1,102 @@
+2014-01-13 working log
+
+马荣想要这样架构：
+[9:09:01] 敏 杨: 资源目录作为底的数据访问接口；
+[9:09:40] 敏 杨: 资源目录之上的WFS.WEB作为数据展示的嵌入页；
+[9:10:43] 敏 杨: 最上层才是评分页面，用框架页的方式嵌入WFS.WEB中的特定ID的资源的页面。
+----
+说是资源目录，实际上干的事情却很杂。
+既提供C#语言级别的数据访问接口，又得配合WFS.WEB来提供表格与过程图的WEB页面。
+----
+前端页面与数据混杂。
+马荣设想WFS.WEB提供的可嵌入式页面，其QueryString中加上css样式引用和Javascript代码引用的扩展，两者配合来解决前端界面样式问题。
+----
+评分页面错误之处：自动站实况气温显示应该是摄氏度，看起来像是0.1摄氏度；表格标题部分，即报文X……，填写正确的创建时间与预报员编号；
+需要调整之处：显示页面时，应该默认显示当前日期的报文检验结果，无需按下确认按钮。
+----
+自动站数据解码有误。温度明显不正确。一开始以为是文件格式规范太老，与现有报文实际格式不匹配。
+再次查看《附件 地面气象要素数据文件格式（V1.0）》文档，终于发现了：“3.数据记录单位和特殊说明”！
+我勒了去，里面的温度、变温、露点温度竟然都是用基值法存储的。
+设实际值为x摄氏度，那么存入报文的值y = 1000 - 10x
+可以求得 x = 100 - 0.1y。
+这个关系相当复杂（:p)，这又牵扯出GistarLite.Codec.NumericOption这个东西来，也就是<Field>{FieldName: Float, Option1, Option2, ...</Field> 中的各种Option。
+----
+GistarLite.Codec.NumericOption
+数值(Float)选项。该类用于定义报文记录的Float类型的值如何通过各种参数选项转化为原始值。比如缩放，偏移等。
+NumericOption当前一共有如下几个选项可用：
+选项名字
+	参数	
+含义
+	
+说明
+Offset
+	
+offset
+	固定偏移量	
+
+Ignore
+	
+	
+条件偏移
+	ignoreSep与ignoreOffset必同时出现
+
+	
+ignoreSep
+	
+条件偏移的条件值
+	
+
+
+	
+ignoreOffset
+	
+条件偏移的偏移量
+	
+Scale
+	
+scale
+	缩放系数	
+GKTemp
+	
+无
+	
+是否为高空温度？
+	
+
+GKWind
+	
+无
+	
+是否为高空风速？
+	
+
+GKDewDiff
+	
+无
+	
+是否为高空露点差？
+	
+
+注释：选项的参数紧跟在选项名之后，并以英文方括号包裹该选项的所有参数；选项的各个参数之间以英文分号分隔。各选项之间由英文逗号分隔。相同选项重复定义时仅最后一个有效。例子： <Field>{FieldName:Float,Scale[0.1],Offset[-1000],Ignore[200;10000]</Field>。
+	
+
+	
+
+	
+
+假设报文中字段值直接转Double值为input，
+那么通过NumericOption的Apply方法转换后的结果有且仅有两种：
+1.如果input小于ignoreSep，那么结果output = (input + ignoreOffset) * scale + offset;
+2.如果input大于或者等于ignoreSep，那么结果output = input * scale + offset;
+由于NumericOption的Apply一定会被执行，所以对其中的默认值有特定要求。
+假如所有的选项都没有设置，那么offset、ignoreSep 、ignoreOffset都为0.0；GK开头的三个选项默认值为false；scale默认为1.0。
+这样就保持了报文原始数据不变的能力。
+----
+因此，温度、变温、露点温度的选项为：
+Scale[-0.1],Offset[100]
+对应于 x = -0.1y + 100 这条关系式。
+----
+其时气压解码之前也是照抄的Scale[0.1],Ignore[5000;10000]。其中水汽压需要改过来。
+已修正。
+另，数据库中的HiTemp、HiTempTime与LowTemp、LowTempTime出现次序与入库配置文件中的次序不对，需要对调。
+已修正。

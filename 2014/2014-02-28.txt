@@ -1,0 +1,6 @@
+2014-02-28 working log
+
+qixin.exe 数据库文件密码
+ p w d = q x 7 5 1 2 2 4 1 0 5   
+pwd：qx751224105
+用户名：admin

@@ -1,0 +1,15 @@
+2014-01-21 working log
+
+昨天的空气质量预报报文件正确下发了，在\\10.124.32.201\benj\SendupBK\SEVP\里面可以找到。
+马荣说除去SCMOC（中央气象台下发的全国预报指导产品）、盐城上传的修订预报，还有SNWFD（中央气象台下发的全国修订预报汇总产品）需要入库。但是在\\172.21.32.201\FTPServer\BENJ\RFFC\SNWFD目录下的报文文件最新的为2013年4月17日。可能存放位置并不在这里。
+----
+highcharts图中x轴要素太过密集，可以用 http://www.highcharts.com/demo/dynamic-master-detail 所展示的Master-detail图来展示。
+另外，雨量展示用柱状图，不用折线。
+----
+不知为何，对aspx页面设置的断点无效。
+但是图又出不来，这下麻烦了。
+找到个方法，http://msdn.microsoft.com/zh-cn/library/ie/0bwt76sk(v=vs.94).aspx
+在脚本中插入“debugger”，即可设置断点。
+----
+蛋疼，你妹呀，Date.UTC方法返回结果竟然不是Date对象。
+怪不得给出如此奇怪的对比结果来。

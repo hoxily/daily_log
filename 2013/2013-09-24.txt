@@ -1,0 +1,3 @@
+给GPPLite 添加 TransFileTreeDef
+
+TransFtpTreeDef 的构造函数初始化基类时传递的TransItemType为什么不是TransItemType.FtpTree

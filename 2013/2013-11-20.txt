@@ -1,0 +1,156 @@
+2013-11-20 working log
+
+针对DataTable不能被DataContractJsonSerializer序列化后反序列化，原因生成的根本不是Json格式，而是xml格式，反序列化时Xml报遇到\0字符的错误。
+另一方面，DataTable也不能被System.Web.Script.Serialization.JavaScriptSerializer序列化，原因是DataTable里因有循环引用。
+参考 二维数组，DataTable类的Json字符串反序列化为DataTable [ http://cheeruplc.iteye.com/blog/1153951 ] 一文，
+可以设计如下的DataTable到Json的转换方式，反之亦然。
+对于二维的表格，可以理解为每一行数据就是一个键-值对集合。其中的键即是列名，值则是具体的数据值。因此可以用Dictionary<string, object>来表达。
+整张表又是由若干行数据构成，即Dictionary<string, object> 的数组；
+最后，还可以保留一下表名，如此一来，取到这个Json串的程序就可以完全还原DataTable了。
+原文摘抄如下（绿色标注）：
+ #region 将Json 字符串格式反序列话为datatable类型
+string jsonStr = "{\"data\":[{\"id\":\"0\",\"name\":\"name0\"},{\"id\":\"1\",\"name\":\"name1\"},{\"id\":\"2\",\"name\":\"name2\"}]}";
+JavaScriptSerializer jss = new JavaScriptSerializer();
+var obj=jss.DeserializeObject(jsonStr);
+Dictionary<string, object> dic = (Dictionary<string, object>)obj;
+var data = dic["data"];//得到所有行的信息，数组类型，每一个数组是一个Dictionary类型的键值对，即为列
+Array rows =(Array)data;//这里从rows 的每一个元素为一个Dictionary类的对象，相当于datatable中的一行的数据
+DataTable dt = new DataTable();
+foreach (Dictionary<string, object> cols in rows)
+{
+    //为datatable添加列
+     if (dt.Columns.Count == 0)
+     {
+          foreach (string key in cols.Keys)
+          {
+              dt.Columns.Add(key);
+          }
+      }
+    DataRow dr = dt.NewRow();
+    //为行中的每一列列赋值
+    foreach (string keyname in cols.Keys)
+    {
+        dr[keyname] = cols[keyname];
+    }
+    dt.Rows.Add(dr);
+}
+this.dataGridView1.DataSource = dt;
+#endregion
+----
+上面这段代码在.net 4.0环境下已不可运行，因为 DataRow的构造方法被 protected internal 修饰。
+但是可以通过DataTable对象的NewRow方法创建一个新的DataRow [ http://msdn.microsoft.com/zh-cn/library/System.Data.DataRow(v=vs.100).aspx ]，
+“
+The following example creates a new DataRow by calling the NewRow method of the DataTable object.”
+----
+该方法效率低下，1400行的表格，JSON文本以UTF-8编码有1MB大小。
+这时将DataTable转成JSON的时间可以忍受。
+但是返过来将JSON转成DataTable所花时间是10秒以上，无法忍受。
+----
+数据流转问题
+如果ShowRes.aspx页面不在点击“调阅”按钮（浏览器POST）后直接将表格展示出来做为回应；而是将取得的表格数据进一步POST到/Show/DataGrid.aspx，交给/Show/DataGrid.aspx负责表格数据的展示。那么最终呈现在用户浏览器上的表格其实就是经过了三次流转。
+1.从服务器的数据库中取出，到了服务器端上运行的IIS服务上。
+2.是从IIS服务内部的某一处，转移到IIS服务内部的另一处地方。
+3.是从IIS服务器，传到用户浏览器上。
+第一步和第三步是不可避免的，但是第二就显得有些多余。
+因此，考虑按下“调阅”按钮后，直接构建表格，在ShowRes.aspx页面上作展示。免去了第二步的多余操作。
+另外，由于暂时没有想到合适的办法，实现上面所说的第二步，即在IIS服务器内部，将取得的数据POST到/Show/DataGrid.aspx，然后页面跳转到/Show/DataGrid.aspx。
+能想到的办法是按下“调阅”按钮后，服务器取得数据，然后生成一个含有即要在浏览器上进行POST操作的页面，通过Javascript方式，在浏览器上进行POST请求，最后转到/Show/DataGrid.aspx页面。
+这种办法将会有四次流转，分别如下所示：
+1.从数据库到IIS服务器，取数据；
+2.从IIS服务器到浏览器，返回含有json表示的数据，并且将要进行POST操作的临时页面；
+3.从浏览器到IIS服务器，向/Show/DataGrid.aspx提到表格数据；
+4.从IIS服务器到浏览器，/Show/DataGrid.aspx页面生成页面内容返回给浏览器；
+这是相当的不合理呢。
+综上所述，直接在ShowRes.aspx页面展示表格数据比较合理。
+----
+数据表终于显示在web页面上了，但是汤军义说需要分页机制，他说给用户看的数据绝不能这么乱槽槽的。
+1.数据一股脑地去服务器端取出，分页借助客户端脚本来实现。
+2.数据本身就是逐页取出，完全不借助客户端脚本；于是资源目录里应该有某种方式可以按照（pageIndex, pageSize）一对参数方式来精确到该页数据，而不是一次性返回全部数据。
+----
+啊嚏，完了我也感冒了。
+----
+运行log检查
+检查YCQX-Trans上运行的GistarTransServer运行log（gppliteservice_20131120.log），按照"exception"（不区分大小写）来搜索，发现如下情况：
+2013/11/20 0:01:02:TransFileTree2:完成开始在\\10.124.32.197\radar\Jwproducts\检索RadJw201311191600*，结果:0个文件
+2013/11/20 0:01:02:TransFileTree2:开始在\\10.124.32.197\radar\Jwproducts\检索RadJw201311191554*
+2013/11/20 0:01:03:时间解析器:无法根据模板'yyyy-MM-dd HH:mm:ss'解析:none  [1]
+2013/11/20 0:01:03:传输服务，任务江苏土壤水分:完成
+2013/11/20 0:01:01正在处理第1个，开始装载:default.aspx
+http://172.21.32.32/web/
+0001/1/1 0:00:00
+0
+
+20131120000000000 完毕，结果:装载成功
+2013/11/20 0:01:03开始执行处理0
+2013/11/20 0:01:03结束，结果True:解码结束，共处理84组数据
+2013/11/20 0:01:03开始传送目标0
+2013/11/20 0:01:03结束，结果False:插入出错:异常:SqlException [2]
+内容 System.Data.SqlClient.SqlException (0x80131904): 从 varchar 数据类型到 datetime 数据类型的转换产生一个超出范围的值。
+   在 System.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   在 System.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   在 System.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   在 System.Data.SqlClient.SqlDataReader.TryHasMoreRows(Boolean& moreRows)
+   在 System.Data.SqlClient.SqlDataReader.TryReadInternal(Boolean setTimeout, Boolean& more)
+   在 System.Data.SqlClient.SqlDataReader.Read()
+   在 System.Data.SqlClient.SqlCommand.CompleteExecuteScalar(SqlDataReader ds, Boolean returnSqlValue)
+   在 System.Data.SqlClient.SqlCommand.ExecuteScalar()
+   在 GistarLite.Filler.GroupDef.Fill(DBFiller df, Values value, StringBuilder info, Int32& recordCount, Int32& ignoreCount, Int32& updateCount)
+ClientConnectionId:7e1abaa2-321b-47bc-970d-97bdd31e3bc7 ]
+ 来自:.Net SqlClient Data Provider
+目标:Void OnError(System.Data.SqlClient.SqlException, Boolean, System.Action`1[System.Action])
+位置: 在 System.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   在 System.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   在 System.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   在 System.Data.SqlClient.SqlDataReader.TryHasMoreRows(Boolean& moreRows)
+   在 System.Data.SqlClient.SqlDataReader.TryReadInternal(Boolean setTimeout, Boolean& more)
+   在 System.Data.SqlClient.SqlDataReader.Read()
+   在 System.Data.SqlClient.SqlCommand.CompleteExecuteScalar(SqlDataReader ds, Boolean returnSqlValue)
+   在 System.Data.SqlClient.SqlCommand.ExecuteScalar()
+   在 GistarLite.Filler.GroupDef.Fill(DBFiller df, Values value, StringBuilder info, Int32& recordCount, Int32& ignoreCount, Int32& updateCount)
+2013/11/20 2:25:03:传输任务 江苏雷达产品数据:出错，异常:IOException [3]
+内容 System.IO.IOException: 找不到网络路径。
+   在 System.IO.__Error.WinIOError(Int32 errorCode, String maybeFullPath)
+   在 System.IO.FileSystemEnumerableIterator`1.CommonInit()
+   在 System.IO.FileSystemEnumerableIterator`1..ctor(String path, String originalUserPath, String searchPattern, SearchOption searchOption, SearchResultHandler`1 resultHandler, Boolean checkHost)
+   在 System.IO.Directory.InternalGetFileDirectoryNames(String path, String userPathOriginal, String searchPattern, Boolean includeFiles, Boolean includeDirs, SearchOption searchOption, Boolean checkHost)
+   在 System.IO.Directory.InternalGetFiles(String path, String searchPattern, SearchOption searchOption)
+   在 GistarLite.FileUtility.GetFilesWithInfo(String user, String password, String folder, String searchPattern, Dictionary`2& infos, SearchOption searchOption)
+   在 GistarLite.Trans.TransFileTree2Def.GetUnProcessedItems(String taskType, TransDB db)
+   在 GistarLite.Trans.TaskTypeDef.DoTask(TransDB db, String& info) ]
+ 来自:mscorlib
+目标:Void WinIOError(Int32, System.String)
+位置: 在 System.IO.__Error.WinIOError(Int32 errorCode, String maybeFullPath)
+   在 System.IO.FileSystemEnumerableIterator`1.CommonInit()
+   在 System.IO.FileSystemEnumerableIterator`1..ctor(String path, String originalUserPath, String searchPattern, SearchOption searchOption, SearchResultHandler`1 resultHandler, Boolean checkHost)
+   在 System.IO.Directory.InternalGetFileDirectoryNames(String path, String userPathOriginal, String searchPattern, Boolean includeFiles, Boolean includeDirs, SearchOption searchOption, Boolean checkHost)
+   在 System.IO.Directory.InternalGetFiles(String path, String searchPattern, SearchOption searchOption)
+   在 GistarLite.FileUtility.GetFilesWithInfo(String user, String password, String folder, String searchPattern, Dictionary`2& infos, SearchOption searchOption)
+   在 GistarLite.Trans.TransFileTree2Def.GetUnProcessedItems(String taskType, TransDB db)
+   在 GistarLite.Trans.TaskTypeDef.DoTask(TransDB db, String& info)
+2013/11/20 2:25:03:传输任务 江苏雷达拼图数据:出错，异常:IOException [4]
+内容 System.IO.IOException: 找不到网络路径。
+   在 System.IO.__Error.WinIOError(Int32 errorCode, String maybeFullPath)
+   在 System.IO.FileSystemEnumerableIterator`1.CommonInit()
+   在 System.IO.FileSystemEnumerableIterator`1..ctor(String path, String originalUserPath, String searchPattern, SearchOption searchOption, SearchResultHandler`1 resultHandler, Boolean checkHost)
+   在 System.IO.Directory.InternalGetFileDirectoryNames(String path, String userPathOriginal, String searchPattern, Boolean includeFiles, Boolean includeDirs, SearchOption searchOption, Boolean checkHost)
+   在 System.IO.Directory.InternalGetFiles(String path, String searchPattern, SearchOption searchOption)
+   在 GistarLite.FileUtility.GetFilesWithInfo(String user, String password, String folder, String searchPattern, Dictionary`2& infos, SearchOption searchOption)
+   在 GistarLite.Trans.TransFileTree2Def.GetUnProcessedItems(String taskType, TransDB db)
+   在 GistarLite.Trans.TaskTypeDef.DoTask(TransDB db, String& info) ]
+ 来自:mscorlib
+目标:Void WinIOError(Int32, System.String)
+位置: 在 System.IO.__Error.WinIOError(Int32 errorCode, String maybeFullPath)
+   在 System.IO.FileSystemEnumerableIterator`1.CommonInit()
+   在 System.IO.FileSystemEnumerableIterator`1..ctor(String path, String originalUserPath, String searchPattern, SearchOption searchOption, SearchResultHandler`1 resultHandler, Boolean checkHost)
+   在 System.IO.Directory.InternalGetFileDirectoryNames(String path, String userPathOriginal, String searchPattern, Boolean includeFiles, Boolean includeDirs, SearchOption searchOption, Boolean checkHost)
+   在 System.IO.Directory.InternalGetFiles(String path, String searchPattern, SearchOption searchOption)
+   在 GistarLite.FileUtility.GetFilesWithInfo(String user, String password, String folder, String searchPattern, Dictionary`2& infos, SearchOption searchOption)
+   在 GistarLite.Trans.TransFileTree2Def.GetUnProcessedItems(String taskType, TransDB db)
+   在 GistarLite.Trans.TaskTypeDef.DoTask(TransDB db, String& info)
+一共四处Exception。
+其中[3]、[4]应该是雷达数据共享服务器问题，导致无法连上。
+[1]所详的时间解析器不能解析none，可能是传递给它的时间字符串格式不正确。由于不清楚这到底是哪一个任务给出的log，所以无法定位。
+[2]所说的DateTime类型范围不正确应该是[1]无法解析所造成的，解析结果很可能返回了DateTime的default值。
+----
+裴道好曰，11月21日星期四下午13:30需要南京那边到场开会，自驾。
+由于车子比较小，汤军义与杨敏可能需要自己坐大巴才能去。

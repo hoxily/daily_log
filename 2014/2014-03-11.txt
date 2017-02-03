@@ -1,0 +1,13 @@
+2014-03-11 working log
+
+呃，迟到了15分钟。
+
+他妈的，画个图都这么难。
+
+呃，画了个草图。每种数据类型得独立配置js文件。
+
+10.125.1.120上的网站：
+ResourceManagement
+YCWFSTest
+YCYBPF
+可用的Web部署帐号：YCYB域上的tjy、mr、ym。

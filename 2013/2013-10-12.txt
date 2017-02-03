@@ -1,0 +1,4 @@
+2013-10-12 working log
+
+15:00
+---> WebUtility，没有考虑到gzip压缩的回答报文正文，GetWebString和GetWebStringSys里对回应Stream的读取竟然是每255个字节就使用utf8或Encoding.Default来解码。这样子有可以会把字符截断成两部分，最终解码的结果会有错误！

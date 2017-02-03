@@ -1,0 +1,22 @@
+2013-11-04 working log
+
+周工作报告（2013-10-28~2013-11-03），给汤军义。
+新服务器P1的RAID驱动：
+1.考虑到可能安装驱动后会出意外，而人又不在机器旁，所以还是先下载到驱动，人到现场的时候再安装。
+“
+Access Denied
+You don't have permission to access "http://failover-downloads.dell.com/FOLDER01460379M/8/SAS-RAID_Driver_2012_2X6KY_A01_6.801.5.0_ZPE.exe" on this server.
+
+Reference #18.c516d23c.1383531463.389bc97”
+
+看起来下载失败呢。
+
+2.开启goagent代理后可以下载，我去！
+
+已下载完成。
+
+----
+
+汤军义说微博什么的现在暂时用不到，先去弄好radar与micaps数据。
+----
+改写FileTree吧，仿照 FtpTree写的FileTree并不适用于radar和micaps。

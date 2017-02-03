@@ -1,0 +1,7 @@
+aws_transport
+
+对smb://172.21.32.200/Product/SendupBK/z_aws的数据进行搬运。
+使用freeware unrar.exe [http://www.rarlab.com/rar_add.htm]进行rar文件的解压缩。
+
+    工具需要具有对指定的日期范围的数据进行导出的能力。
+    因网络带宽限制，工具需要有设置下载速度的能力。（可采用处理若干ENJ文件后，暂停一段时间，然后继续）

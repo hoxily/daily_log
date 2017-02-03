@@ -1,0 +1,6 @@
+2013-11-01 working log
+
+整理一下现场实施报告，发给项目相关人员：马荣、汤军义、杨敏、舒云龙。
+补充：VPN回拨技术文档、RAID驱动、业务平台内部局域网。
+http://www.dell.com/support/drivers/cn/zh/cnbsd1/Product/poweredge-r720
+raid驱动。

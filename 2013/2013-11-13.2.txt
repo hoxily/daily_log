@@ -1,0 +1,50 @@
+2013-11-13 working log
+
+需要给YCQX-P1安装sql server 2012管理工具（不需要引擎）。
+正式安装前，其需要先安装一个Windows Updates（26MB）。
+然而两次尝试都下载失败。实际上已成功下载了4~5MB了。
+这算是网络原因吗？
+“
+Sql server安装程序遇到以下错误：
+sql server安装程序无法下载产品更新，结果为“Failed”并且错误代码为0x80072efe。这可能表示该Windows Update服务对Microsoft Update服务器或Windows Server Update Services没有联机访问权限。
+错误代码 0x851A0003。
+”
+需要给YCQX-P1上添加mr,tjy,ym,syl四个用 户。
+用户名
+	
+初始密码
+	
+密码过期
+	
+隶属Administrators组
+ym
+	
+yhmn123!
+	
+否
+	
+是
+syl
+	
+ycqx2013!
+	
+是
+	
+是
+tjy
+	
+ycqx2013!
+	
+是
+	
+是
+----
+资源目录原理
+五级访问
+Resources表，目录
+Place，资源源头Source表。
+四类Source（资源的4个属性）
+Place类型：point,rect,layer
+时间类型:step,range
+Index结果：ID列表
+ShowTarget：资源表现形式

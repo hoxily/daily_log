@@ -1,0 +1,40 @@
+2014-02-20 working log
+
+入库过程中出现异常：
+2014/2/20 0:01:02结束，结果False:入库出错异常:InvalidOperationException
+内容 System.InvalidOperationException: 已有打开的与此 Command 相关联的 DataReader，必须首先将它关闭。
+   在 System.Data.SqlClient.SqlInternalConnectionTds.ValidateConnectionForExecute(SqlCommand command)
+   在 System.Data.SqlClient.SqlInternalTransaction.Commit()
+   在 System.Data.SqlClient.SqlTransaction.Commit()
+   在 GistarLite.Filler.DBFiller.Fill(Values value, String& info) ]
+ 来自:System.Data
+目标:Void ValidateConnectionForExecute(System.Data.SqlClient.SqlCommand)
+位置: 在 System.Data.SqlClient.SqlInternalConnectionTds.ValidateConnectionForExecute(SqlCommand command)
+   在 System.Data.SqlClient.SqlInternalTransaction.Commit()
+   在 System.Data.SqlClient.SqlTransaction.Commit()
+   在 GistarLite.Filler.DBFiller.Fill(Values value, String& info)
+
+搜索“已有打开的与此 Command 相关联的 DataReader，必须首先将它关闭。”，找到的原因是
+一个SqlConnection只能执行一次事务，每用一次必须关闭然后再开启。[ http://blog.csdn.net/xiaokui008/article/details/6278023 ]
+看了半天源码，唯一有可能的地方就是：
+GistarLite.Filler.GroupDef类的Fill(DBFiller df, Values value, StringBuilder info, ref int recordCount, ref int ignoreCount, ref int updateCount)方法中的
+foreach (KeyValuePair<object,object> kv in inserts)
+{
+     _InsertCommand.Connection = df.DB.BaseConnection;
+     if (df.ST != null)
+      {
+           df.TryCommitTrans();
+           _InsertCommand.Transaction = df.ST;
+       }
+这篇文章给出的简单解决方案是“直接在连接字符串的后面加上MultipleActiveResultSets=true即可”。
+待我试上一试。
+尝试结果出来了，“无法执行该事务操作，因为有挂起请求正在此事务上运行。”
+百度该关键字无果。第一条结果“http://bbs.csdn.net/topics/390158445”
+
+可能是由于Primary Key限制导致向Info表插入数据失败，却又没有编写ignoreCondition与updateCondition，在后面的忽略步骤与更新步骤出错。
+
+很明显，不是设计的表结构与表关系出问题，就是由于没有编写ignoreCondition与updateCondition而出问题。
+需要改。
+
+todo:
+分析“过程图”是什么，能做什么，怎么做。参考“江苏省自动站系统——综合查询——单站多要素”。在抽象结果之后，再结合具体图形库，编写设计思路。思考的结果应该给具体实现提供规范，同样的具体实现中遇到的问题也能反馈给不合理的设计，加以改进。

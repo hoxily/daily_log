@@ -1,0 +1,25 @@
+path convention of Windows Share as known as UNC path
+
+Syntax of UNC
+
+    \\computername\sharename\path\to\fileordirectory
+
+----complicated version----
+
+A Universal Naming Convention (UNC) string is used to specify the location of resources such as shared files or devices. [ http://msdn.microsoft.com/en-us/library/gg465305.aspx ]
+
+This type is declared as follows:
+
+typedef STRING UNC; 
+
+There are three UNC schemes based on namespace selectors: filespace selector, Win32API selector, and device selector. Only the filespace selector is parsed for on-wire traffic, the other two pass opaque BLOBs to the consuming entity. The filespace selector is a null-terminated Unicode character string of the following format:
+
+UNC =  \\<hostname>\<sharename>[\<objectname>]*
+
+    <hostname>: Represents the host name of a server or the domain name of a domain hosting resource; the string MUST be a NetBIOS name as specified in [MS-NBTE] section 2.2.1, a fully qualified domain name (FQDN)as specified in [RFC1035] and [RFC1123], or a textual IPv4 as specified in [RFC1123] section 2.1 or IPv6 address as specified in [RFC4291] section 2.2.
+
+    <sharename>: Represents the name of a share or a resource to be accessed. The format of this name depends on the actual file server protocol that is used to access the share. Examples of file server protocols include SMB (as referenced in [MS-SMB]), NFS (as referenced in [RFC3530]), and NCP (as referenced in [NOVELL]).
+
+    <objectname>: Represents the name of an object; this name depends on the actual resource accessed.
+
+    The notation "[\<objectname>]*" indicates that zero or more object names may exist in the path, and each <objectname> is separated from the immediately preceding <objectname> with a backslash path separator. In aUNC path used to access files and directories in an SMB share, for example, <objectname> may be the name of a file or a directory. The <hostname>, <sharename>, and <objectname> are referred to as "pathname components" or "path components". A valid UNC path consists of two or more path components. The <hostname> is referred to as the "first pathname component", the <sharename> as the "second pathname component", and so on. The last component of the path is also referred to as the "leaf component". The protocol that is used to access the resource, and the type of resource that is being accessed, define the size and valid characters for a path component. The only limitations that a Distributed File System (DFS) places on path components are that they MUST be at least one character in length and MUST NOT contain a backslash or null.

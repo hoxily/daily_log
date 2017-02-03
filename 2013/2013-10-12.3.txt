@@ -1,0 +1,34 @@
+Windows Wildcard Character
+
+Using wildcard characters [ http://www.microsoft.com/resources/documentation/windows/xp/all/proddocs/en-us/find_c_search_wildcard.mspx?mfr=true ]
+
+A wildcard character is a keyboard character such as an asterisk (*) or a question mark (?) that is used to represent one or more characters when you are searching for files, folders, printers, computers, or people. Wildcard characters are often used in place of one or more characters when you do not know what the real character is or you do not want to type the entire name.
+Wildcard character	Uses
+
+Asterisk (*)
+	
+
+Use the asterisk as a substitute for zero or more characters. If you are looking for a file that you know 
+
+starts with "gloss" but you cannot remember the rest of the file name, type the following:
+
+gloss*
+
+This locates all files of any file type that begin with "gloss" including Glossary.txt, Glossary.doc, 
+
+and Glossy.doc. To narrow the search to a specific type of file, type:
+
+gloss*.doc
+
+This locates all files that begin with "gloss" but have the file name extension .doc, 
+
+such as Glossary.doc and Glossy.doc.
+
+Question mark (?)
+	
+
+Use the question mark as a substitute for a single character in a name. 
+
+For example, if you type gloss?.doc, you will locate the file Glossy.doc or Gloss1.doc
+
+ but not Glossary.doc.

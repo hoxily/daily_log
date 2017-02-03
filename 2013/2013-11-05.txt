@@ -1,0 +1,34 @@
+2013-11-05 working log
+
+修改TransFileDef的GetUnProcessedItem方法，使得能够递归地搜寻当前目录与子目录下的文件，如此即可实现FileTree的处理。
+这个方法的最大问题在于，如果指定的根目录代表的文件树很复杂，那么遍历所花费的时间将会很多。
+也就是GetUnProcessedItem方法非常费时间。
+
+当前在运行的TransFileDef与TransWebDef与TransFileTreeDef有很大的不同。
+TransFileDef是已知Source目录下不会有很多文件，所以检索起来很快。
+TransWebDef则是已知文件名的完整路径了，只需检测文件在不在即可。
+TransFileTreeDef则不一样，它知道的信息只有一个根目录。至于根目录下文件树到底有多复杂，对它来讲是未知的。为了判断是否有新文件或者文件有修改，它只能老老实实地遍历整个目录树，一个文件一个文件地与数据库中的记录比对，得出这个文件是否需要处理。
+
+---- TransFileTree2Def 时间复杂度实测：
+1 测试
+1.1 配置
+<Type id="FileTree2Test" name="FileTree2Test2" >
+      <Source id="Input" type="FileTree2" path="\\jsqx:jsqxjsqx@10.124.32.197\radar\Products\盐城" fileName="*"  sameFileAppend="True"/>
+      <Target id="localFile" source="Input" type="FileTree2" path="C:\Users\hoxily\Desktop\testdir2"/>
+</Type>
+1.2 耗时
+dt2 - dt1
+{02:17:07.5665899}，
+其中检索待处理Item费时10分钟左右。
+---- JSAWS 传输可能的bug
+1 Bug描述
+File类型，SameFileAppend 为true。
+当前记录到数据库的Source字段则只有文件名（不含路径）加上文件长度，之间用'\n'分割。
+因此有可能第一个月的某条记录，与下一个月同名文件的Source字段重复。因为文件长度恰好相同是有可能的。
+因此程序会误以为这个应该处理的文件已经处理过了，而造成数据缺失。
+2 解决方法
+设置SameFileModified为true，让Source字段记录的数据具有惟一性。
+2.1 该解决方法导致的新问题
+由于换成了文件名+文件修改时间作为Source字段的值，所以之前处理过的文件误认为未处理。大约有1个月的数据要重复处理。
+
+

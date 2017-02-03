@@ -1,0 +1,30 @@
+2013-12-03 working log
+
+昨晚尝试了下以QAPITool的认证思路，所其中的获取verify的步转成自动获取，但是腾迅不认帐。是缺失了cookie还是wap2的页面里的javascript产生了影响。
+09：40去马荣办公室，数据访问。
+1. 在YCQX-P1上增加一个开发用windows server 2012虚拟机。STD版，4GB内存。
+1.1 开发所用的Visual Studio 2010， 以及源代码管理用的Visual Source Safe工具目前在YCQX-P1上不存在。需要从其他地方获取。
+汤军义说盐城气象台某些机器上有，那么在哪里？
+如果是从Internet上下载的话，从哪里下载？
+实在不行就从公司的\\10.33.250.5\的Installs与Installs2上复制过去，问题速度太慢。
+2. /Show/目录下的ShowGrid与ShowChart的输入改为接受一个读取资源的URL，而不是接受POST过来的具体数据。
+3.读取资源目录列表（左侧）时，访问CatalogDB次数太多，效率太低，需要优化。
+----
+* Visual Studio 2010 Service Packet 1, 
+http://www.microsoft.com/zh-cn/download/details.aspx?id=23691
+见其他信息中的ISO镜像链接。
+md5sum: 610f8bc8d42e804a54e67dc786fa453b
+* en_vss2005.iso, 108MB
+已上传到百度云，
+md5sum: 30dbdfeb1f2dabe724e2b41c5e2744ae
+* Visual Studio 2012 Ultimate
+ed2k://|file|%5BVisual.Studio.2010.%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87%E6%97%97%E8%88%B0%E7%89%88%EF%BC%88MSDN%E5%8E%9F%E7%89%88%E4%B8%8B%E8%BD%BD%EF%BC%89%E5%86%85%E7%BD%AEKEY%5D.iso|2685982720|4ae6228933dde49d9bfa4c3467c831c2|/
+md5sum: a94b54aa4a79e4f767de116b1b77473d
+----
+动态内存，min 512MB， max 4096MB。
+Windows Server 2012 STD with GUI 启动内存为512MB时失败，1024MB时成功。
+问题在哪里？安装时启动内存设置为512没有问题呢。
+----
+TXWeiboSDK的ClientLogin第二步改为不使用SyncHttp，直接用HTTPWebRequest的方式成功获得了verifier了。
+但是在第三步，GetAccessToken时，服务器返回Invalid Signature的页面。
+这是为什么？

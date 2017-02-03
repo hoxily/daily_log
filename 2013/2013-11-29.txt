@@ -1,0 +1,30 @@
+2013-11-29 working log
+
+按照马荣的方法，尝试Guest账号访问Everyone权限的共享文件。——共享时设置成Everyone都能访问时，可以用Guest账户访问，即\\Guest@10.125.1.33\xxx的方式。——方法来自马荣。
+----本地测试完全测不出来
+测试中报System.IO.IOException，登录失败：禁用当前的帐户。
+[10:04:02] 敏 杨: 测试代码是：
+[10:05:26] 敏 杨: string userID = "Guest";
+            string password = "";
+            string host = "\\\\192.168.211.211";
+            string path = "test\\";
+            var infos = new Dictionary<string, System.IO.FileInfo>();
+            var files = FileUtility.GetFilesWithInfo(userID, password, host + "\\" + path, "*", out infos, System.IO.SearchOption.AllDirectories);
+[10:09:48] 敏 杨: 启用了Guest帐户后再测试，报System.UnauthorizedAccessExeption，其他信息：对路径 "\\192.168.211.211\test" 的访问被拒绝。
+----
+问题是连接VPN之后，访问不了\\10.125.1.33\151，只能是盐城市气象台内部的机器才行。
+----
+在YCQX-DB2机器上对\\10.125.1.33\151映射网络驱动器，使用其他凭据Guest，空密码竟然可以！
+那就用Guest帐号空密码吧
+\\Guest:@10.125.1.33\151\
+其实Administrator/bfyh组合也是可以访问的。Everyone都可以访问了，Administrator怎么可能不能访问呢!果然是受Everyone权限的影响范2了。
+----
+解码之后，哪些数据需要入库的筛选是在Database.xml配置文件中编写的。
+不可以直接用杭州的Database.xml配置文件来处理江苏盐城那边的入库配置。
+需要修改，改哪些？
+----
+去掉Filter之后，确实入库了。
+但是DZB的Codec里注释掉了一两个字段，在Database里却需要这两个字段，导致报Exception信息--取值错误,当前没有WindLevel_Code这个字段。
+实际上报文里的WindDirect_Code与WindLevel_Code确实是没有的（按Codec里来的话）。
+虽然报Exception，但是缺失的字段是以NULL值入库了。
+另，Trans服务的log显示，\\10.125.1.33\151的访问人数达到最大人数上限，所以出错。出现System.IO.Exception。

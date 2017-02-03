@@ -1,0 +1,2 @@
+在Microsoft SQL Server Management Studio里连接1433之外的端口的MSSQLServer，Microsoft SQL Server Management Studio里加入指定的端口号连接数据库使用的是逗号(,)而不是冒号(:)。
+2B MS。

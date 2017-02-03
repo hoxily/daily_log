@@ -1,0 +1,75 @@
+/* qsort: from K&R C 2nd Edition, Pg.78-79
+ * sort v[left]...v[right] into increasing order
+ */
+void qsort(int v[], int left, int right)
+{
+	int i, last;
+	void swap(int v[], int i, int j);
+	
+	if(left >= right)
+	{// do nothing if array contains fewer than 2 elements
+		return;
+	}
+	
+	swap(v, left, (left+right)/2);// move partition elem to v[0]
+	last = left;
+	
+	// partition 
+	for(i = left + 1; i <= right; i++)
+	{
+		if(v[i] < v[left])
+			swap(v, ++last, i);
+	}
+	swap(v, left, last);// restore partition elem
+	qsort(v, left, last - 1);
+	qsort(v, last + 1, right);
+}
+void swap(int v[] ,int i, int j)
+{
+	int tmp;
+	
+	tmp = v[i];
+	v[i] = v[j];
+	v[j] = tmp;
+}
+
+qsort分割分析（hoxily@qq.com, 2014-01-06T2105+0800）
+习惯了C#中的List<T>等GenericCollection后，突然再看朴实无华的C代码操作数组，竟然一下子看不懂了。
+K&R 2nd Edition讲Recursion中给出的qsort代码很简洁。其算法思想也很容易理解，即任取数组中的某个元素作为分割标准，将数组划分为比这个标准元素小的元素集合和比这个元素大或者相等的元素集合。于是得到了相比原来规模较小的两个数组。因此继续对分割出来的数组执行这个分割算法，直到数组元素个数小于2.最终整个数组也就有序了。
+结合注释读其C代码，感觉就像是用C语言描述了一遍上面中文描述执行过程，很顺畅。但是我卡在了“划分”这个操作上，也就是“
+swap(v, left, (left+right)/2);// move partition elem to v[0]
+last = left;
+
+// partition 
+for(i = left + 1; i <= right; i++)
+{
+	if(v[i] < v[left])
+		swap(v, ++last, i);
+}
+”
+这几行代码描述的“划分”。
+我们暂时先不去管这段划分代码，从集合遍历与集合添加操作来实现一下这段代码所作的工作，即用抽象程度更高的C#中的GenericCollection来描述。
+首先，我们假设所有元素复制到List<int>类型的对象，list_src，中。
+然后选中list_src中的中间下标元素并取出存放于e。
+接着假设有List<int>类型的list_dest_left和list_dest_right两个容器，前者用于存放比e小的元素，后者用于存放比e大或者相等的元素。
+那么，只需遍历一遍list_src，依据元素与e的大小关系，可以很容易地使用List<T>.Add方法添加进去。
+最后，复制回数组中去即可。
+啰哩叭嗦了一大堆，有没有觉得更糊涂了？
+上面用GenericCollection来实现这个划分与K&R中的划分相比，有一个最大的不同，那就是没有重复使用原有的数组。
+C代码中的划分，通过标准的两两交换（SWAP）实现了复用原始数组，而无需额外存储空间（如果用于下标的last与swap中的tmp两个变量不计）。
+可以从集合的角度来理解C代码的神奇操作。
+注意到最后分割完成的两个小数组分别为 [left, last-1]和 [last+1, right]。
+一开始[left+1, last]为空，随着for循环中i不断向right靠近，越来越多的比标准元素小的元素加入到[left+1, last]集合中。但是请注意，无论如何last不会比i大，因为即使全部元素都比标准元素小，也仅仅是last与i持平罢了。
+这就像是一边遍历数组，一边挪动元素位置，同时还不忘把大于或等于的元素挪到后面去以免覆盖。
+比如对数组a[1,2,...,N-1]作筛选，选出比a[0]小的元素来，同样可以如此操作：
+last = 0;
+for(int i = 1; i<N;i++)
+{
+	if(a[i] < a[0])
+	{
+		a[++last] = a[i];
+	}
+}
+操作完成后，a[1,2,...,last]则为一段连续的比a[0]小的元素集合了。
+当然，因为不像qsort代码中作swap操作，而是直接覆盖，所以一些比a[0]大或者相等的元素是丢失了的。
+或者换句话说，那就是它使用交换替代直接覆盖，将数组划分成了两个子数组。

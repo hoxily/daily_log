@@ -1,0 +1,12 @@
+2014-01-03 working log
+
+
+好不容易在09：10分赶到。结果公司局域网出问题了。（09：17）
+（10：02好了，可以访问VSS服务器了）
+----
+EasyUI之DataGrid插件学习：
+从官网Demo与Google搜索到的DataGrid使用Blog来看，DataGrid能处理的表格是这样一种类型：
+1.表头（table header, <thead></thead>）固定。这里的固定是指表头的定义位于html页中。
+2.表格正文（table body, <tbody></tbody>）可以通过table标签的data-option属性中的url来动态加载表格数据。
+2.1 表格数据的格式， json格式， { "total": 数据行数, "rows": [ { "col1": 列1数据, "col2": 列2数据...} ] }。
+2.1 如果table标签的data-option属性中没有指定url，那么还可以通过 $('#tableid').datagrid('loadData', dataObj)方式来加载2.1所述表格数据；

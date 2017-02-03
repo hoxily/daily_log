@@ -1,0 +1,8 @@
+局域网共享
+
+Visual Studio 2010
+    \\10.33.250.5\Install2\Dev\VS2010
+Microsoft SQL Server 2012
+    \\10.33.250.5\Install2\Svr
+相关文档
+    \\10.33.250.4\文档\307研发部\部门员工\汤军义\盐城

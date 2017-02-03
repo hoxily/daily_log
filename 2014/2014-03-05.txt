@@ -1,0 +1,24 @@
+2014-03-05 working log
+
+todolist
+0.模板配置文档说明的编写。
+1.修改原先的预处理程序，换成传输服务来生成xml数据。
+1.过程图展示。
+6.给查询字符串增加一个timeNearest参数，用于查询最接近timeNearest的数据。
+9.地面气象资料（SJK）归档历史资料入库。
+
+插值与拟合
+插值是根据已知点集求取一个近似函数，使得所有已知点都满足此近似函数；
+而拟合则是求取一个近似函数（线性，二次等），使得这些已知点与此近似函数的距离误差最少，常见的距离误差衡量方法为各点的实际值与代入拟合曲线所得值之差的平方和。
+插值中的lagrange（拉格朗日）插值法：已知n+1个点，求n次多项式，以该多项式作为插值函数。
+
+VirtualBox VDI磁盘压缩
+在VBox的使用过程中发现，动态扩展的虚拟磁盘文件大小随着Guest OS中文件的创建而增大，但是并不会因为Guest OS中删除文件后而自行缩小。所以在长时间使用虚拟系统后，虽然实际磁盘空间使用很小，但是VDI虚拟磁盘文件却很大，造成存储空间的浪费。
+动态扩展的VDI磁盘压缩方法可以参见Oracle VirtualBox User Manual用户手册第8.23. VBoxManage modifyhd命令。
+摘录如下：
+
+    With the --compact option, can be used to compact disk images, i.e. remove blocks that only contains zeroes. This will shrink a dynamically allocated image again; it will reduce the physical size of the image without affecting the logical size of the virtual disk. Compaction works both for base images and for diff images created as part of a snapshot.
+
+    For this operation to be effective, it is required that free space in the guest system first be zeroed out using a suitable software tool. For Windows guests, you can use the sdelete tool provided by Microsoft. Execute sdelete -z in the guest to zero the free disk space before compressing the virtual disk image. For Linux, use the zerofree utility which supports ext2/ext3 filesystems. For Mac OS X guests, use the Erase Free Space feature of the built-in Disk Utility. Use Zero Out Data there.
+
+    Please note that compacting is currently only available for VDI images. A similar effect can be achieved by zeroing out free blocks and then cloning the disk to any other dynamically allocated format. You can use this workaround until compacting is also supported for disk formats other than VDI.

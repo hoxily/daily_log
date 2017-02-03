@@ -1,0 +1,12 @@
+如何让Weechat始终以utf-8编码解析尾部或者开头含有不合法utf-8字符的消息而不是以iso-8859-1编码解析
+/set charset.default.decode ''
+背后的故事
+IRC协议中每条回车换行结尾的消息是有512字节长度限制的。如果某个客户端想要发送一条长度超过限制的消息，那么需要自行分割消息内容。如果分割失误，将一个完整的UTF-8字符分成两部分，那么另一个客户端收到的消息将会是两个含有非法utf-8字符的字符串。这时Weechat会尝试用全局编码解码器（charset.default.decode）来解码消息内容，而Weechat的默认全局编码解码器是iso-8859-1。这时看到的内容就是一塌糊涂了。
+参考资料
+[ http://savannah.nongnu.org/bugs/?38734 ]
+Sun 14 Apr 2013 07:30:55 AM UTC, comment #1:
+Problem happens because the message is cut by another client (to fit in the IRC 512 bytes limit). 
+Some clients like irssi cuts the message in the middle of an UTF-8 char, and then the message becomes UTF-8 invalid. 
+When the message is not UTF-8 valid, WeeChat will try to decode it using "decode" charset, which is by default "iso-8859-1". 
+And after such decode, all UTF-8 chars are lost. 
+One solution is then to remove the "iso-8859-1" default decode charset if you don't use it (or set it only on buffers where you really need it): 

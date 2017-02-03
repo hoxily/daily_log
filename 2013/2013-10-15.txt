@@ -1,0 +1,7 @@
+2013-10-15 working log
+
+GistarUtilityLite清单整理
+1. FTPUtility/FileUtility 各方法需要加上备注，注明是否可以在path上
+带用户名/密码;
+2. DBUtility的GetUpdateTime其实是获取的是Index的更新时间。普通的table
+并没有记录更新时间。需要注明。

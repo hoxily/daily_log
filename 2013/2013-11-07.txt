@@ -1,0 +1,24 @@
+2013-11-07 working log
+
+1 预测文件名加速
+傻傻地遍历整个radar/Products目录是没必要的。
+事实上平均每分钟更新（添加数据），根本不需要关心6分钟（或者说12分钟以前的文件）。
+虽然文件名是由时间构成的，但是两个相邻时次的文件名时间之差并不是固定的（不像自动站ENJ文件名）。
+即使如此，某个时次对应的文名其可能的时间最多误差+-6分钟。而radar/Products的文件名上的时间精确到秒。
+这意味着本时次所有可能的文件名数量有12*60 = 720（个）。
+如果某目录下有大于720个文件时，预估出可能的文件名，然后去判断该件是否存在所费时间，应该比读取这个目录的所有文件要快。
+2 读取ProductsIndex.*索引文件加速
+另各Products目录都各自有一个
+ProductIndex.*文件，也许可以从这个Index文件入手，加快检索。
+该文是Binary格式文件，可以去公司内网气象团队历史资料里找找，也许有格式说明文档或例子。
+---- FileSystemWatcher类 尝试
+http://msdn.microsoft.com/zh-cn/library/system.io.filesystemwatcher(v=vs.110).aspx
+MSDN上说的filter为""（空串）时表示监视所有文件，含义与"*.*"相同，实际上测试的经果表明，空串表示不监视任何文件。
+设想一个Notify服务器，它内部使用FileSystemWatcher类来监控目录变动。根据数据实际的更新周期，在这一段时间内Notify服务器都在做收集FileSystemWatcher通知它的消息，同一个文件在这个周期里无论怎么变，变动多少次，最终Notify服务器对这一段时间的汇总，同一个文件至多一次变动消息被保存下来。这之后，第二个具体负责传输、解码、入库的服务根据Notify服务给出的列表做处理。虽然并不是很及时，但是尽量减少不必要的文件传输操作。
+Notify服务的消息池可以用键-值对的方式来管理。将变动的文件的FullPath作为键，以该变动消息收到的时间为值。
+需要注意，Dictionary.Add不能添加已存在的键。想要更新对应键的值可以用Dictionary的Item属性的Set方法。C#中为this索引器。
+FileSystemWatcher监视网络驱动器假死故障
+测试中，恰好遇到过公司网络卡的情况。之后测试中的程序再也不能收到FileSystemWatcher的Changed与Created事件了。
+设定断点，查看watcher的EnableRaisingEvents属性变成false了。
+奇怪了，程序中并没有显式地更改EnableRaisingEvents属性。
+是否需要添加Disposed和Error事件的处理函数？

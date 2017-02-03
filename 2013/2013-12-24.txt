@@ -1,0 +1,59 @@
+2013-12-24 working log
+
+[8:35:57] 荣 马: 补丁打了吗？
+[8:37:36] 敏 杨: 没
+[8:38:15] 荣 马: 昨天在干吗？ 补丁看到了吗？
+[8:39:42] 敏 杨: 昨天在写空气质量指数报文展示页面。
+[8:39:50] 荣 马: 哦
+[8:39:57] 敏 杨: 51cto那个补丁吗？
+[8:40:02] 荣 马: t到了没有？
+[8:40:03] 荣 马: 嗯。
+[8:41:36] 敏 杨: 那个补丁来源不明，不敢用。
+[8:42:04] 荣 马: 谁告诉你来源不明了？
+[8:42:21] 敏 杨: 我觉得
+[8:42:28] 荣 马: 这是个很成熟的补丁， 或者你装个迅雷之类的， 里面有破解XP连接限制功能。
+[8:45:13] 敏 杨: 你说它是个很成熟的补丁，有证据吗？
+[8:45:31] 荣 马: 这个很古老了，你以前难道从来没听说过？
+[8:45:59] 敏 杨: 没听说过。
+[8:46:07] 荣 马: 你装个迅雷之类的， 里面有破解XP连接限制功能。
+[8:46:13] 荣 马: 如果你不放心， 那就用这个好了。
+[8:53:22] 敏 杨: 如果是我自己的电脑当然无所谓，搞坏了重装、还原就是了。现在这么重要的电脑，不应该这么随意吧？
+[8:53:42] 荣 马: 这个没问题的， 很常规的问题。
+[8:53:53] 荣 马: 很常规的操作。
+[8:54:07] 荣 马: 你要懂得原理，直接手工操作也可以。 
+----
+总算可以通过http://10.125.1.120:88/AQIViewer.aspx查看了。
+就差自动抓取了。
+----
+看了下汤军义增加的YBPF.WEB项目。
+“此项目与Visual Studio的当前版本不兼容。”
+他复制了Gistar.WFS.Catalog、GistarUtilityLite和WFS.WEB三个项目的源码，重新建了这三个项目。
+那么GistarUtilityLite有多份版本喽？
+算了，乱了就乱了吧。
+先把AQIViewer.aspx的报文抓取搞定吧。
+报文抓取任务己添加。16：00这后log里应该就可以看到结果了。
+----
+看起来我之前没理解TimeUtility.GetTimeList(DateTime timeBase, DateTime start, int align, int step, int count);
+设置的抓取任务竟然抓取了2013-12-23日的报文。我想要抓取的是2013-12-24日起报的报文呢。
+该方法是将start对齐到timeBase与align这两个参数定义的DateTime上去。
+具体代码：
+DateTime alignedStart = timeBase + TimeSpan.FromSeconds(align * Math.Floor(((start - timeBase).TotalSeconds / align)));
+注意Math.Floor是下取整，即小于或者等于。
+当timeBase < start时（一般会这样子情况），
+alignedStart = timeBase + n * align, 其中n为正整数，使得n取某个值，让timeBase + n * align最靠近start却不超过start。
+对齐了之后，才轮到step起作用。
+步长step如果为正，表示相对alignedStart向未来推进count个step (count - 1)；
+如果为负，表示相对alignedStart向过去往回推count个step (count - 1)。
+最终得到时刻列表。
+如下代码：
+for (int i = 0; i < count; i++)
+{
+    result.Add(astart+TimeSpan.FromSeconds(step*i));
+}
+意味着，至少alignedStart是列表中的一个元素。
+----
+因此，在一天内，文件名时刻值晚于实际抓取任务时刻，那么抓取时alignedStart一定会比最新的文件名时刻小一个align。
+如何才能把最新的报文抓到？可以设置Step为正，count = 2，这样的话，就可以向前推。
+好复杂！
+----
+整理一下AQI相关资源，分享给汤军义。

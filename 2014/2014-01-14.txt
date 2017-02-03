@@ -1,0 +1,13 @@
+2014-01-14 working log
+
+汤军义告诉我入库的时间不正确，差不多相差8小时。
+果然是解码器配置文件里写错了。
+虽然指明了ObserveTime为TimeU，但是参数ObserveTime的时间依然要定义为TimeU时间，否则相差8小时。
+----
+MSSQLServer中调整时间的时区方法：
+select CONVERT(datetime,'2014/01/14 18:32:10.123') + '08:00:00'可以得到类型为datetime的 '2014-01-15 02:32:10.123'。
+所以具体的加8小时的update语句为 
+update tableName
+set columnName = columnName + '08:00:00'
+，其中columnName为datetime类型。
+----

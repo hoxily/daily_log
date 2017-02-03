@@ -1,0 +1,30 @@
+2013-10-22 working log
+
+09:02
+ycqx vpn 720错误
+----
+WFS.WEB AWS 数据 在 盐城现代气象业务平台WEB站点上的展示. (急)
+vss位置: \\10.33.250.5\vssroot\WFS.Web.root
+---> ResCatalog.aspx 不正常, 对 Resource的读取是否有问题? DBReader的构造方法调用时传递的fields参数里描述的字段/属性远远比WFS.Catalog中的Resources表内字段多.
+static DBReader<Resource> _ResReader = new DBReader<Resource>("ID:_ID", "Name:_Name"
+                , "ParentClass:ParentID", "dispOrder:_DispOrder","showTitle:_ShowTitle"
+                , "PlaceSource:PlaceID","TimeSource:TimeID","IndexSource:IndexID","DataSource:DataID");
+Resources表只有前四个字段,即ID,ParentClass,dispOrder,ShowTitle.
+所有res的_Data字段都是null,按照当前(2013-10-22)逻辑,所有资源项都不可能有链接.那么后续的ShowRes.aspx就无用武之地了.
+----
+[2013/10/18 22:22:17] 
+敏 杨: 已经在做的本地化:
+1.江苏全省自动站分钟资料入库
+旧:\\yancheng:yancheng@172.21.32.200\SendupBK\z_aws;
+新:\\jsqx:jsqxjsqx@10.124.32.201\Sendup\AWS-AS
+2.江苏欧洲中心中尺度本地化与归目
+http://172.21.32.199/SZYB/ECMWF/
+3.江苏土壤水份资料入库
+http://172.21.32.32/web/default.aspx
+需要本地化的其他资料:
+模式产品:
+日本,欧州中心,GFS,NCEP, t639
+提供杭州市的本地化目录,供参考. 裴道好.
+[2013-10-20]
+[10:06:40] 荣 马: 你这个根据杭州的业务平台和展示平台里面的那几个展示功能，相关说那个列一下细节。
+[10:06:52] 荣 马: 日本专门有个模式组织过的。

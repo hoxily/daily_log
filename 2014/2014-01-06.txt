@@ -1,0 +1,24 @@
+2014-01-06 working log
+
+上周五试用EasyUI的datagrid插件，不满足要求。
+具体为：由预先生成的table html代码，使用datagrid插件的方法初始化后，并不满足数据行（除去表头）的合并要求，即无法处理tbody中的rowspan属性。
+----
+马总对前端的Datagrid的要求不单单是显示。如果光是显示的话，完全可以不用管现有的框架、插件，自己写个解析器生成table的html代码，然后调整一下样式即可。用现成的插件，目标在于其已经提供的显示、选择、编辑等一系列通用的Datagrid控件所能提供的功能。况且，现成的成熟插件，通常会有预定义的几套主题，可以省去调整样式的功夫。
+所以，这**的要怎么搞？简单地使用现有插件我会，但是改写javascript编写的插件暂时不会。
+----
+会议结果：
+主要任务：模块化的基于框架的具体数据处理——表格与过程图。
+
+chart插件相关信息：
+ComponentOne Chart（C1Chart）：http://www.componentone.com/SuperProducts/StudioEnterprise/Charts/?gclid=CNiy34zF6LsCFUTipAodhzMAAA
+C1(ComponentOne) Chart组件研究笔记一：http://blog.sina.com.cn/s/blog_56d695b201008mo4.html
+HightCharts：http://www.highcharts.com/
+highcharts入门高级篇：深度剖析highcharts图表画图原理canvas：http://www.stepday.com/topic/?651
+
+----
+12：40发车；
+17：03，兴泰服务区换乘；
+18：40，菲斯特假日宾馆，606房间；
+18：58，沙县小吃，鸡腿饭加卤蛋；
+每次坐车就花费了很多时间呢（6小时）。
+不单单是时间，身体也会很疲惫。

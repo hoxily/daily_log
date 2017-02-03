@@ -1,0 +1,18 @@
+foreach 与 yield return 与 迭代器
+
+yield return 与 foreach语句相关资料：
+1. C#稳固基础：传统遍历与迭代器，http://www.cnblogs.com/heyuquan/archive/2012/08/15/2639475.html
+2. MSDN yield（C# 参考），http://msdn.microsoft.com/zh-cn/library/9k7k7cf0.aspx
+3. MSDN foreach，in（C# 参考），http://msdn.microsoft.com/zh-cn/library/ttw7t8t6.aspx
+
+----
+
+音效加载与播放
+
+方法1：
+给一个GameObject附加上AudioSource，然后添加AudioListener。
+有了声源与声音接收器就可以听到声音了。
+缺点：不清楚为什么附着在这个GameObject上的脚本总是不能生效，不能在Start方法里加载声音。
+方法2：
+编写静态类AudioController，类的初始化时加载声音资源。
+提供静态的Play方法，内部调用NGUITools.Play方法来播放声音。

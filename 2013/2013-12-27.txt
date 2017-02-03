@@ -1,0 +1,19 @@
+2013-12-27 working log
+
+08：50去打开水，发现还没开，只有20摄氏度，只好回来，以后再打。
+发现201312262000起报的江苏省全省空气质量预报报文中数值不正常。值为9999.00，指数为500，首要污染物为除O3外的全部。
+想问王台或韦台，但是韦台昨天值夜班，今天白天休息；王台正在预报会商。只好待会再问。
+todo：AQI Forecast纳入ResCatalog
+done!
+todo：AQI 实况原始Silerlight页面地址（http://113.108.142.147:20035/emcpublish）加到88端口页面的参考资料下。
+done！
+todo：对10.125.1.120:88 WEB站点建立项目，纳入VSS源码管理。配置一下该站点的Web Deploy。
+done！
+源码管理位置：$/ResourceManagement.root
+Web部署配置信息：
+{
+  "url":"https://10.125.1.120:8172/msdeploy.axd",
+  "user":"ycyb\ym", // ycyb\mr 或者 ycyb\tjy
+  "site":"ResourceManagement"
+}
+todo：BranchHeadTable完善，以及JQueryEasyUI中的DataGrid尝试。

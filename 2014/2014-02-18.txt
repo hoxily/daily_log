@@ -1,0 +1,33 @@
+2014-02-18 working log
+
+昨天下午把14日的会议录音转成文字了。
+如果有自动的语音识别那就好了。
+
+天气雨夹雪。
+昨天下午汤军义不在。
+
+马总给龚华彬的任务：
+新增type为Compress（压缩）的Process处理类。
+输入：TransFile
+输出：Content属性为压缩结果的TransFile，保留输入的TransFile各项属性。
+压缩算法：
+format
+	使用的压缩方法	参考
+Deflate
+	
+RFC 1951. "DEFLATE Compressed Data Format Specification version 1.3."
+	
+http://msdn.microsoft.com/en-us/library/system.io.compression.deflatestream(v=vs.100).aspx
+GZip
+	
+ gzip data format
+	
+http://msdn.microsoft.com/en-us/library/system.io.compression.gzipstream(v=vs.100).aspx
+
+马总曰：海洋预报抓取得怎么样？
+回：设定是每天08点左右抓取。
+问：为什是08点？
+回：猜的。
+语重心长地：这玩意儿怎么能用猜的？可以设定一个全天待命的任务，每隔一小段时间就尝试一次。通过一段时间的运行，就可以知道数据发布的时间了。
+有理有据才行。
+因此可以这样做：设定一个每天每隔5分钟执行一次的任务，该任务将抓到的内容存入本地，以时刻为文件名。运行一段时间（比如5天）后，分析被抓取内容，得出海洋预报数据的发布时间。

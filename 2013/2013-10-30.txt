@@ -1,0 +1,6 @@
+2013-10-30 working log
+
+http://www.hzqx.com/91.8/
+Webshot
+http://www.websitescreenshots.com/Usage.aspx#clparam
+webshotcmd /url http://www.hzqx.com/91.8/ /out e:\hzqx.jpg /waitdoc 5 /bwidth 1024

@@ -1,0 +1,28 @@
+2014-02-27 working log
+
+\\172.21.32.201\FTPServer\BENJ\RFFC\SCMOC\201402 下的全国指导报报文一个也没有。
+
+资源目录网站上引用的订正报使用的是？盐城本地上传备份版本，里面添加了预报员编号。
+
+先做空气质量实况单站过程图吧。问题明确。其他的图都滚蛋吧。
+
+* 增加旧ENJ数据在WFS.Web上的目录条目。
+
+修改Sql中的 <station> = '{place}' 为 <station> in ({place}) 出现SQL语法不正确。情况:
+站点id为 “1215A”，这时 语句变成 <station> in (1215A).这时就出错了。
+所以应该要对1215A加上引号包裹。
+另外，为了保持Catalog://表示法简洁，place参数自身并不加上引号并以逗号分割，例如/place=1215A,58151。那么将这步操作放到 
+public string ReplacePlaceholderWithRealValue(string str, System.Collections.Specialized.NameValueCollection parameters)
+中处理。
+如果是place变量，那么将其实参值按照逗号分割后，分别括上引号，重新拼成逗号分割的列表.
+
+
+对Z_SEVP_C_BENJ_20140227073000_P_MSP3_JS-MO_ENVAQFC_AIR_L88_JS_201402272000_00000-07200.TXT执行Result信息:出错:异常:NullReferenceException 
+实际为0大小报文文件。
+* 添加更加友好准确的log输出。
+
+*soil water 更换地址， 镇江网站，http://10.124.32.145/web/default.aspx 。
+
+* sjk文件（mdb格式，standard jet db)，地面气象资料归档历史资料。未知用户名与密码。
+
+*国家指导报新临时地址：10.124.32.201\benj\sevp\rffc， jsqx, jsqxjsqx

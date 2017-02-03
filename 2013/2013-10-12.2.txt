@@ -1,0 +1,36 @@
+where qualifier in csharp generic programming
+
+例子：
+public class DBReader<T>
+        where T:new()
+    {
+        public IEnumerable<string> _Fields;
+        List<DB.FieldSetter<T>> _Setters = new List<DB.FieldSetter<T>>();
+        public DBReader(params string [] fields)
+        {
+            Init(fields);
+        }
+        public DBReader(IEnumerable<string> fields)
+        {
+            Init(fields);
+        }
+
+        void Init(IEnumerable<string> fields)
+        {
+            _Fields = fields;
+            foreach (string f in fields)
+            {
+                DB.FieldSetter<T> fs = new DB.FieldSetter<T>(f);
+                _Setters.Add(fs);
+            }
+        }
+        public T Read(SqlDataReader sdr)
+        {
+            T result = new T();
+            foreach (DB.FieldSetter<T> fs in _Setters)
+            {
+                fs.Set(sdr, result);
+            }
+            return result;
+        }
+    }

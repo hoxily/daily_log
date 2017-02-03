@@ -1,0 +1,11 @@
+2013-10-08 working log
+
+todo: 09:06
+
+    雷达数据整理:Jwproducts和Products文件夹之统计；
+
+        连接 盐城气象VPN 发生错误 720 。  @09：15
+
+todo:09:16
+
+    TransFileTreeDef的仿写: 继续分析TransFileDef, TransFtpDef, TransFtpTreeDef,以此来完成TransFtpTree。

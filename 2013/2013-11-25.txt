@@ -1,0 +1,12 @@
+2013-11-25 working log
+
+花了大约1个小时时间来总结上周的成果。真是费时。
+
+城镇报（rffc），评分急用。（国家指导报）
+\\172.21.32.201\FTPServer\BENJ\RFFC\
+User: rffc
+Password：rffc201
+micaps上可能的路径样例：172.41.129.18\cmacast\cmacast\SEVP_WE_001\RFFC\PUB
+需要入库
+
+

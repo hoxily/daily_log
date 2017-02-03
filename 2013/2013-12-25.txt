@@ -1,0 +1,57 @@
+2013-12-25 working log
+
+Visual Studio 2010 WEB一键发布到远程方法。
+Silverlight SplashScreen 方法，自定义加载介面。
+http://msdn.microsoft.com/zh-cn/library/cc903962(v=vs.95).aspx
+http://silverlightchina.net/html/tips/2011/1010/10880.html
+http://silverlightloader.codeplex.com/
+SplashScreenSource http://msdn.microsoft.com/en-us/library/cc838219(v=vs.95).aspx
+OnSourceDownloadProgressChanged http://msdn.microsoft.com/en-us/library/cc838236(v=vs.95).aspx
+OnSourceDownloadComplete http://msdn.microsoft.com/en-us/library/cc838143(v=vs.95).aspx
+JavaScript API for Silverlight Reference http://msdn.microsoft.com/en-us/library/bb979679(v=vs.95).aspx
+涉及JavaScript与Silverlight插件的交互。
+----
+IIS 一键发布：
+Web Deploy安装配置概要（2013年12月25日）
+1 在WEB服务器上安装Web Deploy服务
+ 下载地址：http://www.iis.net/downloads/microsoft/web-deploy
+ 安装包为msi格式。
+ 安装选项选complete。
+2 配置某个站点的发布设置
+ 打开 IIS管理器，展开 网站 结点，看到具体站点后，右键该站点，
+ 看到 部署--> 启用WEB Deploy发布...，点击启用WEB Deploy发布，
+ 在弹出的配置窗口里进一步配置。
+2.1 启用Web Deploy发布 窗口
+ 用户：可以选择Windows类型用户或IIS管理器；
+ SQL Server连接串：空着；
+ MySQL连接串：空着；
+ 发布服务器连接URL：可以默认，或者将域名改成IP；
+ 发布设置文件存放位置：默认为当前Windows用户桌面上，建议选择一个专用的目录；
+3 Visual Studio 2010 中的配置
+ 在解决方案资源管理器里右键点击WEB类型的项目，点击 发布 将弹出 发布WEB 配置窗口。
+3.1 发布Web 窗口
+ 发布配置文件：任务取名；
+ 发布方法：选择第一项 Web部署；
+ 服务URL：步骤2.1中的发布服务器连接URL；
+ 网站/应用程序：步骤2中选择的那个站点的名称；
+ 标记为目标上的IIS应用程序：默认没有打钩，可按需要打钩；
+ 保留目标上的多余文件（不删除）：默认打钩，可按需要不打钩；
+ 允许不受信任的证书：打钩；
+ 用户名：步骤2.1中设置的用户名；
+ 密码：步骤2.1中设置的密码。
+4 参考文献
+4.1 Installing and Configuring Web Deploy [ http://www.iis.net/learn/install/installing-publishing-technologies/installing-and-configuring-web-deploy ]
+4.2 Web Deploy 3.5 [ http://www.iis.net/downloads/microsoft/web-deploy ]
+4.3 使用Microsoft Web Deploy技术自动部署 [ http://blog.joycode.com/scottgu/archives/2010/11/03/116148.joy ]
+----
+在本机尝试Web Deploy时玩坏了Visual Studio。运行devenv.exe，报未知错误，然后就退出了。
+修复过程中报错：
+错误 1401.未能创建注册表项：
+UNKNOWN\Components\249FF085ED066DB40A4291912BCEB03C\90C597584A6D6023FA323011FA36C046。请确认您有足够的权限访问该注册表项或者与支持人员联系。
+----
+AQI.Codec.xml完善；
+---
+Visual Studio 2010修复失败；卸载后重新安装，在安装第一个组件时报错：
+安装程序在安装此软件包时遇到错误。这可能表明此软件包有问题。错误代码为2908。
+点击确定按钮后，重新弹出同样内容的报错窗口。看起来得结束进程了。
+这是要重新安装操作系统的节奏？

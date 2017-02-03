@@ -1,0 +1,85 @@
+2013-12-11 working log
+
+今日工作任务：
+
+1.       城镇报数据列名中文显示及单位添加；
+
+2.       城镇报数据可筛选列显示；
+
+3.       检验结果数据库建立（按照评分系统设计报告中检验规则部分内容进行）。
+
+----
+
+Translog检查：
+
+2013/12/11 9:06:13:传输服务，任务江苏自动站数据:对AS110050.ENJ
+
+20131211090105354执行Result信息:出错:异常:IOException
+
+内容 System.IO.IOException: 出现了意外的网络错误。
+
+2013/12/11 9:06:13结束，结果False:无法保存到\\192.168.34.203\JSDATA\AWS\2013\12\11\AS110050.ENJ,异常:异常:IOException
+
+内容 System.IO.IOException: 出现了意外的网络错误。
+
+   在 System.IO.__Error.WinIOError(Int32 errorCode, String maybeFullPath)
+
+   在 System.IO.FileStream.ReadCore(Byte[] buffer, Int32 offset, Int32 count)
+
+   在 System.IO.FileStream.Read(Byte[] array, Int32 offset, Int32 count)
+
+   在 GistarLite.Trans.TransFile.get_Content()
+
+   在 GistarLite.Trans.TransFileDef.SaveItem(TransItem item, String& info) ]
+
+ 来自:mscorlib
+
+目标:Void WinIOError(Int32, System.String)
+
+位置: 在 System.IO.__Error.WinIOError(Int32 errorCode, String maybeFullPath)
+
+   在 System.IO.FileStream.ReadCore(Byte[] buffer, Int32 offset, Int32 count)
+
+   在 System.IO.FileStream.Read(Byte[] array, Int32 offset, Int32 count)
+
+   在 GistarLite.Trans.TransFile.get_Content()
+
+   在 GistarLite.Trans.TransFileDef.SaveItem(TransItem item, String& info)
+
+2013/12/11 9:06:13开始传送目标2
+
+2013/12/11 9:06:13结束，结果False:无法保存到\\192.168.34.203\JSDATA\AWS\month\AS110050.ENJ,异常:异常:IOException
+
+内容 System.IO.IOException: 出现了意外的网络错误。
+
+   在 System.IO.__Error.WinIOError(Int32 errorCode, String maybeFullPath)
+
+   在 System.IO.FileStream.ReadCore(Byte[] buffer, Int32 offset, Int32 count)
+
+   在 System.IO.FileStream.Read(Byte[] array, Int32 offset, Int32 count)
+
+   在 GistarLite.Trans.TransFile.get_Content()
+
+   在 GistarLite.Trans.TransFileDef.SaveItem(TransItem item, String& info) ]
+
+ 来自:mscorlib
+
+目标:Void WinIOError(Int32, System.String)
+
+位置: 在 System.IO.__Error.WinIOError(Int32 errorCode, String maybeFullPath)
+
+   在 System.IO.FileStream.ReadCore(Byte[] buffer, Int32 offset, Int32 count)
+
+   在 System.IO.FileStream.Read(Byte[] array, Int32 offset, Int32 count)
+
+   在 GistarLite.Trans.TransFile.get_Content()
+
+   在 GistarLite.Trans.TransFileDef.SaveItem(TransItem item, String& info)
+
+ 传送全部完毕
+
+错误原因分析：
+
+从Trans服务器到盐城气象台的自动站报文存放服务器的网络出现短暂问题。
+
+----

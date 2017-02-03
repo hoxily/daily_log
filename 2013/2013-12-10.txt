@@ -1,0 +1,17 @@
+2013-12-10 working log
+
+数据抓取入库服务运行检查：
+1.log日志
+* 2013/12/9 17:32:00:传输任务 江苏自动站数据:出错，异常:IOException
+内容 System.IO.IOException: 指定的网络名不再可用。
+* 2013/12/9 17:33:05:传输任务 江苏自动站数据:出错，异常:IOException
+内容 System.IO.IOException: 找不到网络路径。
+* 2013/12/9 17:34:05:传输任务 江苏自动站数据:出错，异常:IOException
+内容 System.IO.IOException: 找不到网络路径。
+* 2013/12/10 3:53:27:传输任务 江苏自动站数据:出错，异常:IOException
+内容 System.IO.IOException: 信号灯超时时间已到
+* 2013/12/10 4:33:25:传输任务 江苏自动站数据:出错，异常:IOException
+内容 System.IO.IOException: 信号灯超时时间已到
+2.分析
+网络原因。
+----

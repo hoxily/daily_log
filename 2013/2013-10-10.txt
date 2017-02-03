@@ -1,0 +1,17 @@
+2013-10-10 working log
+
+GistarLite.Trans.TransFtpTreeDef.SaveItem 中 对 this._Path不正确使用，注意this._Path含有格式化字符串，并不是真实路径。
+11：34
+---》对GistarUtilityLite里的utility进行统计，列一张清单。表头：类名、用途、具体方法等。
+12：04
+---》public override bool SaveItem(TransItem item, out string info)
+        {
+            bool result = true;
+            info = string.Empty;
+            if (item is TransFile)
+            {
+                var transFileItem = item as TransFile;
+                string path = transFileItem.Title;
+                // 假设item的Title属性为完整路径！
+                // 需要证实！
+                // 2013年10月10日 11:50

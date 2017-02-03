@@ -1,0 +1,15 @@
+2013-12-05 working log
+
+在公交车上看K&R的C语言教程，看到shell排序。没看懂:(
+唯一gap为1的时候，变成简单插入排序这个可以理解。
+----
+成功给YCQX-DEV1安装了Microsoft SQL Management Studio工具。
+----
+google 搜到了bassistance写的jquery.treeview插件。可以实现HTML的ul/li嵌套，构成树状列表。关键是不需要给二级、三级等ul增加额外的class属性。js会自动完成。
+----
+YCQX-DEV1 VPN拨号连回公司分配到的IP变成10.33.250.214了。
+难道不应该是固定为10.33.250.203吗？
+[12:52:35] 荣 马: 奇怪。
+[12:52:48] 荣 马: 可能是250.1响应不及时关系？
+----
+从张伟手中接过那辆Santana的车钥匙。

@@ -1,0 +1,5 @@
+2014-01-20 working log
+
+空气质量预报报文件无法找到，所以AQIViewer页面查看不了。
+\\10.124.32.201\benj\SendupBK\SEVP\中的Z_SEVP_C_BENJ_*_P_MSP3_JS-MO_ENVAQFC_AIR_L88_JS_*.TXT没有昨天本该下发的文件。
+不知道是哪里出现了问题。

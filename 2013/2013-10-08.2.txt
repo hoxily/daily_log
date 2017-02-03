@@ -1,0 +1,46 @@
+FTP protocal LIST command
+
+
+
+reference: http://www.ietf.org/rfc/rfc959.txt
+
+----ZZZ----
+
+4.1.3.  FTP SERVICE COMMANDS
+
+        LIST (LIST)
+
+            This command causes a list to be sent from the server to the
+            passive DTP.  If the pathname specifies a directory or other
+            group of files, the server should transfer a list of files
+            in the specified directory.  If the pathname specifies a
+            file then the server should send current information on the
+            file.  A null argument implies the user's current working or
+            default directory.  The data transfer is over the data
+            connection in type ASCII or type EBCDIC.  (The user must
+
+            ensure that the TYPE is appropriately ASCII or EBCDIC). Since the information on a file may vary widely from system
+            to system, this information may be hard to use automatically
+            in a program, but may be quite useful to a human user.
+
+         NAME LIST (NLST)
+
+            This command causes a directory listing to be sent from
+            server to user site.  The pathname should specify a
+            directory or other system-specific file group descriptor; a
+            null argument implies the current directory. The server
+            will return a stream of names of files and no other
+            information. The data will be transferred in ASCII or EBCDIC type over the data connection as valid pathname
+            strings separated by <CRLF> or <NL>.  (Again the user must
+            ensure that the TYPE is correct.) This command is intended
+            to return information that can be used by a program to
+            further process the files automatically. For example, in
+            the implementation of a "multiple get" function.
+
+5.3.1.  FTP COMMANDS
+
+            LIST [<SP> <pathname>] <CRLF>
+
+            NLST [<SP> <pathname>] <CRLF>
+
+

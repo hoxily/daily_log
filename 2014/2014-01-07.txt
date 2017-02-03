@@ -1,0 +1,15 @@
+2014-01-07 working log
+
+马荣今天早上不来办公室，有问题MSN上问他。——汤军义说。
+----
+写了一早上的Javascript版BranchHeadTable，还好javascript里的Array类提供了大部分动态数组功能。
+----
+修订预报预报员编号入库：调整解码器配置文件，调整数据库入库配置文件，调整数据库Info表增加预报员编号字段。
+----
+调试Javascript版BranchHeadTable的时候，发现写在GistarWebUtility.js文件中的函数undefined。
+最后终于找到了原因，script标签的type属性不对 type="text/javascript"写成了type="text/javscript"。
+所以尽管js文件都有被浏览器下载，却没有加载执行，因为类型不对！
+----
+js版基本上可用了。22：51.
+还需要加上“命名空间”，以免冲突。
+----

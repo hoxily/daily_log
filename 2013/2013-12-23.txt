@@ -1,0 +1,113 @@
+2013-12-23 working log
+
+Skype对话记录备忘：
+[2013/12/20 16:59:36] 敏 杨: 马总，Silverlight中的表格数据能破解吗？
+[2013/12/20 17:00:00] 敏 杨: 裴台要求抓一下Silverligh插件中的表格数据。
+[2013/12/20 17:00:01] 荣 马: 哪个Silverlight?你用开发人员工具抓包看看？
+[2013/12/20 17:00:18] 敏 杨: http://113.108.142.147:20035/emcpublish
+[2013/12/20 17:00:35] 敏 杨: 地址是这个。关于空气质量。
+[2013/12/20 17:01:08] 敏 杨: 他想要可以自主编辑、运算的数据，而不是只能看。
+[2013/12/20 17:01:26] 荣 马: 我看看。
+[2013/12/20 17:04:09] 敏 杨: 开发人员工具好像只能看到GIS地图的传输记录
+[2013/12/20 17:04:51] 荣 马: 是的， 不是用标准WebService方法读的，那么用WireSharkl来抓吧。
+[2013/12/20 17:27:12] 荣 马: 是Web开发人员工具好像没抓到Post。
+[2013/12/20 17:28:14] 荣 马: 用Wireshark抓到了， 调用WebService
+[2013/12/20 17:28:51] 荣 马: 不过返回的是二进制格式， 得分析一下，应该问题不大。
+[2013/12/20 17:29:01] 荣 马: 他要抓哪些范围的数据。
+[2013/12/20 17:29:18] 敏 杨: 只是盐城的四个站。
+[2013/12/20 17:29:30] 荣 马: 那些指标？
+[2013/12/20 17:30:06] 敏 杨: 应该是全部
+[2013/12/20 17:30:24] 荣 马: 这个应该可以，啥时候要？
+[2013/12/20 17:30:28] 荣 马: 评分做的如何了？
+[2013/12/20 17:31:14] 敏 杨: 他说比较急。尽快。
+[2013/12/20 17:32:46] 敏 杨: 评分的订正报抓取总是出现IOException。超过最大连接数限制。导致58151这个站的报文总是抓取失败。
+[2013/12/20 17:33:05] 荣 马: 你把错误日志发给我看一下。
+[2013/12/20 17:33:18] 荣 马: 那个数据源是那个服务器的文件共享？
+[2013/12/20 17:34:06] 敏 杨: \\10.125.1.33\151
+[2013/12/20 17:34:31] 荣 马: 这个125.1。33是他们本地服务器吗？ 跑的啥操作系统？
+[2013/12/20 17:35:09] 敏 杨: 不清楚。
+[2013/12/20 17:35:12] 敏 杨: 2013/12/18 18:01:17:传输服务，任务城镇订正报08点起报:完成
+ 失败，原因:装载出错，异常:IOException
+内容 System.IO.IOException: 已达到计算机的连接数最大值，无法再同此远程计算机连接。
+   在 System.IO.__Error.WinIOError(Int32 errorCode, String maybeFullPath)
+   在 System.IO.FileSystemInfo.get_CreationTimeUtc()
+   在 System.IO.FileSystemInfo.get_CreationTime()
+   在 GistarLite.FileUtility.GetFileTime(String user, String password, String filePath, DateTime& cTime, DateTime& mTime)
+   在 GistarLite.Trans.TransFileTree2Def.LoadItem(String item, String& info) ]
+ 来自:mscorlib
+目标:Void WinIOError(Int32, System.String)
+位置: 在 System.IO.__Error.WinIOError(Int32 errorCode, String maybeFullPath)
+   在 System.IO.FileSystemInfo.get_CreationTimeUtc()
+   在 System.IO.FileSystemInfo.get_CreationTime()
+   在 GistarLite.FileUtility.GetFileTime(String user, String password, String filePath, DateTime& cTime, DateTime& mTime)
+   在 GistarLite.Trans.TransFileTree2Def.LoadItem(String item, String& info)
+2013/12/18 18:01:17:传输服务，任务城镇订正报20点起报:完成
+ 失败，原因:装载出错，异常:DirectoryNotFoundException
+内容 System.IO.DirectoryNotFoundException: 未能找到路径“\\10.125.1.33\151”的一部分。
+   在 System.IO.__Error.WinIOError(Int32 errorCode, String maybeFullPath)
+   在 System.IO.Directory.InternalCreateDirectory(String fullPath, String path, Object dirSecurityObj, Boolean checkHost)
+   在 System.IO.Directory.InternalCreateDirectoryHelper(String path, Boolean checkHost)
+   在 GistarLite.FileUtility.NewFileStream(String user, String password, String path, FileMode mode, FileAccess access, FileShare share)
+   在 GistarLite.Trans.TransFileTree2Def.LoadItem(String item, String& info) ]
+ 来自:mscorlib
+目标:Void WinIOError(Int32, System.String)
+位置: 在 System.IO.__Error.WinIOError(Int32 errorCode, String maybeFullPath)
+   在 System.IO.Directory.InternalCreateDirectory(String fullPath, String path, Object dirSecurityObj, Boolean checkHost)
+   在 System.IO.Directory.InternalCreateDirectoryHelper(String path, Boolean checkHost)
+   在 GistarLite.FileUtility.NewFileStream(String user, String password, String path, FileMode mode, FileAccess access, FileShare share)
+   在 GistarLite.Trans.TransFileTree2Def.LoadItem(String item, String& info)
+[2013/12/20 17:35:29] 荣 马: 你去看一下， 是不是Xp？
+[2013/12/20 17:36:50] 敏 杨: 哦。我让汤军义问一下韦台。
+[2013/12/20 17:47:17] 敏 杨: 韦台确认10.125.1.33这台电脑是XP系统。
+[2013/12/20 17:48:37] 荣 马: http://bbs.51cto.com/thread-781477-1.html
+----
+12:06 空气质量预报
+今天必须完成！
+最终呈现为Web页面。
+想法：抓取报文后，对报文进行解码，然后生成该报文对应的HTML静态页面。
+WEB站（主页）上仅提供日期选择，默认显示当前时间的报文。
+----
+报文每天一个，在\\10.124.32.201\benj\SendupBK\SEVP上创建的时间一般为15：18，然后进一步修改，直到15：33完成修改。
+----
+17：20 汤军义报告说，他坐的车在高速上抛锚了。
+叮嘱：晚上记得发日报。
+----
+2013-12-24 01：33 登录mail.gistar.com.cn邮箱时点击LogOn按钮后发现如下错误页：
+	Outlook Web Access 无法连接到 Microsoft Exchange。如果问题持续存在，请与组织的技术支持联系。
+
+
+Request
+Url: http://mail.gistar.com.cn:80/owa/default.aspx
+
+Exception
+Exception type: Microsoft.Exchange.Data.Storage.ConnectionFailedTransientException
+Exception message: Cannot open mailbox /o=GISTAR/ou=Exchange Administrative Group (FYDIBOHF23SPDLT)/cn=Recipients/cn=ym.
+
+Call stack
+Microsoft.Exchange.Data.Storage.ConnectionCachePool.OpenMailbox(String serverDn, String userDn, String mailboxDn, Guid mailboxGuid, Guid mdbGuid, Object identity, ConnectFlag connectFlag, OpenStoreFlag openStoreFlag, CultureInfo cultureInfo, String clientInfoString, Boolean secondTry)
+Microsoft.Exchange.Data.Storage.ConnectionCachePool.OpenMailbox(String serverDn, String userDn, String mailboxDn, Guid mailboxGuid, Guid mdbGuid, Object identity, ConnectFlag connectFlag, OpenStoreFlag openStoreFlag, CultureInfo cultureInfo, String clientInfoString, Boolean secondTry)
+Microsoft.Exchange.Data.Storage.ConnectionCachePool.OpenMailbox(String serverDn, String userDn, String mailboxDn, Guid mailboxGuid, Guid mdbGuid, Object identity, ConnectFlag connectFlag, OpenStoreFlag openStoreFlag, CultureInfo cultureInfo, String clientInfoString)
+Microsoft.Exchange.Data.Storage.MailboxSession.Initialize(LogonType logonType, ExchangePrincipal owner, DelegateLogonUser delegateUser, Object identity, OpenMailboxSessionFlags flags)
+Microsoft.Exchange.Data.Storage.MailboxSession.CreateMailboxSession(LogonType logonType, ExchangePrincipal owner, DelegateLogonUser delegateUser, Object identity, OpenMailboxSessionFlags flags, CultureInfo cultureInfo, String clientInfoString)
+Microsoft.Exchange.Data.Storage.MailboxSession.Open(ExchangePrincipal mailboxOwner, WindowsPrincipal authenticatedUser, CultureInfo cultureInfo, String clientInfoString)
+Microsoft.Exchange.Clients.Owa.Core.OwaWindowsIdentity.CreateMailboxSession(ExchangePrincipal exchangePrincipal, CultureInfo cultureInfo)
+Microsoft.Exchange.Clients.Owa.Core.UserContext.Load(OwaContext owaContext)
+Microsoft.Exchange.Clients.Owa.Core.RequestDispatcher.CreateUserContext(OwaContext owaContext, UserContextKey userContextKey, UserContext& userContext)
+Microsoft.Exchange.Clients.Owa.Core.RequestDispatcher.PrepareRequestWithoutSession(OwaContext owaContext, UserContextCookie userContextCookie)
+Microsoft.Exchange.Clients.Owa.Core.RequestDispatcher.InternalDispatchRequest(OwaContext owaContext)
+Microsoft.Exchange.Clients.Owa.Core.RequestDispatcher.DispatchRequest(OwaContext owaContext)
+System.Web.HttpApplication.SyncEventExecutionStep.System.Web.HttpApplication.IExecutionStep.Execute()
+System.Web.HttpApplication.ExecuteStep(IExecutionStep step, Boolean& completedSynchronously)
+
+Inner Exception
+Exception type: Microsoft.Mapi.MapiExceptionLogonFailed
+Exception message: MapiExceptionLogonFailed: Unable to open message store. (hr=0x80040111, ec=-2147221231) Diagnostic context: Lid: 18969 EcDoRpcExt2 called [length=587] Lid: 27161 EcDoRpcExt2 returned [ec=0x0][length=132][latency=15] Lid: 23226 --- ROP Parse Start --- Lid: 27962 ROP: ropLogon [254] Lid: 17082 ROP Error: 0x80040111 Lid: 26937 Lid: 21921 StoreEc: 0x80040111 Lid: 27962 ROP: ropExtendedError [250] Lid: 1494 ---- Remote Context Beg ---- Lid: 26426 ROP: ropLogon [254] Lid: 22787 Error: 0x0 Lid: 13032 StoreEc: 0x8004010F Lid: 59409 Lid: 45073 Lid: 11173 StoreEc: 0x80040111 Lid: 22970 Lid: 8620 StoreEc: 0x80040111 Lid: 1750 ---- Remote Context End ---- Lid: 26849 Lid: 21817 ROP Failure: 0x80040111 Lid: 26297 Lid: 16585 StoreEc: 0x80040111 Lid: 32441 Lid: 1706 StoreEc: 0x80040111 Lid: 24761 Lid: 20665 StoreEc: 0x80040111 Lid: 25785 Lid: 29881 StoreEc: 0x80040111
+
+Call stack
+Microsoft.Mapi.MapiExceptionHelper.ThrowIfError(String message, Int32 hresult, Int32 ec, DiagnosticContext diagCtx)
+Microsoft.Mapi.ExRpcConnection.OpenMsgStore(OpenStoreFlag storeFlags, String mailboxDn, Guid mailboxGuid, Guid mdbGuid, MapiStore msgStorePrivate, String& correctServerDn, ClientIdentityInfo clientIdentityAs, String userDnAs, String applicationId, CultureInfo cultureInfo)
+Microsoft.Mapi.ConnectionCache.OpenMapiStore(String mailboxDn, Guid mailboxGuid, Guid mdbGuid, ClientIdentityInfo clientIdentity, String userDnAs, OpenStoreFlag openStoreFlags, CultureInfo cultureInfo, String applicationId)
+Microsoft.Mapi.ConnectionCache.OpenMailbox(String mailboxDn, Guid mailboxGuid, Guid mdbGuid, WindowsIdentity windowsIdentityAs, String userDnAs, OpenStoreFlag openStoreFlags, CultureInfo cultureInfo, String applicationId)
+Microsoft.Exchange.Data.Storage.ConnectionCachePool.OpenMailbox(String serverDn, String userDn, String mailboxDn, Guid mailboxGuid, Guid mdbGuid, Object identity, ConnectFlag connectFlag, OpenStoreFlag openStoreFlag, CultureInfo cultureInfo, String clientInfoString, Boolean secondTry)
+----
+只好用QQ邮箱发了。
