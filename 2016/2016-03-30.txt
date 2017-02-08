@@ -1,0 +1,14 @@
+工作记录2016-03-30
+
+unity3d的shader相当奇怪。又或许是Camera.RenderWithShader方法的问题。
+目前观察到的现象是Pass中的使用传入参数的Color指令仅在正常渲染物体（给该物体添加此shader的材质）以及场景视图中可见。一旦使用Camera.RenderWithShader就会发生失效现象。就好像并没有使用该方法中给定的shader去渲染物体，而是沿用了物体原本的材质，导致渲染出的结果是五颜六色的。
+然而相同的操作，一但在Pass中使用固定常量的Color指令，则Camera.RenderWithShader会按照预期工作。
+
+既然无法改Material的参数，来影响Shader的参数。那么尝试一下这个方法吧：
+Shader.SetGlobalColor
+为了避免干扰别的shader工作，可以给参数名取名特殊点、长一点。
+尝试有效！
+
+问题的原因大概是RenderWithShader接受的是一个Shader，而不管该Shader所被引用的Material。因此在此Material设置的颜色值无效。
+
+Graphics.Blit方法的source与destination两个RenderTexture不能是同一个RenderTexture。否则会出错。

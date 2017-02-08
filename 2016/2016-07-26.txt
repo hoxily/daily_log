@@ -1,0 +1,5 @@
+工作记录2016-07-26
+
+体感试衣 ，退出加上体感操作。
+在DraggabelPanel里拖动物体，竟然飞出边界，消失了！明明勾选了RestrictWithinPanel的。
+那么就在每次显示推送监听信息时，调用UIDraggablePanel的ResetPosition方法来重置位置吧。

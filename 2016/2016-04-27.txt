@@ -1,0 +1,8 @@
+工作记录2016-04-27
+
+ngui的panel想要正常工作，需要使用NGUI目录下的Unlit/Transparent Colored Shader才行。
+
+新增脚部度数30的腿。对应新增的30度高跟鞋。
+
+TODO:
+主页面的“运营管理”移动到最下方。

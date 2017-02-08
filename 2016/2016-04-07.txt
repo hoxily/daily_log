@@ -1,0 +1,35 @@
+工作记录2016-04-07
+
+昨天联调半天，最后发现是刘新乐用错了API。本该用GCDAsyncUdpSocket，结果用成了GCDAsyncSocket，成了TCP连接了。怪不得有Connection Refused的错误信息。
+
+另外，PushMessage里做的那个ScrollText有问题。
+当一个Text对象的text属性的文字特别多时，会报错。大意是顶点数超标，文字无法渲染。
+
+    String too long for TextMeshGenerator. Cutting off characters.
+    UnityEngine.Canvas:SendWillRenderCanvases()
+
+    String too long for TextMeshGenerator. Cutting off characters.
+    UnityEngine.Canvas:SendWillRenderCanvases()
+
+    ArgumentException: Mesh can not have more than 65000 vertices
+    UnityEngine.UI.VertexHelper.FillMesh (UnityEngine.Mesh mesh) (at C:/buildslave/unity/build/Extensions/guisystem/UnityEngine.UI/UI/Core/Utility/VertexHelper.cs:78)
+    UnityEngine.UI.Graphic.DoMeshGeneration () (at C:/buildslave/unity/build/Extensions/guisystem/UnityEngine.UI/UI/Core/Graphic.cs:382)
+    UnityEngine.UI.Graphic.UpdateGeometry () (at C:/buildslave/unity/build/Extensions/guisystem/UnityEngine.UI/UI/Core/Graphic.cs:364)
+    UnityEngine.UI.Text.UpdateGeometry () (at C:/buildslave/unity/build/Extensions/guisystem/UnityEngine.UI/UI/Core/Text.cs:371)
+    UnityEngine.UI.Graphic.Rebuild (CanvasUpdate update) (at C:/buildslave/unity/build/Extensions/guisystem/UnityEngine.UI/UI/Core/Graphic.cs:324)
+    UnityEngine.UI.CanvasUpdateRegistry.PerformUpdate () (at C:/buildslave/unity/build/Extensions/guisystem/UnityEngine.UI/UI/Core/CanvasUpdateRegistry.cs:149)
+    UnityEngine.Canvas:SendWillRenderCanvases()
+
+这意味着想要渲染大量文本需要分成多个Text。或者做成翻页，或者做成仅显示可见部分。简单地放到一个Text里，再加上ScrollView构成可以滚动的文本框是不行的。
+
+子网之间想要互通的话就不能使用NAT模式（常规的TP-Link路由器的Wan口与Lan分别所处的子网是用NAT模式做的），而是使用静态路由表。NAT模式下，只能由LAN口网络的主机向WAN口网络的主机发起连接。反之则不行。
+
+点击屏幕左上角50x50像素，弹出退出选项面板。这个功能的触发是写在Assets\Scripts\NewVersion\GUILogic.cs中。而GUILogic脚本附着在层次视图中的GUILogic游戏物体上。
+
+需要实现页面跳转功能。能做到从任意界面跳到指定界面。
+
+点对点通信使用的端口号与广播消息使用的端口号区别一下，可以让魔镜端不必收到广播消息。
+广播端口定为点对点端口+1
+
+TODO:
+unity4.5.2 自定义格式 sir 人物的隐藏、显示

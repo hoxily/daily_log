@@ -1,0 +1,6 @@
+工作记录2016-08-31
+
+终于把爱居兔版的购物车界面改过来了。完全复制的七匹狼的界面。
+接下来是把爱居兔版的购物车界面复制到标准版。我勒个去。第二遍操作应该会快一些吧。
+
+确实快了许多。另外发现在MoJingCartManager里定义了RaiseOnClothChangedEvent与RaiseOnCartClosedEvent，但没有用起来。已修正。

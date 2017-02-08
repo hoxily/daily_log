@@ -1,0 +1,16 @@
+工作记录2016-05-16
+
+缺少UI素材与她联系。
+Promise?
+TODO：
+1.
+/UI_/Camera_3.0/PeiXun/Main/Frame物体上的UITexture换成UISprite，以消除明显的拉伸痕迹。企业培训的素材与颜色不对，需要修改。
+2. 企业风采
+
+NGUI使用UIAtlas的Sliced Sprite时，如果出现边框模糊，可以适当增加border的大小，这样就不会把中间色切下来。
+
+用Sliced Sprite方式来做虽然可以方便地拉伸而不变形。但是如果想要边框的粗细变化的话，就需要让美术提供不同粗细的Sliced Sprite 素材。
+
+由于缺少3d试衣的发型，所以没有办法测试发型的更新。
+
+企业风采里的企业视频直接使用轮播视频代替。

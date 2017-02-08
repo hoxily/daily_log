@@ -1,0 +1,17 @@
+工作记录2016-05-24
+
+IEnumerator TestCoroutineInEditor()
+{
+
+     Debug.Log("TestCoroutineInEditor");
+     yield return new WaitForSeconds(3);
+     Debug.Log("3");
+     yield return new WaitForSeconds(2);
+     Debug.Log("2");
+     yield return new WaitForSeconds(1);
+     Debug.Log("1"); 
+
+}
+如果是用[ContextMenu("Menu")]方法，在Editor没有Play的情况下执行以上的代码，那么只会输出第一条log信息。后续的yield return不再执行。
+
+2016-05-26出差温州。听取奥康的需求。记得仅记下需求，不可以现场答应下需求。

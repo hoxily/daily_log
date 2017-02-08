@@ -1,0 +1,11 @@
+工作记录2017-01-24
+
+用MovieTexture的方式播放缺失了图像数据的ogg视频文件时，会发生crash。在editor界面，则是连着editor一起crash掉了。
+
+黎明说要把首页视频和品牌视频里的播放方式也改成培训里那样的UMP插件播放。他说看看能不能不再出现崩溃的情况。
+
+D:\qpl-branches\ABs_qplo\videos\87.ogg
+
+----
+
+UMP在播放新的视频之前要先Stop。好像是引用了之前创建的MovieTexture，导致内存问题。

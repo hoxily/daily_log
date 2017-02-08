@@ -1,0 +1,21 @@
+工作记录2016-05-11
+
+版本发布注意事项
+ftp服务器地址：
+地址：61.174.52.41
+用户名：clm
+密码：*
+
+由于cdn的问题。版本发布时，上传到ftp的文件名最好加个后缀，比如“.tmp”。等到上传完毕后，再改名为正式名字。然后在后台的版本管理web界面新增一个版本，并推送。改名字的作用是主动刷新cdn。
+
+找到md5校验错误的原因了。当前工程代码生成的md5码值是缺失了0的md5码值。
+foreach (byte b in result)
+{
+    fileMD5 += Convert.ToString(b, 16);
+}
+按照他们的说法，必须使用他们生成的“md5”才能正确匹配。
+即发布时，必需使用GUILogic组件的GetMD5菜单，来生成zip包的校验值。
+
+此处代码暂不改动。保持维护人为赵国伟。
+
+小心sqlite数据表的_rowid_。categorys表的id字段必须定义为_rowid_才行。根据 https://www.sqlite.org/lang_createtable.html#rowid 文档中的说明，满足INTEGER并且是PRIMARY KEY才是_rowid_类型的column。由于SqliteQuery.Insert取了last_insert_rowid()值。否则select last_insert_rowid()取出来的值将会是很奇怪的值，2660啥的。

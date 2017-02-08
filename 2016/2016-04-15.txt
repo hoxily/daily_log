@@ -1,0 +1,56 @@
+工作记录2016-04-15
+
+NGUI的UI纹理导入的时候，设置如下：
+Texture type: Advanced *
+Non Power of 2: None *
+Read/Write Enabled: false
+Import type: default
+
+    alpha from grayscale:false
+    alpha is transparency:false
+    bypass srgb sampling:false
+    encode as rgbm:auto
+    sprite mode:none
+
+generate mip maps:false *
+wrap mode:clamp *
+filter mode:bilinear
+aniso level:1
+[default]
+max size: 4096 *
+format:argb 32bit *
+
+----
+
+七匹狼接口文档注意事项
+GET类型的请求参数
+参数不是常规的URL QueryString方式。而是直接拼接在接口地址的后面。
+假设参数字典为Dictionary<string,string> parameters = ...
+接口地址为 string address = "http://qplnew.qd.com/index.php/home/Apimir/login";
+那么构成最终URL的步骤为：
+string url = address;
+foreach(var pair in parameters)
+{
+    url += "/" + pair.Key +"/" + pair.Value;
+}
+拼接完成后的例子：
+http://qplnew.qd.com/index.php/home/Apimir/login/uname/admin/pwd/password
+
+无需检验、转义参数的值。即使参数的值含有斜线、回车都无需管。
+吐槽：这样子很容易构造出无效的HTTP请求吧。
+
+POST类型的请求参数
+参数放在body里，以json格式编码。无需担心。
+
+奥康后端接口基地址。暂时延用七匹狼的变量名。暂时将奥康作为七匹狼的子版本来对待。
+
+RunRawAPI内部是统一用WWW的POST方法来对接后端的。然而接口文档区别为GET与POST。张东说不用管。我去。。。。。
+
+代码可优化的可能性：相同的返回头部，而result体不一样。可以用泛型。直接让所有接口的返回值对应类少掉头类型。
+
+测试用店铺账号：u3d
+密码：*
+
+ak.qd.com  192.168.1.243
+
+小心，JSONObject类的str字段，并没有正确处理字符串中的转义。所以会出现"\u4e00\r\n\t"等结果。

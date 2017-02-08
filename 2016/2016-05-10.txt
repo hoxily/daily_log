@@ -1,0 +1,26 @@
+工作记录2016-05-10
+
+1. 增加3d试衣入口；
+2. 培训的视频在暂停时，播放按钮停靠位置太低，需要移动到中间。
+
+Camera 的 clear flag 设置为 Depth Only 的模式来渲染画面时，注意添加背景。否则会有残影留下来。
+
+对应于 Hierarchy中的UI_/Camera_3.0/BGP 物体。把它Active即可。
+
+getPaperList（问卷）、
+getSliderList（轮播）
+getVideoList（视频）、
+getGameList（游戏）
+getActiveNotice（活动公告）、
+getMessageNotice（通知公告）、
+newVersion（版本）
+
+这几个推送内容的接口统一新增 push_ids 字段（字段类型：string，值：推送ID1,推送ID2）
+
+奥康发布特殊规则：
+可执行文件名叫“奥康.exe”
+保持叫MoJing.exe不变（注意大小写）。用户需要的是快捷方式叫“奥康”，而不是可执行文件名。
+不可以叫中文名的另一个理由是，当前使用的Zip库不支持中文名。解压出来会乱码。
+
+
+魔镜Patcher的代码暂不提交。等七匹狼那边也升级到新api再一起提交。

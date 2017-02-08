@@ -1,0 +1,7 @@
+工作记录2016-09-19
+
+在线广播模块的自助监测重置功能有一些问题。
+超时的检测是在unity的main thread里。而其他的成功发送与发送失败检测是在另外的线程里。如此一来，对send_failure_counters数组操作的时候就要小心了。需要考虑读写问题。
+原子性地增长某个变量，可以使用 System.Threading.InterLocked.Increment(ref location1);方法。
+
+asus 的bios里的CSM是指compatible support module，兼容支持模块，这里兼容相对UEFI之前的旧的启动方式。

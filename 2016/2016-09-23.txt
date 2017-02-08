@@ -1,0 +1,18 @@
+工作记录2016-09-23
+
+黎明说，要从当前的七匹狼版本改造，得出特步版本。
+
+直接给eOEMType枚举增加Xtep类型，并在ConfigManager上改掉oem配置，程序就挂掉了。凡是出现qipilang_own枚举类型的地方，都得换成xtep才行。一共有170多处。
+
+最老的特步版本，是unity4.5.2版本的。在源码库里的工程文件夹名字是叫 xStep。
+如果下载下来源码后，用Unity4.5.2打开，运行出现这样子的错误并且3D试衣穿不上衣服的话：
+
+System.NullReferenceException: Object reference not set to an instance of an object
+at MoJingExport.PMat.DupMaterial(Boolean reqOpactiyProcess, UnityEngine.Object[]& assets)[0x0001c] in D:\repo\Siren_MoJing_xStep\Assets\Extensions\MoJingPkgTools\PMat.cs:51
+...
+at LoadResource+<LoadAsset>c__Iterator3D.MoveNext()[0x00894] in D:\repo\Siren_MoJing_xStep\Assets\Scripts\LoadResource.cs:411
+
+那么需要执行如下操作：
+停止运行，执行PMat菜单项里面的Refresh命令，更新这些资源。然后就好了。
+
+3D试衣修改进度：模特设置

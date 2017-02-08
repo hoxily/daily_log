@@ -1,0 +1,11 @@
+工作记录2016-06-14
+
+陈黎明  17:08:32
+规则1：clothtype相同，level相同，后穿的替换之前穿的。level不同，level值大的穿在level小的之上。
+规则2：clothtype为2（套装）的，穿上之后，把clothtype为0和1（上衣和裤子）的所有衣服脱掉。
+同理，如果穿某件clothtype为0或1的衣服，把身上clothtype为2（套装）的衣服脱掉
+规则3：上衣（clothtype为0）和裤子（clothtype为1）的显示前后逻辑：
+1）所有level>100的上衣穿在所有裤子之上。
+2）针对level=100的上衣，
+如果裤子istop参数为true，裤子显示在衣服之上。
+如果裤子istop参数为false，如果衣服istop为true，衣服显示在裤子之上。如果衣服istop为false，裤子显示在衣服之上。

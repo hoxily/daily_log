@@ -1,0 +1,15 @@
+工作记录2016-03-09
+
+4. Assets/Scene/release4.0_qpl.unity
+5. Assets/Scripts/WebAccess.cs RFID接入
+6. Assets/Scripts/RfidControl.cs
+
+RFID技术支持方案.docx  马克华菲
+qrcode
+
+坐标变成很接近0的x.xxxe-5时，并且手动输入0无效时，可以使用Transform的ContextMenu，选择Reset使其恢复。
+
+7. Assets/Scripts/MoJing4.0/RFIDDemoControl.cs
+
+ugui中的text的bestfit属性可以让字体自动调整大小，来适应控件矩形的大小。
+然而发现一个问题，那就是根据text的文本长度不同，相同矩形大小的两个text，其本文本的字号大小不相同。看起来相当别扭。

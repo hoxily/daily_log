@@ -1,0 +1,15 @@
+工作记录2016-09-20
+
+增加新oem版本需要做的事情：
+1。 eOemType增加一个类型枚举；
+2。 oem_add 后缀增加一个该类型的字符串；
+3。 更改 db 的数据库文件的名字；
+4。 更改 ABs 资源文件夹的名字；
+5。 修改 ConfigManager 上的oemType；
+6。 修改 WebAccess上的 web_api_base_url和 repair_database_url；
+7。 修改Build Settings 里的 ProductName；
+等等？？？
+有什么遗漏的吗？
+
+Unity3d的EditorWindow，其OnGUI更新并不及时。特别是使用Process类创建并运行一个新的程序之后。严重的会导致EditorWindow整个儿消失掉。所以想要显示进度是别想了。麻烦的是，外部命令执行完毕后，OnGUI并不能被及时调用，不能及时检测Process.HasExited，拖慢了计算hash码的时机。偶尔运气差，还会遇到外部命令运行结束后，EditorWindow再也不显示回来的问题。
+相当的不可靠呢。

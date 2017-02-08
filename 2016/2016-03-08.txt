@@ -1,0 +1,7 @@
+工作记录2016-03-08
+
+4. Assets/Scene/release4.0_qpl.unity
+5. Assets/Scripts/WebAccess.cs RFID接入
+6. Assets/Scripts/RfidControl.cs  -- Assets/Extensions/Rfid/RfidProvider.cs
+
+一个网络适配器可以添加多个IP地址。首先需要取消DHCP。在IPv4属性的高级里面，可以添加另一个网段的IP地址。这在同时访问多个网段的设备时很有用。

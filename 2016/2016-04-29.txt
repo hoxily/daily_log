@@ -1,0 +1,27 @@
+工作记录2016-04-29
+
+TODO：来自沈微微
+1、退出界面还是七匹狼版本，
+2、活动公告未接入，显示在品牌推广里 
+3、店铺管理给用户改密的 要开放出来  
+4、官网二维码要填入，我们来填  
+5、魔镜帮助隐藏
+10. 魔镜帮助的页数搜索bug  已找到bug原因。参见下方 OnScreenKeyboard使用方法
+11. 点击品牌不应该重置下身着装穿着。  品牌已经被屏蔽，后续版本需要修复此bug。
+
+OnScreenKeyboard使用方法：
+OnScreenKeyboard使用了Unity3d的legacy gui。绘制的窗口看不见大小与位置。
+NGUI那边需要加上两个Collider才能正确处理CancelInput。
+即创建一个包裹OnScreenKeyboard 的keyboardmask区的Collider，
+再创建一个比keyboardmask区稍远离摄像机的cancelinputmask，并加上Button Message。
+这样就可以实现点击OnScreenKeyboard之外的区域，响应CancelInput逻辑。而点击到OnScreenKeyboard上，属于虚拟键盘输入。
+
+找到megapge页码输入无效的原因了。原因之一是OnScreenKeyboard的用法不对；原因之二则是输入框控件与输入确认的Collider的z轴位置不对。
+正确的顺序应该是：（z轴值从小到大）
+输入确认、输入框、keyboardmask、cancelinputmask
+小心Collider的z轴顺序。
+
+
+奥康发布特殊规则：
+可执行文件名叫“奥康.exe”
+保持叫MoJing.exe不变。用户需要的是快捷方式叫“奥康”，而不是可执行文件名。

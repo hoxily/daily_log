@@ -1,0 +1,10 @@
+工作记录2016-06-01
+
+既然UIPopupList不满足需求，干脆用基本控件自己搭一个颜色选择器吧
+
+1. 弹出窗口做成统一的右上角X按钮吧。陈黎明说。
+2. 弹出窗口背景图做成Sliced Sprite，这样上边的标题栏就能保持比例
+
+Firefox的JsonHandler插件有个bug。当钩选“自动渲染JSON文件”时，如果string中含有“&”符号，会被自动转成“&amp;”。要小心。例如这个地址：http://ak.quda.cn/index.php/home/Apimir/getGoodsRule/key/QPL_MIRROR/secret/539d60b7bb51e8efce9342a2403b5f45/uid/30/token/04bcb6f5fddf54e4eaa604f6dcb7d82d
+
+3. 给商品二维码加上店铺来源参数，以使爱拍客可以跟踪来源，计算销售员业绩。

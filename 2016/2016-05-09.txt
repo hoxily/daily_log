@@ -1,0 +1,4 @@
+工作记录2016-05-09
+
+patcher更新功能出bug啦！
+除了需要修改MoJing_AoKang源码，还需要修改Patcher的源码。实际上，Patcher的源码与MoJing_AoKang内的Patcher是一样的代码。

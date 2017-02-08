@@ -1,0 +1,10 @@
+工作记录2016-09-12
+
+TShow舞台背景biaozhi（标志）物体：
+/DressingRoom/TTaiShow/TG4.13_Titai/polySurface144/polySurface146，直接换material里的贴图即可。注意导入的纹理设置需要与原先设置保持一致。
+注意，新纹理是quda logo， 不再是狼图案。
+
+1. 去掉3d试衣男模身上的七匹狼图标。注意换SkinFiles里的资源。以及男模的默认皮肤资源。
+默认初始皮肤资源在 BodyManager上，也即 /DressingRoom/BodyManager_male 物体上。
+
+虚拟货架上的Item不需要selected_sign标志。可以直接将SelClothItemControl3_0的selected_sign置空。改预设体。

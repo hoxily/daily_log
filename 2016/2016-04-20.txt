@@ -1,0 +1,13 @@
+工作记录2016-04-20
+
+todo:
+在用户主动更新界面中，完成更新商品对接、更新轮播视频对接。
+参见以下物体：
+/UI_/Camera_3.0/MoJingHelper
+/UI_/Camera_3.0/HomePage/Internal_Apps_Update
+
+z值除了影响NGUI的显示层次问题。还影响NGUI UIButtonMessage的互相遮挡顺序。
+
+张东 2016/4/20 17:03:56
+获取区域（分公司）绑定商品的后端接口名字：getGoodsList、getGoodsCount ，
+参数和返回值和更新本店绑定商品一致。

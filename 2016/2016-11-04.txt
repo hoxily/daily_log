@@ -1,0 +1,14 @@
+工作记录2016-11-04
+
+弹窗通知文本过长。目前定下来的解决方案是可拖动的面板。
+
+遇到了NGUI 的UIDraggablePanel.ResetPostion方法在物体没有初始化时的NullReference错误。
+
+现在没报NullReference错误了。但是ResetPosition方法重置的位置不对。
+估计是通过调整scale做动画效果的时候，初始的localScale调得太小，导致UIDraggablePanel.ResetPosition的时候定位出错。
+
+搞定。
+需要把ResetPosition的时机放在_root.SetActive(true)之后，并且在_root.transform.localScale = new Vector3(0.001f, 0.001f, 1.0f); 之前。
+
+蛋疼。为了方便计算boxcollider的位置，把UILabel的Pivot设置成正中了。可是这样子，文本显示就很糟糕（居中对齐了）。
+为了左对齐的文本显示效果，需要复杂地计算BoxCollider的位置了。

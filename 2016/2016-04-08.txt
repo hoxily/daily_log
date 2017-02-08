@@ -1,0 +1,14 @@
+工作记录2016-04-08
+
+TODO:
+unity4.5.2 自定义格式 sir 人物模型的隐藏、显示，但是保留着装的显示。
+切换男女模型使用了对Model根GameObject做SetActive(false)操作。所以想以SetActive方法实现以上功能将会与切换男女模型冲突。
+陈黎明建议对模型上的SkinnedMeshRenderer组件做enabled操作。
+问题在于人体模型的某些部件是动态添加上去的。无法在编辑器界面一次性将所有SkinnedMeshRenderer 加入到数组中。
+还有一个问题则是，这些动态部件的命名可能并不固定。
+层次视图上显示有一个BodyControl，而BodyControl分别持有男女的BodyManager的引用。从
+BodyManager中可以找到该人物模型对应的head,face,body等身体部件。
+
+注意：头部face不是使用SkinnedMeshRenderer渲染，而是MeshRenderer。注意类型区别。
+
+发现了该工具的一个bug。那就是点击清空试衣列表的时候，会强制切换人物模型为女性。然而性别切换按钮上的指示图标并没有相应地改变过来。

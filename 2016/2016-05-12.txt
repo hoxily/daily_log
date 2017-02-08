@@ -1,0 +1,9 @@
+1. IEnumerator迭代器不能有ref或out参数。
+2. yield return不能放在try块、catch块以及finally块里面。
+
+找到一个bug。
+对于不存在的sir模型文件，后台返回的HTTP状态码仍然是200 OK。然而WebAccess类里面的DownloadFile只检查了是否是200状态码。接下来直接取HTTP Header里面的Content-Length值。然而并没有检查Regex 的Match是否Success，直接取的Match的Value。导致uint.Parse出错。于是程序的更新就停下来了。
+
+看起来，3D试衣界面的选择栏是只有两级分类的。也就是默认根据男女性别，直接代码写死一级分类，然后显示出二、三级分类。
+
+不知道为什么，3D试衣界面的选择界面看不到添加了3d模型的两件商品。

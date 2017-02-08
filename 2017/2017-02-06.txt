@@ -1,0 +1,11 @@
+2017-02-06，星期一，多云
+
+如果不考虑3D人物的BodyControl的话，一共有8个相关的cs文件实现着装顾问。分别是MinusAndPlus.cs, StatureItem.cs, ModelBMIControl.cs, DemoSetStature.cs, CustomDatePageControl.cs, ModelItem5_3.cs, ModelItemControl.cs, ModelMeasureControl.cs
+
+其中MinusAndPlus、StatureItem是3D人物身材控制的Slider控制，顺便加上了身体部位示意图展示功能，二者为DemoSetStature服务。ModelBMIControl是简单的身高、体重两个因素输入，展示BMI数值、BMI刻度条和相应的文本提示。ModelItem5_3是ModelItemControl的子物体。这两者主要是实现一个单选功能，类似OptionList功能。CustomDatePageControl是输入完毕后的报表页面控制，包括展示类似表格的复杂界面等等。最后的ModelMeasureControl则是整个着装顾问的总控制脚本。内部子界面的跳转、动画、上一步、下一步的流程控制、与后台的数据交互都是写在这里面。
+
+所以理应只要改动 ModelMeasureControl就够了？
+
+----
+
+纹理导入设置里，如果想要节省内存空间，可以不要mipmap；另外如果是没透明的图，压缩成dxt1，质量和不压缩基本没区别。

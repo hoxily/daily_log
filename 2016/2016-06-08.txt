@@ -1,0 +1,3 @@
+工作记录2016-06-08
+
+成功将winform的升级包打包工具移植到了UnityEditor中，成为了一个编辑器Utility。

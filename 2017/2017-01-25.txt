@@ -1,0 +1,6 @@
+工作记录2017-01-25
+
+引入UMP后调试遇到断点会导致Unity Editor和Visual Studio/MonoDevelop卡死。
+
+没有百度到啥有用的信息。感觉最好还是询问一下UMP插件开发者。
+现在暂时只能输出log来调试了。

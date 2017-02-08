@@ -1,0 +1,6 @@
+工作记录2016-07-06
+
+摘自微软msdn的note：
+You must create the UdpClient using the multicast port number; otherwise, you will not be able to receive multicasted datagrams. Do not call the Connect method prior to calling the JoinMulticastGroup method, or the Receive method will not work. You do not need to belong to a multicast group to send datagrams to a multicast IP address.
+也就是作为魔镜报告自身ip这一方，不需要加入组播组，直接向组播地址发消息即可。
+那么问题就来了，这个组播组的地址选什么好？会不会跟已有的组冲突？

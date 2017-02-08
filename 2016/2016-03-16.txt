@@ -1,0 +1,11 @@
+工作记录2016-03-16
+
+长任务模式并没有心跳的机制。
+只能检测socket是否还连接着。
+或者设置ReadTimeout/WriteTimeout，出现读写错误时即认为连接已经无效。
+
+uGUI例子学习：UIWidgets项目
+
+todo:
+1. 奥康UI逻辑图
+2. LongTask两个线程的UML序列图。

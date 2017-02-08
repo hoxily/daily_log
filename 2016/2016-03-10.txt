@@ -1,0 +1,13 @@
+工作记录2016-03-10
+
+4. Assets/Scene/release4.0_qpl.unity
+5. Assets/Scripts/WebAccess.cs RFID接入
+7. Assets/Scripts/MoJing4.0/RFIDDemoControl.cs
+QRCode集成
+
+马克菲尔的rfid接入方案，界面流程上有个小疑问。startrfid成功后理应自动转到等待扫描界面，而扫描成功后自动转到商品详情界面。那么，问题来了，初始界面上stoprfid有什么用？商品详情页被用户手动关闭后，应该是返回到等待扫描界面吧。难道是长时间等待扫描而无结果，超过一定时间后自动断开连接，返回初始界面么？在初始界面上显示商家logo？
+
+在unity里，用户新建的线程没有正常结束的话，会导致unity编辑器卡死。
+
+多次开启关闭RFID，再尝试退出，将会出现程序无响应的问题。
+单次开启RFID，再关闭并退出，程序可以正常结束。

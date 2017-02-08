@@ -1,0 +1,30 @@
+工作记录2016-07-07
+
+在Unity编辑器的Sprite预览图里发现了奇怪的斜45度和斜135度交错的条纹。原来是设置了alpha值不为255的缘故。而且原始图片是png带透明的格式。正常现像，不用怀疑显示器坏了。
+
+试了一下从注册表里面读取WinRAR的安装路径，结果发现找不到。但是用regedit注册表编辑器打开 HKLM\SOFTWARE\WinRAR是存在的。其exe64正是程序的完整路径。
+
+http://www.cnblogs.com/TankXiao/archive/2012/11/03/2747910.html 网上找到一个读写64位注册表信息的方法。
+
+using System;
+using Microsoft.Win32;
+
+namespace RegistryTest
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            RegistryKey local_machine = RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Registry64);
+            RegistryKey winrar = local_machine.OpenSubKey("SOFTWARE\\WinRAR");
+            string program_path = winrar.GetValue("exe64") as string;
+            Console.WriteLine(program_path);
+        }
+
+    }
+}
+
+感觉还是太麻烦了。还不如直接在PackagePacker里面配置Winrar的安装路径算了。
+
+todo：
+1. 参考七匹狼项目，修复异常截屏功能。以及SubmitErrorLog功能。

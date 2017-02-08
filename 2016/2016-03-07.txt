@@ -1,0 +1,15 @@
+工作记录2016-03-07
+
+TODO:
+1. svn
+2. 入职手续
+3. unipatcher
+4. Assets/Scene/release4.0_qpl.unity
+5. Assets/Scripts/WebAccess.cs RFID接入
+6. Assets/Scripts/RfidControl.cs  -- Assets/Extensions/Rfid/RfidProvider.cs
+
+unity5.3.1f 安装后，注意各个组件是分离的。仅安装257MB的UnitySetup64-5.3.1f1.exe，将会仅仅支持WebPlayer Builds。由此，将造成常见插件不能正常工作、脚本报缺少assembly引用错误等。
+依据需求，还需要安装相应的平台支持组件：
+UnitySetup-Windows-Support-for-Editor-5.3.1f1.exe,
+UnitySetup-Mac-Support-for-Editor-5.3.1f1.exe,
+UnitySetup-Linux-Support-for-Editor-5.3.1f1.exe

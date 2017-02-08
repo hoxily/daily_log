@@ -1,0 +1,10 @@
+工作记录2016-09-29
+
+办公室的饮水机又烧不了热水了。上一次坏掉是什么时候来着？
+
+很奇怪，无法直接从unity3d 4.5.2的Sync MonoDevelop Project菜单打开visual studio，并且会残留一个占用了内存资源的进程。暂时的解决方法是直接打开Visual Studio 2015，然后打开对应的工程解决方案。这时打开unity3d里的脚本资源时，会自动打开visual studio里的文件。
+
+肤色的设置涉及到皮肤的颜色以及脸部的颜色。而脸部的资源并不在SkinsFiles里。而在脸型预设体的FaceTextureControl脚本的_all_skins上。从道理上说，脸型的FaceTextureControl._all_skins的脸型材质应该从亮到黑排布。否则与身体的亮暗就对应不上了。
+
+另外还有一个问题，调整身材的时候，那5个触发动画用的Collider形状还对吗？会不会大小不匹配了？我看一看。
+没有问题。由于是把Collider放在骨骼上，会随之移动和缩放。

@@ -1,0 +1,13 @@
+工作记录2016-08-11
+
+看了一些csdn的blog文章，以及zhihu上的评论。
+
+相似单品后台接口：获取商品详情的 getProDetail，   新增返回 same_pro字段，多个货号以逗号分隔。注意，是货号。
+例子：
+{"code":0,"message":"\u7ed3\u679c\u6b63\u786e","result":{"srcname":null,"modname":"578dde62859aa.sir","img_url_2d":"578dde512f0a5.png","model360":null,"model_id":"4904","pro_title":"2016\u590f\u5b63\u77ed\u8896\u886c\u886b[\u4f53\u611f\u8bd5\u8863\u4e13\u7528]","pro_desc":null,"type_main":"1","type_sub":"2","mod_pic":"578dde6fae47b.png","pro_img":"5798125705d6d_hd.jpg","mask_img":"","brand_id":"0","price":"699","aid_type":"0","level":"100","cloth_type":"0","retain_underware":"0","model_type":"2","resource_type":null,"is_top":"1","foot_angle":"0","ck_src":"","frontal_map":"578dd8cc316b4.png","negative_map":"5795b13d3337c.png","template_id":"102","rec_url":"http:\/\/demo.zb.quda.cn\/Tpl\/default\/upload\/3dmodel\/","type_one":"6","dp_price":"699","info_modify":"1469600865","file_modify":"1469600865","jmnumb":"111630503205-406","producnumb":"1468913492213644","thridnumb":"111630503205","ysms":"","dsx":"#FFFFFF","cover":"5798125705d6d_mid.jpg","mask_url":"http:\/\/m.septwolves.cn\/goods\/111630503205","brand":"","pinpai":null,"mallpic":"http:\/\/demo.zb.quda.cn\/Tpl\/default\/upload\/goods\/","same_pro":"EWJAJ2G003A03-239,EWJAJ2G002A02-239"}}
+
+相似单品设计图说明：
+下方的小图列表为各个相似单品。可以考虑为DraggablePanel。点击其中的项，则展示到中间的大图。左、右箭头的功能为向前向后翻动一项，以当前展示商品为基准。去试穿按钮则是根据是否有3d试衣衣物模型来决定是否显示。列表与大图之间的说明文字为当前展示商品的标题，考虑居中显示。最多两行。
+
+推荐搭配设计图说明：
+小图列表为当前选定推荐中的组成商品。由于技术原因，暂时无法展示完整搭配效果图，所以中央大图为当前选定推荐中的当前选定商品。所以左、右箭头的功能分别为选择上一推荐搭配和选择下一推荐搭配。试穿按钮的含义为穿上整套搭配。

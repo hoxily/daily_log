@@ -1,0 +1,7 @@
+接口有变动。又得修改代码了。相似单品属性从getProDetail里分离出来了。
+
+http://demo.zb.quda.cn/index.php/home/Apimir/getSameProList/key/QPL_MIRROR/secret/539d60b7bb51e8efce9342a2403b5f45/pid/28843
+
+{"code":0,"message":"\u7ed3\u679c\u6b63\u786e","result":"EWJAJ2G003A03-239,EWJAJ2G002A02-239"}
+
+耶。相似单品对话框搞定。不过在弹出该对话框后，左右滑屏会导致下方的商品选购面板也进行翻页，可以屏蔽一下。

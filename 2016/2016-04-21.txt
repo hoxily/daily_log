@@ -1,0 +1,9 @@
+工作记录2016-04-21
+
+2d搭配的png图作为模型来对待。
+给ClothItem增加u2d_name 字段
+rec_url+u2d_name即为完整url地址。
+存本地时，存入pros/{id}/2d/{u2d_name}。
+存入一个独立的2d文件夹。
+
+上传的数据的分类有些问题。必须是特定类型才能在aokang那里显示。

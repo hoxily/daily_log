@@ -1,0 +1,3 @@
+第二次遇到DraggablePanel无法拖动的问题了。经过比对，最终发现是预设体的Layer与Panel的Layer不一样的缘故。预设体的Layer是Default。而如果用代码加载的话，会强制设置物体的Layer为父物体的Layer。这是个坑。
+
+UI改起来好慢。

@@ -1,0 +1,5 @@
+工作记录2016-08-02
+
+小心。UIInput的activeColor会强制把关联的UILabel的color改掉。
+
+bug记录：切换男女的时候，推荐、喜欢、试穿记录不正确。
