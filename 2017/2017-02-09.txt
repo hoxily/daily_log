@@ -13,3 +13,10 @@
 张继霞的第2个问题可以通过以下方式解决：关掉TeamViewer远程操作连接。通过对比，可以发现TeamViewer在开启远程操作时是比较消耗CPU性能的。这时UMP的视频画面会有卡顿现像。关掉TeamViewer之后，视频画面恢复正常。
 
 第1个问题找到原因了。生成的列表项稍微靠上了一点。超出了UIPanel的clipRange。导致UIDraggablePanel.shouldMove判定为true；把UITable、UIGrid、WaterFallLayout排版组件物体向下移一点就好。
+
+----
+
+22:51
+整个下午到晚上都没有马雪敏的回应。整个人心情都不好啦。好期待我的手机闪烁绿色的提示灯。
+
+睡了，晚安。
