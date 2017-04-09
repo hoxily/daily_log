@@ -1,0 +1,5 @@
+2017-04-05，星期三，多云，16~25摄氏度
+
+需要向程鹏请教一下，为什么DOTweenComponent.Update下会有这么耗时的LogStringToConsole。
+然而程鹏的回答只是说print或者Debug输出太多，IO耗时。其实我更想知道是哪一块log输出过多。
+直接使用 Debug.logger.logEnabled = false 是可以屏蔽log输出的。但是对象的ToString消耗以及字符串拼接消耗不能避免。要做到最高性能，需要移除涉及log输出的代码。

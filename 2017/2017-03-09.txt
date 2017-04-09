@@ -1,0 +1,27 @@
+2017-03-09，星期四，多云，9~19摄氏度
+
+可以尝试一下监听MonoBehaviour的OnApplicationPause和OnApplicationFocus事件。
+
+在失去焦点或者暂停时，主动把Input.gyro.enabled置为false；在获取焦点或者从暂停切为播放时，重新把Input.gyro.enabled置为true；
+
+尝试结果表明无效。
+
+----
+
+Input.gyro.attitude莫名其妙变为恒定的(0,0,0,1)时，将Input.gyro.enabled先置为false，再置为true，可以使其恢复正常工作。
+
+----
+
+小心。在一个静态非Trigger的Collider内部创建的非Trigger刚体，初始设置其速度会不正常。但是创建Trigger类型的刚体则是能正常初始化其速度。
+
+----
+
+4.0版本开始的android系统，是否一定有陀螺仪支持？
+
+根据 android api 文档的说法，TYPE_GYROSCOPE 添加于 API level 3。那么4.0版本是一定有的。
+
+----
+
+独立工程的东西导入另一个工程。可以使用Export Package，然后Import Package的方式。为了避免文件夹混乱，在导出之前先把所有东西放入一个新建的文件夹内。等导入到目标工程里，再调整文件夹结构。
+
+是不是还应该把脚本的类名也改一改？

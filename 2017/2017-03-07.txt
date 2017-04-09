@@ -1,0 +1,12 @@
+2017-03-07，星期二，晴，4~15摄氏度
+
+程鹏给的新任务：android端的支付。
+1. 首先配置好 集成开发环境 Eclipse；
+
+unity 5.5.2f1
+
+Unity5.x Pro patch提示Pattern not found时，注意检查是不是下拉菜单没有选择5.x版。默认是4.x版本。
+
+----
+
+新任务：理解抽奖界面， LotteryPager

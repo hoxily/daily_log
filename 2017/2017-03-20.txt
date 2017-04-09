@@ -1,0 +1,21 @@
+2017-03-20，星期一，小雨，10~13摄氏度
+
+paotai transform：
+pos:0,-0.525,1.1
+rot:-34.4,180,0
+scale:1,1,1
+
+-----
+
+删除Pager的公开成员变量时，会出现LuaFramework编译错误。这时按如下步骤执行：
+1. 菜单项 Lua -> Clear wrap files，并等待Unity Editor编译完成；
+2. 菜单项 Lua -> Generate All，再次等待Unity Editor编译完成；
+
+----
+
+每秒12帧
+
+----
+
+UGUI有什么办法可以让一个宽度可变的Text的左紧贴一个宽度固定的Text？
+比如 x10086 乘号宽度固定，但是数值大小在变化。
