@@ -1,0 +1,20 @@
+2018-03-14
+
+2018-03-13
+
+TODO
+
+* 邀请唤醒页需要根据ios还是android，显示不同的引导提示图片。二者的左上角按钮不同，以及使用浏览器打开的图标也不同。(完成)
+* 麻将游戏房间的设置面板提前，在TopUI之下，且在UIRoot之上，二者的中间位置。（推迟，待确认）。此项修复涉及UI部局的层级。
+
+====
+
+老爸与老妈将在今天中午左右到达目的地。
+
+已成功注册另一个微信号。
+
+对话框标题：app installation failed
+对话框内容：a valid provisioning profile for this executable was not found.
+原因：为了省时间，先执行build for running，然后插上新设备，点击按钮注册该设备到开发者的provisioning file里，直接执行perform action->run without building，就会出现这样子的错误。这是因为先前build的可执行文件里面带的是旧的provisioning profile。重新build一遍就行了。
+
+和瑞科技园送水彭先生 18458875776

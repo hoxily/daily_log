@@ -1,0 +1,28 @@
+2018-05-13，星期日，阴转多云，21~29摄氏度，杭州滨江
+
+TODO:
+* 王思敏给了商城的资源以及参考的视频，见桌面上ResRecv/2018-05-07文件夹内容。
+* 客户端的第四方支付。
+* 百搭棋牌的linkmj页面。config.js里的ios下载地址等待更换。
+* 炸金花弃牌要求含有动画。基本原则是录像逆播的效果。
+* 新弹框动画需求，见桌面上的TODO
+* 对于calculate_point协议，如果收到错误码33004之后,发一条离开房间的消息。原因是金币数量不足,被踢出房间。
+* 自动跟注按钮的2个状态UI有调整。除了光圈旋转，还有打勾。具体见脑海中的设计图。
+* 1.0.3bug反馈，见在线表格。
+----
+
+Android Studio 使用过程中Quick Documentation弹框无法查看文档，总是提示“fetching documentation...”。甚至连自己写的代码的文档注释也无法提示。网上搜了下，在Stack Overflow有一个解决方法。基本上是把jdk.table.xml文件里面的联机文档替换成本地文档，然后使用Android Studio的File->Invalidate Caches/Restart菜单项重新生成文档的索引文件就行了。链接 https://stackoverflow.com/questions/23378610/android-studio-quick-documentation-always-fetching-documentation
+
+可以愉快地写java代码了。
+
+----
+出了个闪退的bug。一点应用就闪退。在我的华为机上看不到有用的log信息。换成白色华为机后，终于看到了错误。有两处：
+1. okhttp库好像没有放进去，ClassNotFoundException；
+2. 提示 libpay_native-lib.so 找不到。但是解包aar文件，jni文件夹下面确实是有这个文件的。
+
+GCloudVoice插件已经含有android-support-v4了。
+
+注意！在gradle里更改jar包从compile files为provided files方式（即不包含进aar里面），需要先clean一遍才行。不然assemble命令会将之前的丢进去的jar包打进aar包里，造成v4支持包重复。
+
+----
+解压打出来的apk包，可以看到lib文件夹下，只有armeabi-v7a和x86下才有libunity.so、libmono.so、libmain.so文件。那么为了保持二进制兼容，旺实富的so也需要相应的armeabi-v7a和x86版本。反而文档中所说的armeabi版本根本用不到。

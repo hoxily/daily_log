@@ -1,0 +1,6 @@
+2018-01-29
+
+试过wxapi.WXEntryActivity不在包名之下，微信的回调不成功。看起来一个bundle identifier就需要对应一个微信plugin了。
+
+在Assets/Plugins/Android下放置主AndroidManifest.xml之后，app图标没有了。但是如果不放的话，又会出现默认的UnityPlayerActivity，而不是自己写的MainActivity。所以目前的方案是使用自己的AndroidManifest.xml，用来指定主入口为MainActivity，同时在application结点使用Unity自带的图标资源。也就是这些数据：
+  android:theme="@style/UnityThemeSelector" android:icon="@drawable/app_icon" android:label="@string/app_name" android:isGame="true" android:banner="@drawable/app_banner"

@@ -1,0 +1,7 @@
+2018-01-24
+
+再试试android工程导出，看看能不能在android studio打包。
+
+Gradle构建任务出错了。网上的说法是Gradle版本与Plugin版本不匹配。
+
+*登录页更换布局，见QQ群里的设计图。（已完成）

@@ -1,0 +1,10 @@
+2018-02-03
+
+韩晨尝试了universal link之外的url scheme方案来唤起iPhone上的自家应用，成功了。
+
+断线重连这一块，可以成功地在websocket close事件里重新发起连接，然后发送区别于普通的create_room和join_room的rejoin_room请求，以进入房间。这个看起来也没有问题。麻烦的是，rejoin_room的返回结果，含有之前大量其他协议配合着才推导出来的状态值。
+
+rejoin_room数据不足：
+1. 弃牌缺少朝向；
+2. 当前轮到哪个玩家；
+3. 手牌里最新摸的要隔开；

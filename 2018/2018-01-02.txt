@@ -1,0 +1,15 @@
+2018-01-02
+
+最近刷牙老是出血，今天的出血量特别大。
+
+TODO：
+* 比对并导入外援提供的BMFontEditor，替换自己改写的CustomFontMaker。
+
+测试发现，spine for unity的Skeleton Graphic(UnityUI)组件不支持分多张纹理的skeletonData资源。造成的结果就是显示时会引用错误的纹理。而SkeletonAnimation则是支持多纹理资源的，显示起来并没有混乱。
+
+在spine for unity的源码中，spine-unity/Modules/SkeletonGraphic/SkeletonGrahpic.cs文件中，OnValidate方法里有一段代码明确指出了不支持多纹理。3.5以及github上的3.6、3.7-beta版本都是同样的LogError代码。其源码片段如下：
+
+if (skeletonDataAsset.atlasAssets.Length > 1 || skeletonDataAsset.atlasAssets[0].materials.Length > 1)
+	Debug.LogError("Unity UI does not support multiple textures per Renderer. Your skeleton will not be rendered correctly. Recommend using SkeletonAnimation instead. This requires the use of a Screen space camera canvas.");
+	
+可以通过导出时打包到单张纹理上，或者单独导出每个spine特效来避开这个问题。

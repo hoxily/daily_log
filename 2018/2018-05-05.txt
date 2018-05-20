@@ -1,0 +1,35 @@
+2018-05-05，星期六，阵雨，16~25摄氏度，杭州滨江
+
+TODO:
+* 玩家头像下的当前金币数量使用BMFont字体，参见牛牛；
+* 倒计时小闹钟的时间使用BMFont字体，参见牛牛；
+* 结算时的收入与支出底图和文字都有调整，参见牛牛；
+* 自动跟注按钮的2个状态UI有调整。除了光圈旋转，还有打勾。具体见设计图。
+* 断线重连
+* 客户端的第四方支付。
+* 把SDK相关的appkey，appid统一到配置里面，而不是硬编码在代码里。（已完成）
+* 1.0.3bug反馈，见在线表格。
+* 研究一下ShareSDK是怎么做到任意android包名下wxapi.WXEntryActivity都能正确位于包名之下。（使用变通方案解决：多定义几个WXEntryActivity，在AndroidMenifest.xml里标注exported，继承自统一的BaseWXEntryActivity。尽量做到一个工程，服务多个app应用。）
+
+----
+
+王成改动了auto_keep_stakes协议的返回结果。添加了取消自动跟注后，需要恢复的可用操作。用于轮到自己，但抢在服务器替自己跟注之前，取消了自动跟注的情况下。这时需要恢复玩家可用的操作按钮。
+
+把系统更新一下，结果发生了冻结屏幕的死机问题。只有鼠标可以移动，但是无法拖动任何窗口。用键盘也无法切换当前活动窗口。虽然键盘的Caplock，NumLock，ScrollLock都能开关切换。等了大约10分钟，都没有恢复。所以长按电源关机重启了。
+
+重启后，第二次遇到该问题。冻结时机发生在从其他窗口切换到VSCode时，就一直卡在VSCode上了。鼠标光标可以随意移动，但是点击无效。光标悬停在VSCode上时，会出现转圈的小圆圈。
+
+已还原系统为1703.赶紧把windows更新给禁了。在gpedit.msc里可以强制关闭windows的更新。
+
+----
+
+准备把wx_appid这种配置从Resources/AppConfig里移出去。因为在iOS上，mono都还没有初始化呢，就会用到wx_appid了。另一方面，其他的配置项保持不变，继续在Resources/AppConfig下，使用AppConfigManager来访问。简单地说，就是抢在Unity运行时之前就需要的配置项，放到StreamingAssets下，由native代码来读取该配置项的值。
+
+为了方便，利用文件夹目录结构，约定文件名就是配置项的键名，而文件的内容就是该配置项的值。统一存放于StreamingAssets/AppConfig/之下。
+例如 wx_appid = xxxx 这一条配置，对应于 StreamingAssets/AppConfig/wx_appid.txt 文件，文件内容为“xxxx”。
+
+直接在AndroidManifest.xml的AwakenActivity的intent-filter里加data结点，添加scheme就能多一种scheme方式来唤醒app。
+
+----
+
+在objective-c里，需要先alloc，再调用init；否则会出现terminated by signal 6.alloc是一个类的静态方法。而init是一个对象实例的方法。

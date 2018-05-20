@@ -1,0 +1,12 @@
+2018-04-04
+
+* 麻将牌调整完毕后清理一下用不到的Resources下的资源。
+
+手机的iOS系统升级到11.3之后，xcode不支持了。可能需要更新xcode。
+
+ChooseGame
+    Scale(1,1,1)
+    Bg
+        P(-445.36)
+        cellSize(204,83)
+        space(0,0)

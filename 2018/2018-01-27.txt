@@ -1,0 +1,5 @@
+2018-01-27
+
+超坑的事情。logcat里只有Unity 端的log记录，android java端自己写的代码Log输出完全不可见。害我以为IWXAPIEventHandler的onResp一直没有回调。太坑了。
+
+注意：Log类的输出方法里，如果tag参数给一个空字符串，会导致logcat里看不到内容。这条log记录就会被忽略掉。可能是我的android机本身过滤了。

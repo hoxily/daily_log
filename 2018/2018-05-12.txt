@@ -1,0 +1,23 @@
+2018-05-12，星期六，雷阵雨转阵雨，20~29摄氏度，杭州滨江
+
+TODO:
+* 王思敏给了商城的资源以及参考的视频，见桌面上ResRecv/2018-05-07文件夹内容。
+* 客户端的第四方支付。
+* 百搭棋牌的linkmj页面。config.js里的ios下载地址等待更换。
+* 炸金花弃牌要求含有动画。基本原则是录像逆播的效果。
+* 新弹框动画需求，见桌面上的TODO
+* 对于calculate_point协议，如果收到错误码33004之后,发一条离开房间的消息。原因是金币数量不足,被踢出房间。
+* 自动跟注按钮的2个状态UI有调整。除了光圈旋转，还有打勾。具体见脑海中的设计图。
+* 1.0.3bug反馈，见在线表格。
+----
+
+微信分享网页时报了个错。
+E/MicroMsg.SDK.WXMediaMessage: checkArgs fail, thumbData is invalid
+E/MicroMsg.SDK.WXApiImplV10: sendReq checkArgs fail
+
+代码并没有改动。只是换了张图。网上的说法是微信对分享的网页的缩略图大小做了限制。应该是这个原因吧。
+找到官方的解释了。 https://open.weixin.qq.com/cgi-bin/showdocument?action=dir_list&t=resource/res_list&verify=1&id=open1419318037&token=&lang=zh_CN 
+
+Q：为什么使用微信SDK分享信息给微信好友，有的消息发送成功，有的消息发送失败（打不开微信）？
+
+A：这是因为SDK协议中对缩略图的大小作了限制，内存大小不能超过32K。另外限制的还有title、description等参数的大小。iOS开发者请在微信开放平台网站iOS手册搜索“thumbData”， Android开发者请见微信开放平台网站Android手册的“WXMediaMessage”页面。

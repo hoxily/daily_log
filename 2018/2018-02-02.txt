@@ -1,0 +1,11 @@
+2018-02-02
+
+注意，在向xcode里添加第三方库文件时需要手动复制到classes和libraries文件夹里。直接右键菜单里的Add Files to "Unity-iPhone"，并没有把文件复制到那个目录下。会造成link时找不到库文件。
+
+屏幕破裂iPhone解锁密码：4568
+
+ipv6 literal 在url中表达时需要用方括号包裹。例如： http://[::1]:8080/index.html
+
+HTTP的测试通过了。
+websocket是http的升级，那么表达形式应该也是一样的。
+websocket连接测试通过了。

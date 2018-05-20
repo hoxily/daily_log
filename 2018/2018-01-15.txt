@@ -1,0 +1,3 @@
+2018-01-15
+
+遇到了一个神奇的bug，SystemInfo.deviceUniqueIdentifier在windows下（韩晨和宋业文）出现了重复。

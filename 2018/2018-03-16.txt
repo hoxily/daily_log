@@ -1,0 +1,6 @@
+2018-03-16
+
+TODO：
+* 邀请唤醒web页还是有一点问题。在王斌的手机上出现同一个链接反复打开会重用一个safari标签页，导致setTimeout生效，弹出提示询问是否打开App Store。王斌的那台android则是打开了下载页，直接忽略了唤醒麻将app的步骤。
+
+android版的分享网页的缩略图不能正确显示alpha透明的边角的原因找到了。是因为android版sdk里的WXMediaMessage的setThumbImage方法与iOS的不一样。android版的setThumbImage内部强制使用JPEG格式来编码，造成丢失了alpha通道。

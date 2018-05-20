@@ -1,0 +1,4 @@
+2018-03-20
+
+遮不住麻将，加EventTrigger吃掉click；
+3DCamera看不到桌上的手牌、弃牌以及吃碰杠。

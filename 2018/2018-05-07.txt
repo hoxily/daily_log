@@ -1,0 +1,39 @@
+2018-05-07，星期一，阴，阵雨，16~24摄氏度，杭州滨江
+
+TODO:
+* 王思敏给了商城的资源以及参考的视频，见桌面上ResRecv/2018-05-07文件夹内容。
+* 王思敏给了新的房间内UI资源，见桌面上ResRecv/2018-05-07文件夹内容。
+* 对于calculate_point协议，如果收到错误码33004之后,发一条离开房间的消息。原因是金币数量不足,被踢出房间。
+* 玩家当前跟注数额的字体不对，需要换成BMFont.jpg；（完成）
+* 短语的文字大小没有正好居中对齐。需要调整，以保证在牛牛和炸金花下看起来正常。(完成。牛牛那边并没有使用Resources/PokerFrameWork/Chat/ChatPage预设体，注意。)
+* 玩家头像下的当前金币数量使用BMFont字体，参见牛牛；（完成）
+* 倒计时小闹钟的时间使用BMFont字体，参见牛牛；（完成）
+* 结算时的收入与支出底图和文字都有调整，参见牛牛；（完成）
+* 自动跟注按钮的2个状态UI有调整。除了光圈旋转，还有打勾。具体见设计图。
+* 断线重连
+* 客户端的第四方支付。
+* 把SDK相关的appkey，appid统一到配置里面，而不是硬编码在代码里。重复性工作：同步相关代码、资源到百搭棋牌项目里。（已完成）
+* 1.0.3bug反馈，见在线表格。
+
+----
+
+已给  Assets/StreamingAssets/AppConfig 下的配置项文件加上说明文档。
+
+头像下的当前金币数量：Assets/Font/CoinCount/CoinCount 字体；
+倒计时字体：Assets/Font/CountDown/CountDown
+结算红字：Assets/Font/CalcuteRed
+结算蓝字：Assets/Font/CalcuteBlue
+结算红底：Assets/Texture/单局结算/红底
+结算蓝底：Assets/Texture/单局结算/蓝底
+
+----
+
+防火墙重置了之后，需要在入站规则里把文件共享相关的规则启用。
+
+----
+
+出现了一个神秘的bug，Button组件完全没有响应。找半天之后终于发现，原来是Canvas的EventCamera为None，空掉了。按理说，不应该会掉引用的。除非是从场景里删掉了预设体，然后重新拖上预设体。由于TopUICamera并没有作为TopUIRoot的子物体，所以引用丢失，成了None。
+
+----
+
+Unity2017.3.1p1在Mac mini上，出现Unity Helper进程占用全部内存的bug。原因看起来像是unity id账号失效，弹出的登录对话框无限刷新，占用了越来越多的内存。

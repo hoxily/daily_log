@@ -1,0 +1,10 @@
+2018-04-19
+
+TODO:
+* 把SDK相关的appkey，appid统一到配置里面，而不是硬编码在代码里。
+* 研究一下ShareSDK是怎么做到任意android包名下wxapi.WXEntryActivity都能正确位于包名之下。
+* 第2波bug反馈来了，见 Z:\Bug反馈\2018-04-19 文件夹下的手机聊天截图（王思敏提供）。
+
+----
+
+对于“WXEntryActivity都能正确位于包名之下”问题，有个变通方案。比如这篇文章所写的Manifest文件内容，https://www.jianshu.com/p/d6f0bac9c4c1 ，他同时定义了两个分别处在不同包名之下的WXEntryActivity，并将这两个WXEntryActivity在manifest文件里导出。这时，apk应用程序包名可以在两个包名之间切换，各自使用相应的WXEntryActivity。完全可以写一个实现了全部功能的WXEntryActivity基类，具体有哪些渠道，就写几个对应的WXEntryActivity子类并在manifest文件里面导出。于是就可以在一个android插件工程里搞定。

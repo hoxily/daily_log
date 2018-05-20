@@ -1,0 +1,7 @@
+2018-01-25
+
+android plugin for gradle与gradle的版本需要匹配。参见这里的版本兼容表格：https://developer.android.com/studio/releases/gradle-plugin.html#updating-gradle
+
+unity 2017.2.1f1导出的android studio工程，默认使用的是2.1.0的android plugin for gradle。
+
+gradle的配置全部完成，看起来像是网络比之前十九大开会时要好一些，所依赖的库竟然都能下载下来。成功用菜单栏的Build命令创建出签了名的apk包。大概可以试试集成第三方库了。比如微信的sdk。

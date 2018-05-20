@@ -1,0 +1,9 @@
+2018-03-07
+
+问题：如何打开XCode的Archive界面？
+答案：使用Window->Organizer菜单打开归档窗口。
+
+问题：Archive界面upload时出现错误，提示 no accounts with itunes connect access。
+答案：重启xcode
+
+Xcode在uploading to app store时会引起断网，不知道为什么。

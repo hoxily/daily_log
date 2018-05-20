@@ -1,0 +1,17 @@
+2018-01-16
+
+2017年中国热销手机：
+oppo r9s, 1920x1080
+iphone 7 plus, 1920x1080
+vivo x9, 1920x1080
+oppo a57, 1280x720
+iphone 7, 1334x750
+oppo r11, 1920x1080
+vivo y66, 1280x720
+honor 8lite, 1920x1080
+xiaomi redmi note 4x, 1920x1080
+honor enjoy 6x, 1920x1080
+
+都是16:9的比例。
+
+*新增手动注册、手动登录两个界面，已提供资源，存放于Desktop/ResRecv/2018-01-16文件夹内。

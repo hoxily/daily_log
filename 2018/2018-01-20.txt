@@ -1,0 +1,16 @@
+2018-01-20
+
+*和牌时的牌型有各自独立的音效，不再是单一的“我胡了”，提供了新接口。（已完成）
+*商城所依赖的IAP模块需要依据get_store_data请求成功后的数据来初始化IAP的商品数据。
+
+用别人的ByteReader.ReadCSV代码，修复了一下原先的MessageText没有正确处理双引号的bug。
+
+房卡商城的界面通了。但是原先的IAPButton方案不适用了。需要延迟至get_store_data请求成功后才初始化IAP的商品数据。
+
+王思敏说apple官方审核，如果有iap支付功能，会着重测试该功能。
+
+当前IAP商品ID数据可以先按照IAPButton的思路来做，写死在Resources中以及场景中的IAPButton中。完整版等待以后再改。
+
+上自家服务器校验已通。
+
+头像上的光圈会转移，没法简单的在EnableSelfPlay里做启用还是不启用。

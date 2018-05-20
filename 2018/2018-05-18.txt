@@ -1,0 +1,40 @@
+2018-05-18，星期五，阵雨，23~33摄氏度，杭州滨江
+
+TODO:
+* login登录协议多了一个type参数，用于指明登录类型。
+* 客户端的第四方支付。iOS版。
+* 百搭棋牌的linkmj页面。config.js里的ios下载地址等待更换。
+* 炸金花弃牌要求含有动画。基本原则是发牌录像逆播的效果。
+* 新弹框动画需求，见桌面上的TODO
+* 自动跟注按钮的2个状态UI有调整。除了光圈旋转，还有打勾。具体见脑海中的设计图。
+* 1.0.3bug反馈，见在线表格。
+----
+
+今早凌晨终于把iOS包打出来了。忽然感觉被别人拿去重新签名，很危险。能够嵌入各种神秘代码。即便说本身无恶意，依然可能因为嵌入代码的漏洞，被恶意利用。
+
+早上把ipa包给那位iOS企业证书签名服务提供商客服后，他很快就重新签好了名。
+
+正好想起来一种验证包没有被恶意篡改的方案：比对自己打出来的ipa包里面各个文件，与对方重新签名后的包里面的各个文件。如果没有增删文件、内容变动，那么说明是安全的。否则就是对方植入了某种东西。
+
+经过简单比对，可以发现重新签名过的ipa包大小多了0.6MiB；比对Payload文件夹下的文件列表，发现多了一个“1appstatr.dylib”文件！
+计算主程序 qipai 文件，发现sha256hash 值不一样。想想也是。只有二进制程序有变化，才可能引用多出来的这个dylib文件。
+
+----
+
+不管这个ipa是不是被篡改过了。我不安装就是了。只从受自己控制的xcode直装就是了。去接iOS端的旺实富支付了。
+
+添加JftMergeSDK.framework时，需要复制到Frameworks文件夹下，并在项目视图里把这个文件加进来。这样#import <JftMergeSDK/JftMergeSDK.h>时不会出错。
+
+----
+
+当使用Unity导出xcode工程向原来的工程里append里，会丢失libWechatSDK.a文件。然后，JftMergeSDK.framework也会丢失，需要先删除，再加一遍。
+
+----
+
+见鬼了，发生了超级可怕的事情。用filezilla ftp从p-v-9机子上复制文件到macmini开发机上，JftMergeSDK.framework下的JftMergeSDK文件竟然损坏了，文件大小都不一样！局域网应该不容出错。那么只能是这台macmini的磁盘有问题。
+
+----
+
+方法函数都接上了，但是调用JfPay的getToken方法时，发生了程序崩溃，有一个Uncaught exception: NSInvalidArgumentException: -[_NSInlineData base64EncodedString]: unrecognized selector sent to instance。
+我专门把传给getToken方法的JFTTokenModel里装的参数值也打印了一下，没发现有啥问题。这就很奇怪了。
+等旺实富那边的技术人员回复吧。

@@ -1,0 +1,29 @@
+2018-01-23
+
+当前正在使用的鼠标左键有点失灵了，容易在按下鼠标后拖动时发生按键弹起的情况，造成意外的拖放操作。影响操作。
+
+Loading加载页面和Login登录页面上还缺失“杭州麻将”游戏名，需要美术提供资源。
+
+ratio: 16:9
+	downhandCamera:
+		pos: 0, 33.75, -66
+		size: 31.3785
+	3DCamera:
+		fieldOfView: 50
+ratio: 16:10
+	downhandCamera:
+		pos: 0,37.5, -66
+		size: 34.8
+	3DCamera:
+		fieldOfView: 53
+ratio: 4:3
+	downhandCamera:
+		pos: 0,43.7, -66
+		size: 40.6
+	3DCamera:
+		fieldOfView: 63
+
+*PlayRoom场景背景不够大，在4:3时，裸露出黑色。（已完成）
+*在非16:9比例时，聊天的气泡位置不正确。（已完成）
+*调整商城关闭按钮的大小，调整为2/3大小。（已调整）
+*IAP内购后，拿收据信息给自家服务器，由它做二次验证。它会去询问apple的服务器，由于是外国网站，比较耗时，容易造成Web API访问超时。客户端这边认为超时，就会放弃了。

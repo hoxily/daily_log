@@ -1,0 +1,16 @@
+2018-05-04，星期五，多云，18~29摄氏度
+
+TODO:
+* 自动跟注按钮的2个状态UI有调整。除了光圈旋转，还有打勾。具体见设计图。
+* 客户端的第四方支付。
+* 把SDK相关的appkey，appid统一到配置里面，而不是硬编码在代码里。
+* 1.0.3bug反馈，见在线表格。
+* 研究一下ShareSDK是怎么做到任意android包名下wxapi.WXEntryActivity都能正确位于包名之下。
+
+----
+
+导出百搭棋牌的时候，spine运行时出问题了。新spine特效导入百搭棋牌project，并不会自动生成SkeletonData和Atlas以及Material文件。已找到原因。之前拆分工程的时候，漏了一些文件没有导出。
+
+----
+
+ScrollView里，如果设置了ScrollBar，但是把scrollbar物体SetActive(false)的话，当Content结点下的物体有增删变动时，ScrollRect会将scrollbar纳入计算，造成抖动。如果不想要抖动，可以直接设置两个scrollbar为none。

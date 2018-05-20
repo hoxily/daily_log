@@ -1,0 +1,9 @@
+2018-01-26
+
+要想使用微信sdk需要在allprojects下也加上jcenter仓库，否则会提示找不到微信sdk。无论填什么版本的微信sdk。具体的报错如下：
+Failed to resolve: com.tencent.mm.opensdk:wechat-sdk-android-with-mta:x.y.z
+其中的x,y,z是依赖里具体版本号。
+
+unity2017.2.1f1导出的配置相当于是一个单project的工程，必须在allprojects里加上引用的jcenter仓库。
+
+注意，在AndroidJavaObject上调用无参的方法时，不能给null而是new object[0]。否则会出现Method找不到的问题。还可以忽略第二个参数，因为是params修饰的object数组。

@@ -1,0 +1,39 @@
+2018-05-17，星期四，多云，26~36摄氏度，杭州滨江
+
+TODO:
+* 网络延迟造成的跟注、加注投注数额错误bug。（完成）
+* 观战时，显示“观战中..”标记。素材在牛牛那边有。可以仅在rejoin_room处理。每个玩家的UserStatus里面有指出玩家在游戏中还是在观战。即便是join_room，如果是中途加入观战的话，服务器会再推送一个rejoin_room消息，依然会刷新成观战中的状态。（完成）
+* 商城的商品购买成功后，需要刷新下玩家数据（GameData里的Model数据，以及UI表现上的展示数据）。（已完成。增加了一个CurrencyEntryCtrl控制器）
+* 客户端的第四方支付。iOS版。
+* 百搭棋牌的linkmj页面。config.js里的ios下载地址等待更换。
+* 炸金花弃牌要求含有动画。基本原则是发牌录像逆播的效果。
+* 新弹框动画需求，见桌面上的TODO
+* 自动跟注按钮的2个状态UI有调整。除了光圈旋转，还有打勾。具体见脑海中的设计图。
+* 1.0.3bug反馈，见在线表格。
+----
+
+怎样才算是观战中呢？rejoin_room后，发现自己is_playing是false，并且game_state为正在游戏中，即可将“观战中”标记展示出来。
+观战什么时候结束呢？这一局结算，OnRestartGame时即结束观战。
+
+资源路径：Assets/Texture/牛牛房间切图/观战中.png
+
+----
+
+发现一个逻辑上的bug，主要原因是网络延迟。
+允许自己看牌的时候，点击看牌按钮，是向服务器请求看牌结果。但是由于网络延迟，迟迟没有返回结果。于是加注和跟注的金额就没有刷新为2倍。这时进行加注和跟注操作，就会造成数据错误。
+方案1. 向服务器请求操作里面，不是带上具体下注数额，而是一个筹码index，由服务器来判定投注的数量；
+方案2. 按下看牌按钮后，客户端本地刷新加注和跟注的数额，不等看牌请求结果。
+
+方案2简单粗暴。仅改动客户端即可。方案1需要服务端改动。即便数据不一致，一旦断线，就会重新恢复成最新的状态。
+
+----
+
+iOS打包时的部分设置可以直接在Build Settings的PlayerSettings里设置。需要安装Unity的iOS support包。
+2017.3.1p1版本可以直接在other settings里设置的属性如下：
+* defer system gesture on edge。有四个方向可以勾选。 edge bottom，可以延迟一次从屏幕底部向上滑的操作，阻止调出控制面板；其他的方向如果有需要，也可以勾上。
+* hide home button on iphone x: 可以隐藏掉iPhone x的傻傻的底部控制条。
+* bundle identifier，就像android一样。
+* target minimum ios version，当前xcode最低支持到iOS 8.0，所以可以把默认的7.0改为8.0；
+* supported url schemes，在此添加app要支持的唤醒url scheme；
+* microphone usage description，在此添加使用麦克风权限的用户提示文字。
+

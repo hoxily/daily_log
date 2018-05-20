@@ -1,0 +1,14 @@
+2018-03-08
+
+做一个有趣的人，或者去一个有趣的地方。
+
+unity 2017.2.1f1打包出来的windows版，多出了一个与exe同目录的UnityPlayer.dll文件。如果勾选了Development Build，那么还会多出来一个WinPixEventRuntime.dll。这个WinPixEventRuntime好像是用于监视游戏性能用的。
+
+
+iPhone is busy: preparing debugger support for iPhone. Xcode will continue when iPhone is finished. 当插上新的iPhone时，会出现这个等待提示。在Stack Overflow上搜到很多答案，但是来不及尝试。因为手机拥有者放弃了等待。有人说只要耐心地等下去自动就会好。有人说可以去window->device and simulators菜单项打开的窗口里，确认那台设备就行。还有其他的人说重启手机和xcode。
+
+新打的ipa包审核过了之后，需要一段时间之后才能在App Store上看到。这里有一个时间差。如果服务端太早的把版本更新掉，会出现应用打开时提示需要更新版本，但是跳转过去的App Store上却是旧的版本，并且重新安装依然出现这样的版本强制更新提示。
+
+TODO：
+1. 麻将游戏房间的设置面板提前，在TopUI之下，且在UIRoot之上，二者的中间位置。
+2. BUG表里的第30、31、32、33行。

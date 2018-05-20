@@ -1,0 +1,33 @@
+2018-01-18
+
+*商城界面
+遇到很奇怪的问题。工程在韩晨那边打开以后，IAPButton脚本消失了。
+
+猜测应该是IAPButton不支持prefab预设体，仅支持.unity场景文件。所以一旦序列化到prefab中，再加载就出错了。
+
+昨晚遇到的ios打包错误不见了。貌似之后哪里更新了一下Assets/Plugins/UnityPurchasing/Bin下的两个Editor.dll和Stores.dll，不再出现cil linker错误了。
+
+ailed running /Applications/Unity/Unity.app/Contents/il2cpp/build/UnityLinker.exe --api=NET_2_0_Subset -out="/Users/xhkj/Desktop/code/client/mj_hangzhou/Temp/StagingArea/Data/Managed/tempStrip" -l=none -c=link --link-symbols -x="/Applications/Unity/PlaybackEngines/iOSSupport/Whitelists/Core.xml" -f="/Applications/Unity/Unity.app/Contents/il2cpp/LinkerDescriptors" -x "/Users/xhkj/Desktop/code/client/mj_hangzhou/Temp/StagingArea/Data/Managed/../platform_native_link.xml" -x "/Users/xhkj/Desktop/code/client/mj_hangzhou/Temp/StagingArea/Data/methods_pointedto_by_uievents.xml" -x "/Users/xhkj/Desktop/code/client/mj_hangzhou/Temp/StagingArea/Data/UnityEngine.xml" -x "/Users/xhkj/Desktop/code/client/mj_hangzhou/Temp/StagingArea/Data/preserved_derived_types.xml" -x "/Users/xhkj/Desktop/code/client/mj_hangzhou/Assets/Plugins/UnityPurchasing/script/link.xml" -d "/Users/xhkj/Desktop/code/client/mj_hangzhou/Temp/StagingArea/Data/Managed" -a  "/Users/xhkj/Desktop/code/client/mj_hangzhou/Temp/StagingArea/Data/Managed/Assembly-CSharp-firstpass.dll" -a  "/Users/xhkj/Desktop/code/client/mj_hangzhou/Temp/StagingArea/Data/Managed/Assembly-CSharp.dll" -a  "/Users/xhkj/Desktop/code/client/mj_hangzhou/Temp/StagingArea/Data/Managed/UnityEngine.UI.dll" -a  "/Users/xhkj/Desktop/code/client/mj_hangzhou/Temp/StagingArea/Data/Managed/DOTween.dll" -a  "/Users/xhkj/Desktop/code/client/mj_hangzhou/Temp/StagingArea/Data/Managed/UnityEngine.Analytics.dll"
+
+stdout:
+Fatal error in Unity CIL Linker
+System.NullReferenceException: Object reference not set to an instance of an object
+  at UnityLinker.AddUnresolvedStubsStep.GetTypeModule (Mono.Cecil.TypeReference type, Mono.Cecil.AssemblyDefinition[] assemblies) [0x00001] in <2949f47faafa4c888eaa69768914f31a>:0 
+  at UnityLinker.AddUnresolvedStubsStep.GetTypeModule (Mono.Cecil.TypeReference type) [0x00001] in <2949f47faafa4c888eaa69768914f31a>:0 
+  at UnityLinker.AddUnresolvedStubsStep.Process () [0x000b5] in <2949f47faafa4c888eaa69768914f31a>:0 
+  at Mono.Linker.Steps.BaseStep.Process (Mono.Linker.LinkContext context) [0x00018] in <09bca01fd71241c7a07af8c71eb6ae1a>:0 
+  at Mono.Linker.Pipeline.Process (Mono.Linker.LinkContext context) [0x00020] in <09bca01fd71241c7a07af8c71eb6ae1a>:0 
+  at UnityLinker.UnityDriver.Run () [0x00086] in <2949f47faafa4c888eaa69768914f31a>:0 
+  at UnityLinker.UnityDriver.RunDriverWithoutErrorHandling () [0x00001] in <2949f47faafa4c888eaa69768914f31a>:0 
+  at UnityLinker.UnityDriver.RunDriver () [0x00002] in <2949f47faafa4c888eaa69768914f31a>:0 
+stderr:
+
+UnityEngine.Debug:LogError(Object)
+UnityEditorInternal.Runner:RunProgram(Program, String, String, String, CompilerOutputParserBase) (at /Users/builduser/buildslave/unity/build/Editor/Mono/BuildPipeline/BuildUtils.cs:128)
+UnityEditorInternal.Runner:RunManagedProgram(String, String, String, CompilerOutputParserBase, Action`1) (at /Users/builduser/buildslave/unity/build/Editor/Mono/BuildPipeline/BuildUtils.cs:73)
+UnityEditorInternal.AssemblyStripper:RunAssemblyLinker(IEnumerable`1, String&, String&, String, String) (at /Users/builduser/buildslave/unity/build/Editor/Mono/BuildPipeline/AssemblyStripper.cs:89)
+UnityEditorInternal.AssemblyStripper:StripAssembliesTo(String[], String[], String, String, String&, String&, String, IIl2CppPlatformProvider, IEnumerable`1) (at /Users/builduser/buildslave/unity/build/Editor/Mono/BuildPipeline/AssemblyStripper.cs:82)
+UnityEditorInternal.AssemblyStripper:RunAssemblyStripper(String, IEnumerable, String, String[], String[], String, IIl2CppPlatformProvider, RuntimeClassRegistry) (at /Users/builduser/buildslave/unity/build/Editor/Mono/BuildPipeline/AssemblyStripper.cs:204)
+UnityEditorInternal.AssemblyStripper:StripAssemblies(String, IIl2CppPlatformProvider, RuntimeClassRegistry) (at /Users/builduser/buildslave/unity/build/Editor/Mono/BuildPipeline/AssemblyStripper.cs:114)
+UnityEditorInternal.IL2CPPBuilder:Run() (at /Users/builduser/buildslave/unity/build/Editor/Mono/BuildPipeline/Il2Cpp/IL2CPPUtils.cs:143)
+UnityEditorInternal.IL2CPPUtils:RunIl2Cpp(String, St

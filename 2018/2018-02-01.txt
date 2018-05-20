@@ -1,0 +1,26 @@
+2018-02-01
+
+先按照apple官方的dns64/nat64测试环境搭建起来看看，到底卡在了哪一步。WWW访问按照unity官方说法是支持ipv4的。那就应该是Websocket不通了。
+
+测试用iPhone解锁密码0206；
+
+在dns64/nat64环境下，
+登录时访问 http://47.96.138.79:9550/login 接口时，遇到两种情况：
+1. 接口访问超时。
+2. Cannot connect to destination host
+
+总之使用WWW访问失败了。
+
+如果是前期登录用ipv4 wifi网络，在创建房间之前切换成dns64/nat64，那么websocket连接依然是连接不上。
+异常信息如下：
+02/01/2018 11:31:50|Fatal|WebSocket.connect|System.Net.Sockets.SocketException: Connection timed out
+                            at System.Net.Sockets.Socket.Connect (System.Net.EndPoint remoteEP, Boolean requireSocketPolicy) [0x00000] in <filename unknown>:0 
+                            at System.Net.Sockets.TcpClient.Connect (System.Net.IPEndPoint remote_end_point) [0x00000] in <filename unknown>:0 
+                            at System.Net.Sockets.TcpClient.Connect (System.Net.IPAddress[] ipAddresses, Int32 port) [0x00000] in <filename unknown>:0 
+                            at WebSocketSharp.WebSocket.setClientStream () [0x00000] in <filename unknown>:0 
+                            at WebSocketSharp.WebSocket.doHandshake () [0x00000] in <filename unknown>:0 
+                            at WebSocketSharp.WebSocket.connect () [0x00000] in <filename unknown>:0 
+socket error: An exception has occurred while connecting.
+WebSocketAccess:OnSocketError(Object, ErrorEventArgs)
+WebSocketSharp.WebSocket:acceptException(Exception, String)
+WebSocketSharp.WebSocket:connect()

@@ -1,0 +1,6 @@
+2018-02-23
+
+打出第一张牌会卡，是因为音频资源加载时，audioclip的设置是decompress on load，而audiomanager采用了Resources.LoadAll方法，一次性加载太多的资源。其中出牌音效（Chip）目录下有140多个文件，即便每个文件load耗时0.01秒也得需要1.4秒；估计是解压缩比较耗时。audioclip资源切换成Streaming模式后，已感觉不出卡顿。
+
+
+单单SceneManager.LoadSceneAsync("PlayRoom")还是会卡住loading动画一小会儿。应该是PlayRoom场景里某个脚本卡住了。

@@ -1,0 +1,4 @@
+2018-01-22
+
+Display.renderingHeight和Display.renderingWidth可以取到Game视图上Stats按钮所显示的Screen size，也就是当前实际大小。
+如果是取 Screen.Resolution的话，不管怎么拖动Game视图大小（Free模式），分辨率都是不变的。
