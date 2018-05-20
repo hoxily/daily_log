@@ -1,0 +1,5 @@
+2017-12-14 日志
+
+吃牌时如果选择过操作，那么会造成无摸牌现像，牌局无法进行下去。
+
+public void ShowChatMsg(Vector3 position, string message) 这个显示汽泡的接口有一个很大的问题，我不知道怎么换算出这个position！！！

@@ -1,0 +1,18 @@
+2017-12-15
+
+NonePOT可以获得更清晰的画质。
+MaxSize会影响清晰度。
+
+解散房间功能。
+
+请求 某玩家发起解散
+vote_for_disband
+{
+	int user_id;
+}
+
+回复 某玩家发起了解散
+begin_vote_for_disband
+{
+	
+}

@@ -1,0 +1,60 @@
+2017-12-18
+
+很烦躁。住的地方，洗衣机噪声很大。窗子和墙壁完全没有隔绝声音的能力。脚步声也一样很响。竟然晚上0点开洗衣机，洗到1点。洗衣机就跟飞机起飞了一样。早上8点30也开洗衣机。真是讨厌。不知道别的房间的隔音效果怎么样。
+
+TODO:
+1. 游戏中玩家头像位置布局与底框变动，见桌面的上的Recv文件夹。
+1.1. 游戏中右上角的菜单项可以收起和展开，见桌面上的Recv文件夹。
+2. VotePage上，发起者所引起的投票展示时，当前用户的状态不对。
+
+解散房间功能。
+1. 某玩家发起解散投票
+请求 
+begin_vote_for_disband
+{
+	int user_id;
+}
+
+回复
+begin_vote_for_disband
+{
+	int result = 0 成功，非 0 说明被别人抢先
+	data : {
+		int user_id;// 发起解散者
+	}
+}
+
+同一时刻，解散发起者只能有一个人，由服务端仲裁谁是发起者，其他人发起失败。
+
+2. 投票中，投票状态多次变化
+
+请求
+
+vote_for_disband
+{
+	int user_id; // 投票者的用户ID
+	int agree = 0 不同意，1同意
+}
+
+回应：最新的投票情况
+
+vote_for_disband
+{
+	int initiator_user_id;//发起者的用户ID
+	Dictionary<string, UserInfo> user_list; //其余人的投票意见
+}
+
+UserInfo
+{
+	int pending; // 0 已做出决定，见agree字段； 1 等待决定
+	int agree; // 0 不同意，1同意
+}
+
+3. 投票结果
+
+广播消息
+end_vote_for_disband
+{
+	int accept; // 1: 投票通过；0：投票未通过
+	int reject_user_id; // 如果投票未通过，该字段记录拒绝者的用户ID
+}
