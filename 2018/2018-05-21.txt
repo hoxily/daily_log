@@ -1,0 +1,23 @@
+2018-05-21，星期一，小雨转阴，20~24摄氏度，杭州滨江
+
+TODO:
+* AlarmCtrl倒计时有更完善的方案了。如果玩家把应用压入后台，倒计时会暂停。假如有60秒时长供操作，而玩家在最后30秒内返回app，他看到的依然是60秒开始计时，会造成误解。所以最好还是改一下。（完成）
+* 王成说，积压消息后，牌局都结束了，这时app从后台返回前台，会依次播放比牌动画，但是结算页是一闪而过（完全看不见）。所以需要给calculate_point协议也加一下sleepTime。但是sleepTime时间不能太久。因为有可能玩家是保持app在前台并且网络畅通的环境下玩游戏。如果sleepTime时间过长，会导致玩家点击回大厅按钮和继续下一局按钮的响应太慢。所以设置为0.5秒，弹一下结算页能展示出来即可。（已完成）
+* login登录协议多了一个type参数，用于指明登录类型。（完成）
+* 客户端的第四方支付。iOS版。（已接通）
+* 百搭棋牌的linkmj页面。config.js里的ios下载地址等待更换。（完成）
+* 炸金花弃牌要求含有动画。基本原则是发牌录像逆播的效果。
+* 新弹框动画需求，见桌面上的TODO
+* 自动跟注按钮的2个状态UI有调整。除了光圈旋转，还有打勾。具体见脑海中的设计图。
+* 1.0.3bug反馈，见在线表格。
+----
+
+被xcode坑啦。在other linker flags里添加-force_load "xxx/libWeChatSDK.a"的时候，把Chat的C写成小写c了。于是再加上-ObjC参数，会出现duplicate symbols错误。mac竟然也是不区分大小写的文件系统？！
+
+还真是。测试建了ABC文件夹，再建abc文件夹，就会报错，提示“名称‘abc’已被占用，请选取其他名称”。
+
+另外 -ObjC 与 -Objc 好像不一样。apple官方是使用大写的C的。参见 https://developer.apple.com/library/content/qa/qa1490/_index.html#top
+
+----
+
+在Assets/Plugins/iOS下的.a库文件上设置compiler flags没有用。导出到xcode时，并没有在Other Linker Flags看到。还是需要手动添加一下。
