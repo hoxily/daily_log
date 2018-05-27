@@ -1,0 +1,24 @@
+2018年5月25日，星期五，多云转阵雨，23~33摄氏度，杭州滨江
+
+TODO：
+* 整合UnityAppController里的自有代码与Unity自动生成的代码分离。参考https://blog.csdn.net/h5q8n2e7/article/details/46833005
+* bug：炸金花游戏的建房设置里的max_player_num，仅在手动建房时设置了最大游戏人数。其他快速加入、点击房间列表的时候没有设置成5人。（已修复）
+* 出android包与iOS包；(完成)
+* 测试出的android包与iOS包；（发现牛牛准备完毕不开局的bug，等待服务端修复）
+* 自动跟注按钮的2个状态UI有调整。除了光圈旋转，还有打勾。具体见脑海中的设计图。
+* 1.0.3bug反馈，见在线表格。
+----
+
+刘三哥说的牛牛游戏流程无限卡死，点击退出按钮，能弹出对话框，但是并不能退出房间。无论等1分钟，还是10分钟。只好杀进程，重启游戏。
+
+估计是使用 SleepTime属性的时候，设置默认为float.MaxValue，然后在进一步处理时，没有重设sleepTime时间。比如在某个分支，提前break掉，忘记恢复sleepTime，导致消息队列的消息无限累积下去，但是却不去取出来处理。
+
+所以在设置消息的SleepTime为float.MaxValue时，需要确保后续的处理代码的所有分支都更新SleepTime为合适的值。
+
+----
+
+SleepTime使用注意事项与小技巧
+
+对于无法预估消息动画耗时的消息，在消息类里override SleepTime为float.MaxValue后，需要检查以下两条：
+1. 遇到提前结束协程的yield break时，需要在yield break之前设置SleepTime为0；
+2. 统一在IEnumerator方法体的底部加上一个设置SleepTime为0的语句，以确保继续处理消息队列里的消息；
