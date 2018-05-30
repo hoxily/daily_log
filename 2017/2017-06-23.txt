@@ -1,0 +1,18 @@
+2017-06-23，
+
+昨天尝试了把assembly-csharp人为拆分成两部分。对unity生成的apk进行了替换处理，重新打包。
+
+1、发现init等apk包内的monobehaviour可以正常运行
+
+2、通过assembly.load方法动态加载进去的monobehaviour类型不能正常识别。editor界面绑定的ui click事件无法响应。
+
+验证是否是missing 脚本的缘故。
+
+System.Type type = System.Type.GetType("LevelControl", false);
+// 由于 LevelControl 不在 mscorlib 内，也不在当前正执行的 assembly 内，所以会找不到。
+
+同样的，unity自身的unity场景、prefab、assetbundle等序列化的.net类型，估计也是用的System.Type.GetType来反序列化。但是又没有提供程序集限定的类型名，而仅仅是命名空间加类型名，这就导致了类型丢失。
+
+那么序列化上去的public字段就全丢失了。
+
+UGUI 在editor界面绑定的事件响应函数也全都丢失了。

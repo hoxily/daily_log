@@ -1,0 +1,9 @@
+2017-06-16，
+
+ilspy反编译为C#，在以下几种情况下会出错：
+1. 所定义的类的const字段，在被引用时会直接以常量出现，而不是常量的名字。
+2. switch-case 语句对于字符串常量的分支，会转换成一个静态的Dictionary<string, int>对象，通过在该字典里查找字符串，得出整数值来确定分支。
+3. switch-case 语句在switch(int)时，case分支有时候多出一些无关的分支，但可以发现其case条件是递增的值，并且分支时无代码，直接fall through到下方的条件。
+4. 针对2和3的情况，会出现代码标签和goto语句，但是标签的定义晚于goto语句，从而出错。
+5. IEnumerator 等迭代器函数，不能正确反编译。可能是不兼容.net2.0的版本。需要关闭 Decompile enumerators (yield return)选项。
+6. abstract class的virtual方法可能会被省略而消失。
