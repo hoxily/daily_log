@@ -1,0 +1,133 @@
+2018年05月29日，星期二，阴转阵雨，22~28摄氏度，杭州滨江
+
+TODO：
+* 炸金花的牌型展示那里，牌太大。参考牛牛的牌型大小。(完成)
+* 登录页的按钮加上点击限制，必须在前一次WebAccess回应（成功或者失败）之后，才允许下一次点击。（完成）
+* 某些iPhone手机进游戏房间后黑屏，不论是牛牛、金花还是猜拳。
+* 整合UnityAppController里的自有代码与Unity自动生成的代码分离。参考https://blog.csdn.net/h5q8n2e7/article/details/46833005 （完成。使用了UnityAppController.h里的 IMPL_APP_CONTROLLER_SUBCLASS 宏定义，以及从UnityAppController继承的自定义AppDelegate interface）。
+* 自动跟注按钮的2个状态UI有调整。除了光圈旋转，还有打勾。具体见脑海中的设计图。
+* 1.0.3bug反馈，见在线表格。
+----
+
+事故的原因，总结起来就是设计时预期承载人数与实际短时间涌入人数不匹配。按王斌的意思，原本说好的一百来人日常在线玩家。结果一次性涌入上千人。既然有这么多人，就不会按照百人规模做设计。
+
+----
+
+牌型展示的牌大小为 100x130，间距-43左右。来自牛牛的牌型展示布局参数。嗯，按照保持原始图片宽高比的原则，如果宽度是100，那么高度应该是136左右。
+
+----
+
+使用xcode附带的Simulator应用时，提示“Unable to boot the Simulator”。
+找到原因了，因为第一次打开simulator会默认打开一个最新的硬件型号的模拟器。所以在Hardware菜单里再选一个别的型号的模拟器，就会出现这个问题了。等前一个启动完毕就行。
+
+----
+
+大坑！Unity默认导出的xcode工程不支持simulator调试。用xcode单独创建最简单的single page view工程，是可以看到simulator运行目标的。网上搜了一下，想要在xcode里使用simulator运行unity导出的工程，必须在导出时设置一个选项才行——Other settings->configuration->Target SDK: simulator sdk。参见 https://blog.csdn.net/w5897093/article/details/50978500
+
+不过从device sdk切换成simulator sdk后，运行环境与实体设备并不一样了。很可能并不会重现黑屏的bug。
+
+模拟器测试发现，除了初始化时出现shader编译错误，降级到default。并没有其他更严重的错误log。而且用模拟器并不会在进游戏场景后黑屏。
+
+log如下：
+
+iphone 5s iOS 8.3 模拟器 运行log，出现 shader 编译错误。
+
+2018-05-29 15:26:23.915 qipai[2455:78297] UnityIAP UnityEarlyTransactionObserver: Created
+2018-05-29 15:26:23.919 qipai[2455:78297] UnityIAP UnityEarlyTransactionObserver: Registered for lifecycle events
+2018-05-29 15:26:24.550 qipai[2455:78297] -> registered mono modules 0x104637738
+-> applicationDidFinishLaunching()
+PlayerConnection initialized from /Users/xhkj/Library/Developer/CoreSimulator/Devices/C5CF59BD-C67F-4128-8280-DA0457559146/data/Containers/Bundle/Application/C0E0F39A-006E-4DC0-A5ED-96D98546E26D/qipai.app/Data (debug = 0)
+PlayerConnection initialized network socket : 0.0.0.0 55000
+Multi-casting "[IP] 192.168.0.102 [Port] 55000 [Flags] 2 [Guid] 2207003083 [EditorId] 0 [Version] 1048832 [Id] iPhonePlayer(xhkjdeMac-mini-3.local):56000 [Debug] 0" to [225.0.0.222:54997]...
+Started listening to [0.0.0.0:55000]
+2018-05-29 15:26:26.993 qipai[2455:78297] UnityIAP UnityEarlyTransactionObserver: Added to the payment queue
+-> applicationDidBecomeActive()
+Renderer: Apple Software Renderer
+Vendor:   Apple Inc.
+Version:  OpenGL ES 2.0 APPLE-12.0.5
+GLES:     2
+GL_OES_depth_texture GL_OES_depth24 GL_OES_element_index_uint GL_OES_fbo_render_mipmap GL_OES_mapbuffer GL_OES_packed_depth_stencil GL_OES_rgb8_rgba8 GL_OES_standard_derivatives GL_OES_texture_float GL_OES_texture_half_float GL_OES_texture_half_float_linear GL_OES_vertex_array_object GL_EXT_blend_minmax GL_EXT_color_buffer_half_float GL_EXT_debug_label GL_EXT_debug_marker GL_EXT_discard_framebuffer GL_EXT_draw_instanced GL_EXT_instanced_arrays GL_EXT_map_buffer_range GL_EXT_occlusion_query_boolean GL_EXT_pvrtc_sRGB GL_EXT_read_format_bgra GL_EXT_separate_shader_objects GL_EXT_shader_framebuffer_fetch GL_EXT_shader_texture_lod GL_EXT_shadow_samplers GL_EXT_sRGB GL_EXT_texture_filter_anisotropic GL_EXT_texture_rg GL_EXT_texture_storage GL_APPLE_clip_distance GL_APPLE_color_buffer_packed_float GL_APPLE_copy_texture_levels GL_APPLE_framebuffer_multisample GL_APPLE_rgb_422 GL_APPLE_sync GL_APPLE_texture_format_BGRA8888 GL_APPLE_texture_max_level GL_APPLE_texture_packed_float GL_IMG_read_format GL_IMG_texture_comp
+ression_pvrtc 
+OPENGL LOG: Creating OpenGL ES 2.0 graphics device ; Context level  <OpenGL ES 2.0> ; Context handle 1634804656
+Initialize engine version: 2017.3.1p1 (6c5ba423732e)
+-------- Shader compilation failed
+#version 100
+#extension GL_EXT_frag_depth : enable
+precision highp float;
+uniform highp vec4 _ProjectionParams;
+uniform highp vec4 _ZBufferParams;
+uniform highp mat4 unity_CameraToWorld;
+uniform highp mat4 _NonJitteredVP;
+uniform highp mat4 _PreviousVP;
+uniform highp sampler2D _CameraDepthTexture;
+varying highp vec2 xlv_TEXCOORD0;
+varying highp vec3 xlv_TEXCOORD1;
+void main ()
+{
+  highp vec4 tmpvar_1;
+  tmpvar_1 = texture2D (_CameraDepthTexture, xlv_TEXCOORD0);
+  mediump vec2 tmpvar_2;
+  highp vec4 tmpvar_3;
+  tmpvar_3.w = 1.0;
+  tmpvar_3.xyz = ((xlv_TEXCOORD1 * (_ProjectionParams.z / xlv_TEXCOORD1.z)) * (1.0/((
+    (_ZBufferParams.x * tmpvar_1.x)
+   + _ZBufferParams.y))));
+  highp vec4 tmpvar_4;
+  tmpvar_4 = (unity_CameraToWorld * tmpvar_3);
+  highp vec4 tmpvar_5;
+  tmpvar_5 = (_PreviousVP * tmpvar_4);
+  highp vec4 tmpvar_6;
+  tmpvar_6 = (_NonJitteredVP * tmpvar_4);
+  highp vec2 tmpvar_7;
+  tmpvar_7 = (((tmpvar_5.xy / tmpvar_5.w) + 1.0) / 2.0);
+  highp vec2 tmpvar_8;
+  tmpvar_8 = (((tmpvar_6.xy / tmpvar_6.w) + 1.0) / 2.0);
+  tmpvar_2 = (tmpvar_8 - tmpvar_7);
+  mediump vec4 tmpvar_9;
+  tmpvar_9.zw = vec2(0.0, 1.0);
+  tmpvar_9.xy = tmpvar_2;
+  gl_FragDepthEXT = tmpvar_1.x;
+  gl_FragData[0] = tmpvar_9;
+}
+-------- failed compiling:
+fragment evaluation shader
+WARNING: 0:4: extension 'GL_EXT_frag_depth' is not supported
+ERROR: 0:38: Use of undeclared identifier 'gl_FragDepthEXT'
+
+Note: Creation of internal variant of shader 'Hidden/Internal-MotionVectors' failed.
+WARNING: Shader Unsupported: 'Hidden/Internal-MotionVectors' - Pass '' has no vertex shader
+WARNING: Shader Unsupported: 'Hidden/Internal-MotionVectors' - Setting to default shader.
+WARNING: Shader Unsupported: 'Hidden/BlitToDepth' - Pass '' has no vertex shader
+WARNING: Shader Unsupported: 'Hidden/BlitToDepth' - Setting to default shader.
+WARNING: Shader Unsupported: 'Hidden/BlitToDepth_MSAA' - Pass '' has no vertex shader
+WARNING: Shader Unsupported: 'Hidden/BlitToDepth_MSAA' - Setting to default shader.
+-------- Shader compilation failed
+#version 100
+#extension GL_EXT_frag_depth : enable
+precision highp float;
+uniform sampler2D _MainTex;
+uniform highp sampler2D _DepthTex;
+uniform highp vec4 _Color;
+varying highp vec2 xlv_TEXCOORD0;
+void main ()
+{
+  lowp vec4 tmpvar_1;
+  tmpvar_1 = (texture2D (_MainTex, xlv_TEXCOORD0) * _Color);
+  gl_FragDepthEXT = texture2D (_DepthTex, xlv_TEXCOORD0).x;
+  gl_FragData[0] = tmpvar_1;
+}
+-------- failed compiling:
+fragment evaluation shader
+WARNING: 0:4: extension 'GL_EXT_frag_depth' is not supported
+ERROR: 0:14: Use of undeclared identifier 'gl_FragDepthEXT'
+
+Note: Creation of internal variant of shader 'Hidden/BlitCopyWithDepth' failed.
+WARNING: Shader Unsupported: 'Hidden/BlitCopyWithDepth' - Pass '' has no vertex shader
+WARNING: Shader Unsupported: 'Hidden/BlitCopyWithDepth' - Setting to default shader.
+Setting up 1 worker threads for Enlighten.
+  Thread -> id: 70000d70e000 -> priority: 1 
+UnloadTime: 120.119624 ms
+
+----
+
+.mm 后缀的是objective-c++代码。导出给unity使用的函数需要加上extern "C" 前缀。
