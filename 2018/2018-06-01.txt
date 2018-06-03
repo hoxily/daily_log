@@ -1,0 +1,99 @@
+2018年06月01日，星期五，多云转阴，17~28摄氏度，杭州滨江
+
+TODO：
+* heart_beat协议里加一个玩家状态异常字段，用于强制踢人。
+* 某些iPhone手机进游戏房间后黑屏，不论是牛牛、金花还是猜拳。机子有了。屏幕也修好了。但是缺一张sim卡。一开机，iPhone5s就提示要求插入sim卡才允许激活。连桌面都见不到。
+* 自动跟注按钮的2个状态UI有调整。除了光圈旋转，还有打勾。具体见脑海中的设计图。
+* 1.0.3bug反馈，见在线表格。
+----
+
+这台iPhone5s是外国的合约机。使用了gpp卡贴加上常规国内运营商sim卡，一起使用。所以，早上拔出来看到的并不是裸露的sim卡，而是辅助工具卡贴。
+
+所以还缺个sim卡。这里的一台hisense手机上有sim卡，可以取出来临时用一下。该sim卡电话号码是18142027542；
+
+由于Home键是损坏的。无法退到桌面。所以需要在重启手机后，在设置里打开通用->辅助功能->
+AssitiveTouch功能。然后就会有常驻屏幕顶级的小圆点菜单入口。
+
+即便插了卡，依然不能使用。显示无服务。但是手机激活了。
+
+----
+
+尝试了很久，新注册的apple id不能使用itunes服务，也就是不能在apple store上下载应用。
+
+然后是安装上传到 fir.im 的企业签名的ipa包，一开始是有进度的。到大约75的安装进度的时候，就报错。
+
+弹框提示“无法下载应用程序。此时无法安装“百搭棋牌””。
+
+----
+
+没有apple id，不能使用apple store也没有关系。直接在xcode里插usb线进行应用的安装就是了。就这样吧。破apple id超级难搞。但是没有能使用于itunes store的apple id，会连微信都安装不了。
+
+----
+
+原来一直以来我用取卡针的姿势都是错误的。只需要将针插入小孔，并稍微使劲，沿着针的方向向里面捅，内部的杠杆结构自然会将卡托弹出！
+之前一直是将针半插入，倾斜后将卡托撬出来，特别费力，还容易造成磨损和变形。我都一直担心针撬断掉了，或者卡托撬坏掉。
+
+----
+
+测试机的iOS系统版本是7.0.4，正好比当前安装的xcode最低支持版本8.0要小。无法安装调试。网上说是加device support文件，就可以支持低版本的iOS系统。试一下。
+
+添加device support文件后可以安装应用了。但是一运行就闪退。因为iOS7.0.4没有Photos.framework这个只在iOS8.0以及以上才有的动态库。运行的时候报错。
+
+dyld: library not loaded: /System/Library/Frameworks/Photos.framework/Photos
+  Referenced from: /var/mobile/Applications/78D08D36-B2E5-4CA9-8CB3-11A37DA377C3/qipai.app/qipai
+  Reason: image not found
+
+----
+
+运行库缺失的问题通过升级这台iPhone5s的系统版本到iOS 10.3.3解决了。
+可以成功复现黑屏bug。黑屏现象仅仅出现在牛牛场景和炸金花场景。主入口场景、大厅场景、猜拳场景都不会出现黑屏。
+
+在editor环境下，调整BlackBGCamera的depth，可以模拟出黑屏bug。
+
+黑屏时，按钮都是有效的，尽管看不见按钮。也就是说Camera的射线检测、GraphicRaycaster起作用了。但是摄像机渲染的画面并没有合成。
+
+同样的代码，在iPhone5s以后的新机器上并不会出现黑屏，这说明是一个硬件兼容问题。想办法让Unity兼容老硬件应该就不会黑屏了。
+
+----
+
+运行的log如下：
+
+2018-06-01 18:47:43.732251+0800 qipai[338:19081] UnityIAP UnityEarlyTransactionObserver: Created
+2018-06-01 18:47:43.736955+0800 qipai[338:19081] UnityIAP UnityEarlyTransactionObserver: Registered for lifecycle events
+2018-06-01 18:47:44.080828+0800 qipai[338:19081] -> registered mono modules 0x1014e34c0
+-> applicationDidFinishLaunching()
+2018-06-01 18:47:49.126268+0800 qipai[338:19081] libMobileGestalt MobileGestaltSupport.m:153: pid 338 (qipai) does not have sandbox access for frZQaeyWLUvLjeuEK43hmg and IS NOT appropriately entitled
+2018-06-01 18:47:49.126520+0800 qipai[338:19081] libMobileGestalt MobileGestalt.c:550: no access to InverseDeviceID (see <rdar://problem/11744455>)
+2018-06-01 18:47:50.175411+0800 qipai[338:19081] UnityIAP UnityEarlyTransactionObserver: Added to the payment queue
+-> applicationDidBecomeActive()
+GfxDevice: creating device client; threaded=1
+Initializing Metal device caps: Apple A7 GPU
+Initialize engine version: 2017.3.1p1 (6c5ba423732e)
+WARNING: Shader Unsupported: 'Hidden/BlitToDepth' - Pass '' has no vertex shader
+WARNING: Shader Unsupported: 'Hidden/BlitToDepth' - Setting to default shader.
+WARNING: Shader Unsupported: 'Hidden/BlitToDepth_MSAA' - Pass '' has no vertex shader
+WARNING: Shader Unsupported: 'Hidden/BlitToDepth_MSAA' - Setting to default shader.
+-> applicationWillResignActive()
+-> applicationDidBecomeActive()
+2018-06-01 18:47:51.851853+0800 qipai[338:19081] [Common] _BSMachError: port d503; (os/kern) invalid capability (0x14) "Unable to insert COPY_SEND"
+2018-06-01 18:47:51.855829+0800 qipai[338:19081] [Common] _BSMachError: port d503; (os/kern) invalid capability (0x14) "Unable to insert COPY_SEND"
+2018-06-01 18:47:51.870034+0800 qipai[338:19081] [Common] _BSMachError: port d503; (os/kern) invalid capability (0x14) "Unable to insert COPY_SEND"
+Setting up 1 worker threads for Enlighten.
+  Thread -> id: 16f4ef000 -> priority: 1 
+UnloadTime: 6.634166 ms
+registered Web-API count: 33
+WebAccess:InitializeApiMaps()
+WebAccess:get_Instance()
+GetConfig:GetConfigInfo()
+ 
+(Filename: /Users/builduser/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+192.168.0.75
+getaddrinfo OK
+accessing http://192.168.0.75:9710/get_config_info with parameters: {"key":"key","mode":"dev"} with rawdata: baw3Yn9M5aodVXHgau021Fn3lpx+2C09eRBluC6/Sn0=
+<GetData>c__Iterator0:MoveNext()
+UnityEngine.SetupCoroutine:InvokeMoveNext(IEnumerator, IntPtr)
+
+----
+
+可以尝试升级Unity版本，看看能不能解决黑屏问题。也许bug被官方修复了也说不定。
