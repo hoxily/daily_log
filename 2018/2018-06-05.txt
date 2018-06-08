@@ -1,0 +1,47 @@
+2018年06月05日，星期二，阵雨，19~24摄氏度，杭州滨江
+
+TODO：
+* AssetBundle模拟Resources.Load接口。
+* AssetBundle资源热更新。
+* heart_beat协议里加一个玩家状态异常字段，用于强制踢人。
+* 某些iPhone手机进游戏房间后黑屏bug。
+* 自动跟注按钮的2个状态UI有调整。除了光圈旋转，还有打勾。具体见脑海中的设计图。
+* 1.0.3bug反馈，见在线表格。
+----
+
+准备结合unity内置的Caching系统和UnityWebRequest.GetAssetBundle(string uri, CachedAssetBundle cachedAssetBundle, uint crc) 方法来做AssetBundle版本缓存与管理。
+
+测试了一下，发现Unity的Caching系统挺稳定的。光从目录结构上就能觉得不一般。以下观察分析基于WindowEditor运行平台。Unity版本是2017.3.1p1
+
+原始AssetBundle资源分布结构如下：
+|   font.assetbundle
+|   scene.assetbundle
+|
+\---hzmj
+        resources.assetbundle
+
+缓存目录的结构如下：
+|   __info
+|
++---font
+|   \---5c87c02c8e6af43d52961169b3e93f00
+|           __data
+|           __info
+|           __lock
+|
++---hzmj
+|   \---resources
+|       \---fcd677d91d89a31a88efd02285193b41
+|               __data
+|               __info
+|               __lock
+|
+\---scene
+    \---84317b62b09b5d133bf57425e685b5c3
+            __data
+            __info
+            __lock
+
+每个AssetBundle包，被缓存到了第一级为名字，第二级正好是hash的文件夹内。__data文件是被缓存的数据。如果在Caching里开启了压缩，那么存储的就是压缩过的AssetBundle数据。__info文件内容是3行数字以及一行内容为“__data”的文本文件。__lock文件则是仅在运行期间才存在的锁文件。
+
+还需要测试文件下载到一半失败的情况。测试结果是，如果下载到一半，服务器挂掉了，那么UnityWebRequest.GetAssetBundle操作会一直卡在那里。也没啥毛病。玩家可以在遇到进度不动的时候，强制结束应用。重启应用。
