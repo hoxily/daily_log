@@ -1,0 +1,31 @@
+2018年06月13日，星期三，多云，20~33摄氏度，杭州滨江
+
+TODO：
+* 把配置文件提到StreamingAssets文件夹里。以方便变动。否则Unity导出xcode工程后，才发现配置有问题，又得耗费大量时间。
+* 杭州麻将的商城需要升级，使用新的接口以及流程。目前服务器临时兼容了一下老代码逻辑。
+* 忽略麻将的杀进程断线重连。HomePageCtrl里对GetReloginUserInfo做了屏蔽处理。实现后，需要解开屏蔽。
+* 由于资源不允许存在于非叶子节点的文件夹下，所以移动了一些资源。需要调整相应的Resources.Load语句。
+* AssetBundle模拟Resources.Load接口。
+* AssetBundle资源热更新。
+* heart_beat协议里加一个玩家状态异常字段，用于强制踢人。
+* 某些iPhone手机进游戏房间后黑屏bug。
+* 自动跟注按钮的2个状态UI有调整。除了光圈旋转，还有打勾。具体见脑海中的设计图。
+* 1.0.3bug反馈，见在线表格。
+----
+
+已修复allinone里，麻将的大厅页。看起所有界面一切OK。
+
+接下来是具体的游戏。先修牛牛吧。牛牛玩的人多。
+
+----
+
+* InviteFriendPage引用的图片丢失。
+* 弃牌指针的缩放不正确。SkeletonData的Scale需要调整为0.065；另外需要将弃牌指针特效从Assets/ABResources/GoldVersion下移到Assets/Effect/hzmj下。并删除Assets/ABResources/hzmj下的弃牌指针特效。
+
+----
+
+遇到超级神奇的事情。AssetBundle打包出来的场景里引用的一些非常用Shader被忽略了。导致运行大片紫红色。
+
+通过Edit->Project Settings->Graphics里添加always included shader，在android机上spine特效显示正常了。但是loading动画小麻将没有正常显示。原因是预设体里的SkeletonData丢失。
+
+很神奇。android上能正常显示。但是Editor加载以windows作为target打包出来的AssetBundle，依然是显示紫红色的shader丢失状态。找到原因了。因为是复制的代码，BuildTarget选的iOS。
