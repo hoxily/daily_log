@@ -1,0 +1,16 @@
+2018年06月29日，星期五，雷阵雨转阵雨，25~31摄氏度，杭州滨江
+
+UIReference编辑器。
+功能：
+1. 自动读取当前的热更程序集里的由ILBehaviour指定的类型，找出SerializeField标记的实例字段，结合UIReference序列化的数据进行展示；
+2. 修改热更程序集的代码后，会自动在Inspector面板里列出；
+用法说明：
+0. 展示在Inspector面板上的字段与属性是缓存后的结果；
+1. Refresh按钮用来从当前UIReference对象加载数据，刷新Inspector面板；
+2. Save按钮用来将最新的Inspector面板上的数据存入当前UIReference对象中；
+
+这个Refresh按钮与Save按钮是多余的。但是暂时没有找到好的方法，来指示Unity有数据需要保存。
+
+----
+
+找到个EditorGUI.BeginChangeCheck和EditorGUI.EndChangeCheck方法，可以检测Inspector面板是否改动。依据这个信息，可以自动存入UIReference物体。

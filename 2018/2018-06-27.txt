@@ -1,0 +1,29 @@
+2018年06月27日，星期三，阴，28~37摄氏度，杭州滨江
+
+最近几天天气变得好热。
+端午放假回乐清的时候，被太阳晒了一下。现在发现，皮肤开始褪皮了。
+
+昨天修改了metadata的1.1.1(build 1)版本，还没有审核的动静。真的是如审核人员发的邮件里所说的那样，被延后审核了。
+
+----
+
+把ilruntime导入allinone工程后，出现了MonoCecil里引用System.Version类，错误的指向了工程里全局命名空间下的Version类。建议自己的代码最好还是包裹一下命名空间，不要放在全局命名空间下。否则与第三方库一起使用时，容易出现这样子的冲突问题。
+
+----
+
+被Unity的Assembly Definition File坑到了。之前的想法还是太简单。没有考虑到Assembly.ILRuntime.Editor引用Assembly-CSharp的问题。原以为是可以直接引用的。结果并不能。
+那就意味着要给Assembly-CSharp做拆分，在Assembly.ILRuntime.Editor里进行引用。
+
+----
+
+最坑的不是在这里。而是引用的很多第三方插件，随随便便就是一个Editor子文件夹。这意味着，需要找出所有的Editor脚本，建立Assembly Definition File；
+
+算了，还是保持原来的文件结构吧。把Assembly.ILRuntime.Editor移出去，形成一个独立的工程。
+
+不行。还是一口气改过来吧。否则在单独的Visual Studio工程和Unity工程里反复切换，也是超级不方便的。
+
+----
+
+一共有18个Editor文件夹，全部需要建立单独的ADF文件。而且还需要管理ADF之间的引用依赖关系。有点繁锁。
+
+已完成！噢耶！
