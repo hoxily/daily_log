@@ -1,0 +1,7 @@
+2018年07月02日，星期一，雷阵雨转阵雨，25~32摄氏度，杭州滨江
+
+试着用ILRuntime改写了一下LoginPage场景的LoginPageCtrl和LoginCtrl以及RegisterCtrl，发现改动的地方并不多。
+
+还试着用ILRuntime改写HomePage场景的HomePageCtrl以及PersonalInfoPageCtrl，发现也不是特别麻烦。
+
+那么，从明天开始，汇集全部人手，一起来改写吧。

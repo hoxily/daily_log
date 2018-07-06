@@ -1,0 +1,7 @@
+2018年07月04日，星期三，雷阵雨转多云，26~33摄氏度，杭州滨江
+
+改写的过程中，据韩晨与宋业文的反馈，最大的麻烦是之前大量使用Unity MonoBehaviour的字段序列化功能，在新的热更环境下不可用。急需一套通用的数据配置方案。
+
+UIReference需要集成到ILBehaviour内部。否则同一个GameObject上有多个ILBehaviour时，相当于是在共享同一个UIReference。或者各自使用不同的UIReference。但是仅仅通过GetComponent<UIReference>是没有办法区分出来的。
+
+算了，把这个功能砍掉吧。
