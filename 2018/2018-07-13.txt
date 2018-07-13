@@ -5,3 +5,24 @@
 
 住在杭州滨兴小区这一块区域的人的素质真差。他们都把共享单车停靠在小区旮旯角落。一大早07:30左右，路上根本看不见mobike车子。非得钻进小区里才能找出来。
 
+***把工作日志文档的存储位置直接存储到footprint下吧。省得每次复制、提交。
+----
+应我的要求，王智林安排郑贤春进行了日常开发流程的讲解。借助TeamViewer的会议功能，春哥在他电脑上直接做了演示。
+会议记录如下：
+
+* Resources文件夹下资源无法热更问题。王智林确定了这个问题。想要热更，放在其他地方。前期开发暂不考虑。另外放入到Resources文件夹内的东西，属于变化频率低的资源。
+* protobuf 2.x, ,required, repeat, optional,不支持 dictionary
+* HotFixedView, HotFixeGroupView
+* ListWidget有适配器
+
+打包、发布、热更是另一套独立的流程，前期不考虑这些。仅关注正常开发。依赖第三方SDK的功能或者原生代码的功能，在Editor下会屏蔽或者绕过。相关的插件Module会自行处理。
+
+----
+Canvas嵌套相关的资源！unity官方的Manual仅仅提了一下nested canvas，说是可以用于优化。但是没有举具体的例子以及注意事项。
+HallView的BG有一个例子。
+
+Canvas与ParticleSystem结合，排序的例子。在HallView的flower与flower2有两个例子。
+
+Canvas的Layer为Default层级，而不是默认的UI层级。问高帮友，他说是不影响。
+
+
