@@ -66,7 +66,7 @@ Hall模块的唤醒时机是在LoginModule的DoLoginSuccess(int roomID, int game
 
 ----
 
-MegoGames.JinYun.Toast命名空间下，有三个类。ToastModule，ToastView以及ToastView的内部类ToastView.ItemView。参考Android中的Toast，它是一种向用户显示信息的机制，与对话框不同，Toast没有焦点。Toast的显示时间有限，超过一定时间后会自动消失。
+MegoGames.JinYun.Toast命名空间下，有三个类。ToastModule，ToastView以及ToastView的内部类ToastView.ItemView。参考Android中的Toast，它是一种向用户显示信息的机制，与对话框不同，Toast没有焦点。Toast的显示时间有限，超过一定时间后会自动消失。通过记时器记时，可以发现其显示时间大约为3秒钟。
 
 由于只提供了要显示的Toast消息一种参数，连延迟关闭的时间都没有。所以调起该模块的代码只需要一行，例子如下：
 
