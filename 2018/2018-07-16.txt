@@ -71,4 +71,5 @@ MegoGames.JinYun.Toast命名空间下，有三个类。ToastModule，ToastView�
 由于只提供了要显示的Toast消息一种参数，连延迟关闭的时间都没有。所以调起该模块的代码只需要一行，例子如下：
 
 Post(CreateModuleWakeUpEvent("Toast", "加入失败，请重新登录游戏后重试！"));
-
+上面的单行代码也是可以拆开的。特别是当需要提示的消息是动态生成的。而不是静态的字符串常量时。
+使用EventMessage对象的stringValue字段来传递通知消息内容。
