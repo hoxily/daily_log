@@ -40,7 +40,7 @@ C盘快满的原因是C:\Windows文件夹占用了20多GB。C:\Users文件夹占
 
 ----
 
-MegoGames.JinYun.Alert命名空间，里面有两个类。一个是AlertView，用于控制UI界面。另一个是AlertModule，用于逻辑控制。Alert模块提供了通用的弹窗提醒功能。该弹窗需要用户确认才会关闭。另外，当前的Alert实现，看起来像我们之前的做法一样，也是同一时刻只能弹出一个弹窗来的。也就是如果因为网络消息或者别的什么原而连续创建两个弹窗的话，前一个弹窗是被后一个弹窗替换掉了。
+MegoGames.JinYun.Alert命名空间，里面有两个类。一个是AlertView，用于控制UI界面。另一个是AlertModule，用于逻辑控制。Alert模块提供了通用的弹窗提醒功能。该弹窗需要用户确认才会关闭。另外，当前的Alert实现，看起来像我们之前的做法一样，也是同一时刻只能弹出一个弹窗来的。也就是如果因为网络消息或者别的什么原因而连续创建两个弹窗的话，前一个弹窗是被后一个弹窗替换掉了。
 
 由于使用了模块化的结构。所以别的模块在使用Alert模块来弹出窗口时，不是直接调用Alert类的方法，而是借助框架的发消息功能，来唤起通用弹窗，在EventMessage对象里塞入需要的参数。
 
@@ -50,13 +50,13 @@ EventMessage.stringValue 字段是弹框的主要提示文本；
 其他参数是通过 EventMessage.Add(string key, object value) 方法添加的。可用的参数以及其含义如下：
 
 参数名         参数类型  参数的含义                        是否可以不提供
-title          string   标题                             是
-normal.label   string   黄色按钮上显示的文本               是
-normal.action  Action   黄色按钮被点击时的响应处理         是
-green.label    string   绿色按钮上显示的文本               是
-green.action   Action   绿色按钮被点击时的响应处理         是
-red.label      string   红色按钮上显示的文本               是
-red.action     Action   红色按钮被点击时的响应处理         是
+title          string    标题                              是
+normal.label   string    黄色按钮上显示的文本              是
+normal.action  Action    黄色按钮被点击时的响应处理        是
+green.label    string    绿色按钮上显示的文本              是
+green.action   Action    绿色按钮被点击时的响应处理        是
+red.label      string    红色按钮上显示的文本              是
+red.action     Action    红色按钮被点击时的响应处理        是
 
 可以按照颜色等需求自由组合。最多提供3个响应按钮。
 
