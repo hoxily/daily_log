@@ -3,3 +3,15 @@
 感冒了。鼻咽喉灼热难受。有痰。吹空调都能吹感冒。
 
 早上给我的键盘清理了一下。每个键都拔出来，用牙刷刷了一下。现在看起来很干净。
+
+非常困，看着代码的同时脑海中会出现梦境。昨晚应该没睡好。去楼下超市买了可乐与提神的糖果，效果一般。把耳机音量开到了24，已经很吵了。
+
+----
+
+HotfixedObject的CreateModuleWakeUpEvent方法，仅仅针对指定的module进行唤醒操作；而CreateUniqueModuleWakeUp方法则是用于快捷地将其他module置为睡眠状态，只保留指定的module为唤醒状态。
+
+----
+
+SettingView里有一些奇怪的东西。效果像Toggle开关，但是稍微有一点点差异。Unity的Toggle仅仅实现CheckMark物体的显示与隐藏。SettingView里的开关是那种打开与关闭状态差的很多的UI。另外它这里还添加了一个继承自MaskableGraphic的RaycastMask，测试可以发现扩大了点击的响应区域。感觉比之前我们那边直接丢一张空白的Image，拉伸到合适大小要高级得多。
+
+TabGroupWidget确实是类似ToggleGroup的功能。高帮友说当前SettingView/Content物体上的TabGroupWidget其实是多余的。完全可以去除。这是由于历史遗留问题，一直没有移除。
