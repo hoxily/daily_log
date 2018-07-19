@@ -1,0 +1,10 @@
+2018年07月19日，星期四，晴转多云，27~36摄氏度，杭州拱墅区
+
+在github的google/protobuf的releases上下载了protobuf-all-3.6.0.zip文件，解压后发现没有exe可执行文件。找半天没有找到。然而developer.google.com文档上说，Protocol Buffer的Compiler去releases下载。仔细检查后终于发现，releases里面还有protoc-开头的zip文件。这个应该就是编译器了。
+
+看起来有两个csharp的protobuf库。google官方接手维护的protobuf-csharp，以及第三方写的在Unity上应该很广的protobuf-net库。由于当前框架使用了protobuf-net库，那么就没必要看protobuf-csharp了。
+
+执行王智林提供的zxsvn源码库里的proto库里的protoc.exe，加上--version参数，可以看到它的版本。显示的是libprotoc 2.6.1.嗯，官方的最新protoc已经到libprotoc 3.6.0了。
+
+----
+试着在visual studio code里面，仿照sublime text的build任务，添加了一个将当前打开的proto文件使用protogen工具生成对应cs文件的task。可以在菜单栏的任务->运行任务针对当前打开的文件执行生成命令。proto对应的java文件好像没有用，仅cs文件对客户端有用。
