@@ -5,3 +5,12 @@
 EnqueueBubbleEvent(Action action);
 
 可以免去为Modal类型的弹框背后各自添加MaskBgButton的重复项。
+
+----
+
+忘记把周六纳入午休的闹钟里。睡过超出了三四分钟，听到外面的声响才意识到。
+用作休息室的小房间超级热。醒过来后口干舌燥。应该是出了一身汗。
+
+----
+
+新框架的里的VoiceRecorder在OnVoiceStateChange方法里已经做了静音和恢复声音的处理。无需再重复处理。
