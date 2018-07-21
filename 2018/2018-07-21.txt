@@ -1,0 +1,7 @@
+2018年07月21日，星期六，阵雨转大雨，27~34摄氏度，杭州拱墅区
+
+当前最新框架里面内置了一个Modal类型Widget弹窗背后全屏的Mask按钮，使用如下的代码即可添加该Mask按钮被点击时的处理方法：
+
+EnqueueBubbleEvent(Action action);
+
+可以免去为Modal类型的弹框背后各自添加MaskBgButton的重复项。
