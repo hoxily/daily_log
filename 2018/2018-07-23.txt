@@ -12,3 +12,17 @@
 要忍住。
 
 ----
+
+周末的时候隐约记得黄进宝跟我说过，想搬家换个地方。当前住的房租太贵。我问他合同签的一年，提前搬走怎么搞。他说是给房东找个接盘的人就行。反正滨兴小区边上大厂子多，地段又好，不愁租不出去的。
+
+----
+
+调整修改代码的策略。以最快出可运行的程序为准。不用考虑搬运、改写为所参考的缙云麻将的新写法以及它的Common库代码。
+
+----
+
+春哥解释说，老框架里的ResBrige的public void CacheAssetPath(string fileName, string fullPath)与public AssetPackage LoadAssetPackage(string fileName)缓存、加载逻辑已经用上不了。因为大部分需要打AssetPackage包的情况，都只是Atlas，而这个用途已经使用UnityEngine.U2D.SpriteAtlas来代替。
+
+----
+
+需要仔细看一下框架里的ListWidget。高帮友说，不像Scroll View那样一堆组件。参考一下缙云麻将的ListWidget是怎么制做的prefab。
