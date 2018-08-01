@@ -1,0 +1,16 @@
+2018年08月01日，星期三，阵雨转多云，26~34摄氏度，杭州拱墅区
+
+午睡后，脖子部位还是出汗。
+
+----
+HotFixedObject提供的启动、停止协程的方法对不够友好。
+启动协程的 Coroutine StartCoroutine(IEnumerator) 方法返回的是一个Coroutine；
+然而停止协程的 void StopCoroutine(IEnumerator) 方法要求传入的却是一个IEnumerator对象。
+如果想要提前终止协程，那就需要记录下迭代器，然后才能使用StopCoroutine来终止。然而由于StartCoroutine返回的是Coroutine对象，导致启动的时候需要多写一行代码，而不能直接将StartCoroutine返回值存储起来。如下：
+
+_theCoroutine = SomeIEnumeratorAsyncMethod();
+StartCoroutine(_theCoroutine);
+
+如果StartCoroutine返回传入的IEnumerator迭代器，那么可以一行写完。
+
+可以把StartCoroutine方法的返回值改为传入的IEnumerator对象；或者把StopCoroutine的参数改为StartCoroutine返回的Coroutine对象。两者都能让启动与停止协程的方法配合得更好。
