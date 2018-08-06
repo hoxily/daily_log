@@ -1,2 +1,20 @@
 2018年08月06日，星期一，晴，27~37摄氏度，杭州拱墅区
 
+用了AfterShokz AS650的耳机后，再使用普通的入耳式耳机，明显发现自己的右耳听到的声音响度与左耳不一样。哈哈，果然右耳的听力确实有问题。只是AS650的声音传导路径避开了鼓膜，所以两耳没有差异。
+
+----
+
+如果是给的图含有无意义的空白透明区域，可以采用Multiple模式，把需要的Sprite切出来。这时打SpriteAtlas时，Unity会自动把原png里多余的空白忽略掉的。所以不需要自己手动开位图处理软件来把多余的空白区裁掉。
+
+----
+
+观察Transform.SetSiblingIndex方法处理SiblingIndex变动时，是怎么处理该Transform空出来的位置的，以及想要占据指定的SiblingIndex时是怎么让出该SiblingIndex的。
+
+我之前的用法都是将整个Parent节点下的物体全部依次从0开始设了一遍index。如果是中间的几个物体，会有什么效果？也就是想实现交换处于中间的两个物体的位置，是怎样的规律？还是需要避开这种连文档上都没有明确说明的情况？
+
+保险起见，理应给需要变换SiblingIndex的物体建一个父节点，直接调用SetAsLastSiblingIndex更保险。或者先全部物体移动到某个临时存放用的父节点下，然后逐个挪回需要的父节点下。
+
+SetSiblingIndex应该是一个先Remove再Insert的过程。符合链表的移除插入规律。
+
+----
+如果发现HorizontalLayoutGroup下的子物体没有从中心向左右两边扩展，可能是因为HorizontalLayoutGroup的RectTransform的width不够，于是只能挤在小小的默认的100单位的小框里。然后该LayoutGroup默认先排列第一个子物体，那么后续的子物体当然就向右排下去了。
