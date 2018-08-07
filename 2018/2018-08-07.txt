@@ -1,0 +1,15 @@
+2018年08月07日，星期二，晴，27~37摄氏度，杭州拱墅区
+
+我发现了。并不是我的右耳听力有差异，而是这个两年前买的入耳式耳机右耳机音量就是比左耳的小。把左耳塞进右耳，明显发现音量大了很多。
+
+之前改造老框架代码时，注释掉的一行赋值语句没有还原，导致初始化SssGamer玩家状态不正确，stau一直为默认值0.应该加上个TODO标签的。也可能是我加在SVN提交日志里面了。但是发生过一次SVN代码库丢失的灾难。
+
+----
+
+发现proto SVN库里带的protoc能生成自带文档注释的java代码。但是protogen生成的C#代码丢弃了注释。
+
+从protogen文件夹里发现了一个descriptor.proto文件。这个文件正好是描述了使用protoc命令时，-o参数生成的结构化的proto源代码文件，-o参数的帮助说的是“Writes a FileDescriptorSet (a protocol buffer, defined in descriptor.proto) containing all of the input files to FILE.”。在调用protoc命令时，再加上--include_source_info，就可以想办法把proto字段定义周围的注释取出来，加工后作为自动生成的C#文件的一部分。
+
+进一步观察可以发现protogen.exe生成的C#文件采用了xslt方式。数据源应该就是上面提到的这个结构化的FileDescriptorProto，整个xslt就是一个数据转换规则描述集合。有点复杂。可以想办法搞到个别人写好的xslt，既支持C#代码生成，同时又支持把注释作为XML文档注释加到生成的代码上。可以尝试去github上找找。也许作者提供了也说不定。
+
+这样就完美了。只要在proto协议定义文件上写好注释，自动生成带有注释的C#代码。
