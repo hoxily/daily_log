@@ -1,2 +1,25 @@
 2018年08月08日，星期三，晴，27~36摄氏度，杭州拱墅区
 
+从 https://github.com/mgravell/protobuf-net/releases/tag/2.3.17 下载了最新版本的protobuf-net源代码，发现里面的assorted/protogen工程使用的csharp.xslt文件与当前项目中使用protogen的csharp.xslt几乎一模一样，只有两处不同。很明显示与xml文档注释无关的改动。诶，看起来官方并没有对protogen有很大的需求。
+
+按官方的说法，protobuf-net的正确用法，是手动定义class类型，在类型上打Attribute标记。
+算了，就这样吧。注释这种东西只能手动加了。
+
+或者反过来改造IDE，写个Visual Studio的插件，能实现读取xml文档注释与源代码分离的注释，并加以intellisense提示。感觉从这个角度来思考，具有更高的通用性。因为从本质上来说，智能提示这种东西，就是IDE的功能。
+
+----
+
+在bing上搜到的msdn官方对xml code comment的文档里有提到有一个include标签，可以实现xml文档注释与源代码分离。文档的地址是 https://docs.microsoft.com/en-us/dotnet/csharp/codedoc ，里面有源代码例子以及xml文档的例子。
+
+麻烦的地方是，每个需要注释的地方，都得加一个include标签。这里可以考虑改csharp.xlst模板，自动加上include标签。
+这样的话，注释就能单独写在另一个文件里了。
+
+----
+GG！include标签仅对最终生成xml注释文档有效果，而不能作用于Intellisense；也就是意味着，protogen生成的csharp代码必须得带上注释才行。
+也许可以考虑protogen生成的csharp文件预留了插入点占位符，我再写个程序把每个占位符替换成实际的注释就可以了。占位符里包含类型、字段等信息即可。基本上就能唯一定位了。
+
+----
+开心，成功地修改protogen的csharp.xlst文件，加入了“//XmlDocumentInsertPoint:ClassSummary(proto定义的消息名)”字段注释占位符和“//XmlDocumentInsertPoint:ClassSummary(proto定义的消息名.proto定义的字段名)”类型注释占位符。只要再写一个把占位符替换成具体注释的工具程序，就能全自动化了。唯一有缺陷的地方就是C#的注释数据是与proto定义文件分离的，需要保持两者同步。如果有能力做到直接从proto文件提取注释也行。
+
+----
+已经全自动化生成带注释的cs文件。工具的输出提示可能需要改进一下。KeyNotFoundException太笼统。而且注释是可选的，不提供也是没有关系的。
