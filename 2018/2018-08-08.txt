@@ -19,7 +19,7 @@ GG！include标签仅对最终生成xml注释文档有效果，而不能作用�
 也许可以考虑protogen生成的csharp文件预留了插入点占位符，我再写个程序把每个占位符替换成实际的注释就可以了。占位符里包含类型、字段等信息即可。基本上就能唯一定位了。
 
 ----
-开心，成功地修改protogen的csharp.xlst文件，加入了“//XmlDocumentInsertPoint:ClassSummary(proto定义的消息名)”字段注释占位符和“//XmlDocumentInsertPoint:ClassSummary(proto定义的消息名.proto定义的字段名)”类型注释占位符。只要再写一个把占位符替换成具体注释的工具程序，就能全自动化了。唯一有缺陷的地方就是C#的注释数据是与proto定义文件分离的，需要保持两者同步。如果有能力做到直接从proto文件提取注释也行。
+开心，成功地修改protogen的csharp.xlst文件，加入了“//XmlDocumentInsertPoint:ClassSummary(proto定义的消息名)”字段注释占位符和“//XmlDocumentInsertPoint:FieldSummary(proto定义的消息名.proto定义的字段名)”类型注释占位符。只要再写一个把占位符替换成具体注释的工具程序，就能全自动化了。唯一有缺陷的地方就是C#的注释数据是与proto定义文件分离的，需要保持两者同步。如果有能力做到直接从proto文件提取注释也行。
 
 ----
 已经全自动化生成带注释的cs文件。工具的输出提示可能需要改进一下。KeyNotFoundException太笼统。而且注释是可选的，不提供也是没有关系的。

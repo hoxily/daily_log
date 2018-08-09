@@ -1,0 +1,53 @@
+2018年08月09日，星期四，晴，27~36摄氏度，杭州拱墅区
+
+指享杭麻1.1.1版本因政策原因被官方下架了。信架内容如下：
+
+2018年8月9日 上午6:06
+发件人 Apple
+
+    0. 10.0 - PLA
+
+Dear Developer,
+
+In order to reduce fraudulent activity on the App Store and comply with government requests to address illegal online gambling activity, we are no longer allowing gambling apps submitted by individual developers. This includes both real money gambling apps as well as apps that simulate a gambling experience.
+为了减少App Store上的欺诈活动，并且遵守政府对处理非法的网络赌博活动的要求，我们不再允许由个人开发者提交赌博app应用。这包括真钱赌博应用，也包括体验模拟赌博的应用。
+
+As a result, this app has been removed from the App Store. While you can no longer distribute gambling apps from this account, you may continue to submit and distribute other types of apps to the App Store.
+因此，该应用从App Store移除。虽然你不能用这个账号提交赌博应用，但是你能继续提交和分发其他类型的应用到App Store。
+
+Going forward only verified accounts from incorporated business entities may submit gambling apps for distribution on the App Store. Visit the Enrollment page to learn more about enrolling an organization in the Apple Developer Program. For information on transferring an app to another developer account, please review the App transfer overview page in App Store Connect Developer Help.
+从此以后只有认证过的公司商业实体的账号才能提交赌博应用，在App Store分发应用。您可以访问Apple Developer Program的Enrollment页面了解更多关于如何登记一个组织。关于如何将一个应用转让给另一个开发者账号，请参阅App Store Connect Developer Help的应用转让概述页面。
+
+As a reminder, the App Store Review Guidelines state that it is your responsibility to ensure your app complies with all legal requirements in any location where you make it available. Submitting apps designed to mislead or harm customers or evade the review process may result in the termination of your Apple Developer Program account. Review the Terms & Conditions of the Apple Developer Program to learn more about our policies regarding termination.
+再次提醒，App Store Review Guidelines声明，让应用遵循使用地的所有合法要求是您的责任。提交那些故意误导或者损害消费者或者逃避审核流程的应用将会终止您的Apple Developer Program 账号。你可以通过审阅Apple Developer Program的条款和条件，以更深入地了解我们的终止政策。
+
+Best regards,
+
+App Store Review
+
+----
+前几天新闻上还吐槽苹果应用商店混乱。终于下手了。
+
+----
+无法理解韩晨提交bug的方式。非要口头说。完全没有图片文字记录，也没bug的详细复现过程。最可怕的是，我表达出我的记录bug的要求，他对此不以为然，使我愤怒。明明有禅道、worktile的工具，却不使用。微信上截个图发一下也好啊。
+
+这种工作流程太过随便了。不是我不想教，而是他根本不想听我啰嗦。他觉得口头说一遍就好了。
+
+随便到他妈的昨天一天就没看到王思敏过来。呵呵（冷笑）。
+
+----
+
+真的很有意思。没法跟韩晨讨论技术问题。就好像是他心里有一些大牛与评判标准，但是我不是。我说他说的有些话让我生气，他说我不听就好了。草，我们是一个团队，怎么就无法沟通了。每次都是别人的错，我却让自己生气。真的很有意思。
+
+全是我的锅？战绩模块只应该关心通用数据。游戏特定数据交给具体模块处理，这条原则有什么错。
+反倒是韩晨纠结的战绩模块一次性传入全部局数的战绩，嫌浪费。这个可以解决。然而他说叫我不听就好了。不要讨论了。能运行就行了。
+
+我讨厌这种做法。
+
+甚至有些连带的讨厌上韩晨这个人。
+
+要么是我有强迫他的嫌疑。要么是他不在意我的看法。
+
+没有话语权。很早在趣搭的时候就感受到了。
+
+王思敏所谓的让我做项目管理，结果他妈的私下说说。完全无法指导、指使韩晨。甚至说，连沟通也不需要。韩晨只要求能用、代码能跑通就行。
