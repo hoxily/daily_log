@@ -1,0 +1,26 @@
+2018年08月11日，星期六，多云转阵雨，25~35摄氏度，杭州拱墅区
+
+请小心。在Windows Powershell里使用重定向符“>”导出命令输出到文件时，使用了特定的UCS-2 LE BOM crlf格式的文本。这将会导致svnrdump导出的数据损坏。使用svnadmin load装载时提示“svnadmin: E140001: Malformed dumpfile header '��S'”。
+
+使用cmd，则是原模原样输出，没有做任何转换。所以备份远程svn库时，建议在cmd环境下。
+
+写了个bash脚本，在cygwin下面跑备份任务。测试运行良好。代码如下：
+
+#!/usr/bin/bash
+#功能介绍：这个脚本能把远程SVN仓库下载到本地并备份，拥有完整revision版本以及commit log数据。
+
+backupdir="/cygdrive/d/svnrepo-backup"
+timestamp=`date +%F-%H-%M-%S`
+client=${timestamp}_client
+protobuf=${timestamp}_protobuf
+dumpfile=dump.svnrdump
+
+cd $backupdir
+
+svnrdump dump --username yangmin --password 这是屏蔽处理后的密码 https://192.168.31.100/svn/ZhiXiangMajong > $dumpfile
+svnadmin create $client
+svnadmin load $client < $dumpfile
+
+svnrdump dump --username yangmin --password 这是屏蔽处理后的密码 svn://47.97.176.144/zxsvn/proto > $dumpfile
+svnadmin create $protobuf
+svnadmin load $protobuf < $dumpfile
