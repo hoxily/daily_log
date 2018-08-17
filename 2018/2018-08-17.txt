@@ -1,0 +1,7 @@
+2018年08月17日，星期五，中到大雨转阵雨，25~30摄氏度，杭州拱墅区
+
+打个iOS包太费时间，还非得人看着。理应该搞成自动化。甚至自动化上传到fir.im。
+
+将libopencore-amrnb/libopencore-amrwb 库重命名为.a结尾的库文件。这样的话，Unity3D可以直接识别出来，在Inspector面板打勾勾。打包iOS时，应该会自动复制到xcode工程里。原先的arm64、armv7、armv7s结尾的扩展名，无法被Unity3D识别。
+
+unity2017.3.1p1没有在iPhone X上将应用推入后台的时候，发送消息给app，导致没有重连，状态更新不及时。
