@@ -1,0 +1,40 @@
+2018年08月20日，星期一，雷阵雨转多云，26~35摄氏度，杭州拱墅区
+
+参照Unity的手册文档，写了个脚本自动出xcode工程。再改进一下，就能一键打包上传测试包了。把人力从重复性体力劳动的打包工作上解放出来，我就能把时间花在更重要的地方。
+
+脚本内容如下：
+
+# 可以直接以命令行方式调用unity应用，调用时可以传递参数，使其自动执行指定的命令，而不需要打开unity界面。
+# 如果将build ios player流程与xcode archive / export ah-hoc ipa流程以及上传到fir.im流程全部串起来，那么就可以实现全自动化了。
+# 就算那台Macmini再慢也没有关系，因为只需要一开始发出一个指令，后续的操作都是自动的。
+# 按照之前出个测试包需要耗费1小时计算，一个工作日至少可以出8个测试包。
+function bip()
+{
+	# 可用的命令行参数参见文档：https://docs.unity3d.com/Manual/CommandLineArguments.html
+	cd /Users/xhkj/zxsvn/ZhiXiangMajong
+	/Applications/Unity/Unity.app/Contents/MacOS/Unity -batchmode -nographics -projectPath $PWD -executeMethod BuildFramework.MyIOSPlayerBuilder.BuildPlayer -quit -logFile
+	if [ $? == 0 ]
+	then
+		echo "构建iOS Xcode工程成功！"
+	else
+		echo "构建失败！错误码：$?"
+	fi
+}
+
+----
+
+需求要求iOS打包去掉Unity的Make with Unity splash logo界面。这需要使用Plus与Pro的Unity版本。
+
+在不愿意花钱购买Plus与Pro License的情况下，只能使用破解工具了。破解工具下载链接: https://pan.baidu.com/s/13Dottqcr9BDR6ckXGk189Q 密码: pkbx
+
+----
+
+考虑了下，现在搞自动化打包上传工作虽然也是加快迭代速度。但是可以学习韩晨，以最低代价把需求和bug修好，然后空余时间拿来做iOS打包自动的工具链。代码再烂，至少能满足需求。如果先去搞工具的话，项目进度就被拖延了。应该以项目进度为优先。
+
+----
+
+试了用xcodebuild命令从xcarchive导出ad-hoc的ipa，发现非常耗内存。占用了3.9个GB；使用了2GB左右的虚拟内存，全是在磁盘上交换数据。所以非常慢。感觉像是哪里出错了。
+
+----
+
+已经可以全自动化生成ipa测试包了。只要再把svn版本号自动填入，差不多完美了。可能还得搞个提醒的机制。命令执行过程中一旦出错，发提示到我的手机或者别的什么东西上。这样子我就能专心干别的事情，把构建脚本放在MacMini上慢慢跑就可以了。只要出问题就提醒我。打包完成也提醒我。
