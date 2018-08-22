@@ -1,0 +1,7 @@
+2018年08月22日，星期三，阵雨转多云，25~33摄氏度，杭州拱墅区
+
+MegoEngine这边的iOS包的版本可以与android包的版本不一致。服务器可以单独配置当前最新的iOS包和Android包，两者各自有独立的版本号。所以遇到使用同样的SVN版本库代码打包出来的Android无需更新而iOS需要更新，不用奇怪。
+
+----
+
+将GameObject直接SetActive(false)时，会造成IPointerExitHandler注册的OnPointerExit消息无法收到，从而出现奇怪的bug。但是如果是别的物体盖上去，是可以正常接收到OnPointerExit消息的。也就是原先预想的完备的状态切换逻辑被破坏，引起错误。
