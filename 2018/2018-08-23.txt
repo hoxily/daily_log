@@ -1,0 +1,44 @@
+2018年08月23日，星期四，多云，25~33摄氏度，杭州拱墅区
+
+Unity的Inspector面板展示Missing字段和None字段，在Editor脚本里加以区分的方法如下：
+Image image = allImages[i];
+Sprite sprite = image.sprite;
+if (ReferenceEquals(sprite, null))
+{
+    // 编辑器下永远不会返回C#引用null。这条log永远不会出现。
+    string path = GetPath(rootGameObject.transform, image.transform);
+    Debug.Log("找到一个sprite属性为null的Image组件。点击这条消息以定位。" + path, image);
+}
+else
+{
+    // UnityEngine.Object 自定义的相等性检查。
+    // 在编辑器环境下，Missing状态的C#对象引用非null，但是UnityEngine.Object 自定义的相等性检查与null比较返回true
+    if (sprite == null)
+    {
+        // 尝试访问这个sprite的name属性时，将会返回两种不同的异常。
+        try
+        {
+            string name = sprite.name;
+        }
+        catch (MissingReferenceException)
+        {
+            //引用的资源丢失，已经不在工程中。Inspector面板的Missing状态。
+            string path = GetPath(rootGameObject.transform, image.transform);
+            Debug.Log("找到一个sprite属性为Missing的Image组件。点击这条消息以定位。" + path, image);
+            missingCount++;
+        }
+        catch (UnassignedReferenceException)
+        {
+            //完全没有赋值。Inspector面板展示为None状态。
+        }
+        
+    }
+}
+
+可以使用这个特性来检查资源清理过程中，丢失的资源引用。但是依然属于事后补救措施了。更完美的方案应该是删除之前就找出所有依赖待删除资源的其他物体，并做妥善处理。
+
+----
+把LSsssCardCalculator脚本整理了一下。现在剩下的相关代码只有700多行了。
+
+----
+sunnygts@163.com所注册的fir.im账号用于思娱网络正式对外分发。自己内部测试将使用王智林提供的fir.im账号。
