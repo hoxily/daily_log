@@ -1,0 +1,20 @@
+2019-01-02
+
+----WWW加载本地%xx编码文件名的文件注意事项----
+关于co模型文件下载失败，经过调试发现，实际上文件数据确实已经下载到本地。问题出在DownloadFile的第二步处理步骤——使用WWW加载本地文件系统的文件。
+对于如下含有中文名的URL：
+https://lt3d.oss-cn-hangzhou.aliyuncs.com/Fashion/Company/081f1cd1-1d2d-3d30-8c62-f5c4f1356f08/20181229/R1rVeVwyLQBiUjbpAJ9A3ZCo/kuankuan主材质测试.co
+
+下载下来的文件名会变为%xx编码的文件名：
+/path_to_file/kuankuan%E4%B8%BB%E6%9D%90%E8%B4%A8%E6%B5%8B%E8%AF%95.co
+
+注意，在本地文件系统上文件名确确实实地带有%编码的。这时如果利用WWW加载 file:/// 协议的本地文件，WWW会将其中的%xx项解码，造成404 Not Found错误。
+
+暂时只能在传给WWW前，把本地文件路径使用WWW.EscapeURL编码一下再拼上 file:/// 协议头。虽然正常运行。但是感觉太过依赖Unity的具体实现。
+
+----GetTexture中根据WWW.texture.width和height是否为8来判断图片是否无效----
+
+举例来说， https://lt3d.oss-cn-hangzhou.aliyuncs.com/Fashion/Company/081f1cd1-1d2d-3d30-8c62-f5c4f1356f08/20181127/8LNPqIQrl20ytcrGKHlZTiSO/5.jpg 这张图的大小是8x8像素大小，像素的颜色是#222222。aliyun服务器的HTTP回应看不出什么异常。200，一切OK的样子。也许是小工具导出的时候，对无效纹理处理为8x8像素的灰色图片。
+按万园的意思，在同时大量请求网络图片时，会遇到WWW.texture返回问号图。而这个问号图，正好是8x8.
+
+发现 http://192.168.31.3:6060/#/business/productDetail?pid=308 款式在展示时，web端没有明显的缝合线，虽然放大后能看出来。而Unity端因为忽略了5张8x8大小的图，所以展示为白色的缝合线，非常明显。去掉8x8判定限制后，Unity端的显示效果基本与web一样。

@@ -1,0 +1,6 @@
+2019-02-19
+
+为了节约成本，仅提供了一份Unity Plus License。
+所以实际上麻烦的不是固定Mac机打包，而是连android打包也得放在那台机上。否则得来回在Mac与windows上注销、注册。
+
+在macmini上打包apk包卡住了。感觉是gradle的锅。使用Android studio重试了次，OK了。

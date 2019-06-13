@@ -1,0 +1,19 @@
+2019-04-24
+
+找了一天，终于把这个奇怪的bug原因找出来了。
+
+HttpServerManager已经做好了防止同一URL重入的事情。反复仔细检查了相关的代码，甚至考虑了有没有可能GetTexture的回调内部又调用了GetTexture方法这种情况，真是烧脑子。真正的原因是由于getSaveNameByUrl方法仅截取了Uri.Segments的末尾的4个片段并拼上Application.persistentPath作为最终存储在本地磁盘的路径，就有可能引起同时有多个DownloadHandlerFile对象写同一个文件错误。其实最初在看到这个仅截取4个Segments片段的时候已经怀疑可能会出现问题：不同URL的资源文件，其末尾的4个Segments相同。这时就有bug了。
+
+下面是Log输出找到的引起错误的两个URL。仅是域名部分有差异。
+
+[2019-04-24 22:38:43:011] !: downloadFilePathAndName: C:/Users/hoxil/AppData/LocalLow/Linctex/open3d/15a712af-c663-36b6-bd66-0934bd650a91/20190329/20190329112308_20190329113458/20190329112308_normal.jpg, original url: https://linctex3d.oss-cn-shanghai.aliyuncs.com/Fashion/Company/15a712af-c663-36b6-bd66-0934bd650a91/20190329/20190329112308_20190329113458/20190329112308_normal.jpg, hashcode of url: 2032562455
+
+[2019-04-24 22:38:43:023] !: downloadFilePathAndName: C:/Users/hoxil/AppData/LocalLow/Linctex/open3d/15a712af-c663-36b6-bd66-0934bd650a91/20190329/20190329112308_20190329113458/20190329112308_normal.jpg, original url: https://oss.style3d.com/Fashion/Company/15a712af-c663-36b6-bd66-0934bd650a91/20190329/20190329112308_20190329113458/20190329112308_normal.jpg, hashcode of url: 1918523473
+
+虽然针对这个问题已经有解决方案，也就是修改getSaveNameByUrl，让它取Uri.Segments的所有片段即可。但是怀疑android、ios、windows的文件系统对路径长度有特定的限制。有可能会失败。
+
+这样一来，就不能直接依赖操作系统提供的文件系统，而是包装出一个虚拟文件系统，让它能支持长路径的文件和文件夹，屏蔽不同OS的差异。
+
+考虑到URL里有host，有port，有query，与常规的文件系统还是有差异的。最好是使用专用的缓存系统，而不是直接强依赖操作系统。
+
+像之前就已经遇到了含有中文名的URL在macos与windows、ios、android上WWW解码不一致的问题。

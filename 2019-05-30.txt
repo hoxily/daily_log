@@ -1,0 +1,20 @@
+2019年05月30日, 星期四, GPS(30.3108, 120.0907)
+
+之前黄宁海报过一个在iPhone SE上出现的列表项缩略图显示为空白的bug。今天苏斌报告说，在iPad上出现了更多的空白。
+
+通过增加log输出，可以发现有一种含有中文的url，完全没有收到GetTexture的回调。这样的话，有可能是下载协程在持续运行，最终达到并发下载的任务数上限，后续的下载请求都会进入等待队列，一直等着。
+
+进一步添加log输出，可以发现卡在了如下的代码处：
+
+//DownloadHandlerTexture的解码、创建Texture2D操作还需要额外的时间
+while (!texDownloadHandler.isDone)
+{
+    Logger.debug(TAG, "Checking isDone...");
+    yield return new WaitForSeconds(0.5f);
+}
+
+当出错的时候，DownloadHandlerTexture的isDone永远返回false，导致陷入了死循环。所以这个循环需要同时检测是否有错误，来跳出循环。
+
+----
+
+收到公司发的一盒五芳斋粽子，内含840g的粽子和300g的咸鸭蛋。

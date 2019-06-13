@@ -1,0 +1,11 @@
+2019-05-13
+
+我原以为UGUI的Text组件，在CanvasScaler模式为ScaleWithScreenSize - MatchWidthOrHeight时，当设计分辨率为实际分辨的1/2时，文字会显示得变模糊。
+
+但是在Editor下，修改Game视图的分辨率，可以看出文本渲染得很清晰，并没有低分辨率纹理被放大的迹象。那么打包之后的情况呢？通过分析UGUI的源码，我感觉应该也是清晰的。
+
+首先是 Text.cs 的 public float pixelsPerUnit 属性，当font为dynamic时，返回了canvas.scaleFactor。源码地址： https://bitbucket.org/Unity-Technologies/ui/src/0651862509331da4e85f519de88c99d0529493a5/UnityEngine.UI/UI/Core/Text.cs#lines-537
+
+然后是 CanvasScaler.cs 的 protected virtual void HandleScaleWithScreenSize 方法，对于 MatchWidthOrHeight 的情况，求得的scaleFactor在上面所述的设计分辨为实际分辨率的1/2时，即为2. 参考的源码地址为：https://bitbucket.org/Unity-Technologies/ui/src/0651862509331da4e85f519de88c99d0529493a5/UnityEngine.UI/UI/Core/Layout/CanvasScaler.cs#lines-289
+
+所以剩下还需要考虑就是图片、Icon的分辨率了。常规Icon可以使用最高倍数的切图。如果不怕麻烦，也可以针对不同的实际屏幕分辨率，使用不同的倍数切图。

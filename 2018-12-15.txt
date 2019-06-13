@@ -1,0 +1,11 @@
+2018-12-15
+
+加入购物车时，提交的每个面料必要的字段为：
+id，thumbPath，quantity；
+application/json提交的true、false，在form格式提交时对应为1和0.
+
+当前Html5版本遗漏的数据，saveTexture时那些clothings, modelling, components, fabrics, decals, fonts数据，一共6个字段。
+
+----
+
+看着年终评优里25条评分标准，感觉很头疼。但是为什么要头疼呢？简单地把自身情况与之对照，得出0分，1分，2分三种结果不就好了吗？有什么东西在脑子里干扰我的判断？是因为杭州思娱的工作经历吗？还是别的什么东西？还是因为近期一直加班，任务迟迟无法解决而苦恼？

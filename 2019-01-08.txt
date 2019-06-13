@@ -1,0 +1,13 @@
+2019-01-08
+
+好久没开我的MacBook Pro，竟然没电了。
+
+微信支付 开发文档 https://pay.weixin.qq.com/wiki/doc/api/index.html
+
+----
+
+蛋疼了。创建出来的AAR Android插件，在Unity里打出来的包可以安装。但是启动时闪退。在logcat里没有看到什么有用的信息。
+
+感觉像是AndroidManifest.xml配置错误了。
+
+把wx_Init注释掉就不会闪退了。应该是传给WxApi的AppID无效的缘故。

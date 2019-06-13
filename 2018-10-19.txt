@@ -1,0 +1,24 @@
+2018-10-19
+
+从HTML5移动端扒下来的接口。
+
+暂时假设数据量不大。所以都是向服务器请求全部数据。
+筛选功能是在客户端这边自己做。
+
+1. 广场轮播图
+http://192.168.31.3:6060/api/front/index/getIndexThumbs
+
+2. 广场的新品推荐
+http://192.168.31.3:6060/api/open/getAll?page={pageNumberStartFromOne}&perPage={ItemCountPerPage}
+
+3. 广场的系列
+http://192.168.31.3:6060/api/front/index/getSeries
+
+4. 我的供应商推荐
+http://192.168.31.3:6060/api/recommend?supplier_id={supplierId}
+当供应商参数空着时，返回我的全部的供应商的推荐。否则限制为指定供应商的推荐。
+
+----
+
+遇到嵌套两层的ScrollView，只有内层能正常滚动的限制。
+嵌套两层以上理应是没有意义的。如果底页已经是上下滚动，其中某一项左右滚动。再进一步上下滚动就没有意义。

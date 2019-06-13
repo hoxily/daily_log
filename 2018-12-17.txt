@@ -1,0 +1,5 @@
+2018-12-17
+
+截图时隐藏所有UI界面，只保留3D背景和3D渲染结果。
+
+发现upload.js不好翻译。那里面竟然有async为false的XmlHttpRequest请求。

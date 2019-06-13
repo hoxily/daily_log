@@ -1,0 +1,19 @@
+2018-12-07
+
+Unity版本：Unity2018.2.11f1
+遇到了Android重新登录不起作用，沿用上次登录的用户的bug。在代码里插入Log输出，查看PlayerPrefs的储存数据，并没有发现什么问题。切切实实更新了AccessToken和RefreshToken。
+
+通过架设wifi热点，用Wireshark抓包发现，Android端在使用UnityWebRequest发送请求的时候，除了包含我通过代码设置的Authorization Bearer头，还有一个laravel session的Cookie头。而服务器以Cookie里的laravel session优先，导致重新登录功能出现了问题。
+
+检查docs.unity3d.com的文档，没有找到UnityWebRequest提供Cookie相关的方法或者属性。看起来是被隐藏了。
+
+在Unity论坛找到了一个相同遭遇的人，看起来Android端使用了名叫CookieManager的东西。https://forum.unity.com/threads/unity-webrequest-cookie-header-not-being-properly-set.532615/
+难道要用反射把CookieManager实例清空？
+
+检查了一下iOS版，发现并不会接受服务器通过Set-Cookie头指定的laravel_session值。下次请求服务器时Cookie header里只有代码主动设置的语言偏好设置。
+
+----
+
+由于是反射方式修改Android端的CookieManager状态。在UnityWebRequest在android的实现方式变更后有可能失效。
+
+更彻底的解决办法也许是换一个更加受控的HTTP库？

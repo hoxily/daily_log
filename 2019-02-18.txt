@@ -1,0 +1,66 @@
+2019-02-18
+
+办公室内23.5摄氏度，47.3%相对湿度。
+
+Shader "MyShaderName" {
+    Properties {
+
+    }
+    SubShader {
+        Pass {
+            CGPROGRAM
+            #pragma vertex vert
+            #pragma fragment frag
+            ENDCG
+        }
+    }
+    SubShader {
+
+    }
+    Fallback "VertexLit"
+}
+
+#pragma vertex name
+#pragma fragment name
+这两条指令指示哪个函数包含了顶点着色器代码，哪个函数包含了片元着色器的代码。其中的name可以为任意合法函数名，但是一般使用vert和frag这两个名字。
+
+float4 vert(float4 v : POSITION) : SV_POSITION {
+    return mul(UNITY_MATRIX_MVP, v);
+}
+
+该顶点着色器代码是逐顶点执行的。
+通过POSITION语义指定了v包含了顶点的位置。
+SV_POSITION语义指定了该顶点着色器函数的输出是裁剪空间中的顶点坐标。
+
+fixed4 frag() : SV_Target {
+    return fixed4(1.0, 1.0, 1.0, 1.0);
+}
+
+该片元着色器没有任何输入。其输出是一个fixed4类型的变量，并且使用了SV_Target语义进行限定。
+SV_Target是HLSL中的一个系统语义，等同于告诉渲染器，把着色器的输出颜色存储到一个渲染目标（render target）中。这里输出到默认的帧缓存中。
+
+//使用一个结构体来定义顶点着色器的输入数据
+struct a2v {
+    //POSITION语义告诉Unity使用模型空间的顶点坐标填充vertex变量
+    float4  vetex : POSITION;
+    //NORMAL语义使用模型空间的法线方向填充normal变量
+    float3 normal : NORMAL;
+    //TEXCOORD0语义使用模型的第一套纹理坐标填充texcoord变量
+    float4 texcoord : TEXCOORD0;
+}
+
+----
+
+第一次见到王东海抽烟。其实也没什么惊讶的。当年在江苏出差的时候见过女性吸烟了。她与赫韩硕一起吸烟。还想留张照，还是算了。
+
+（补充一下，我走楼梯去12楼上厕所的时候，遇见过何欣阳与苏斌在楼道里吸烟。）
+
+----
+
+聚点酒吧尝试记录。
+
+点了一杯红粉佳人，加了冰，69元每杯。口味比RIO冲。闻不到酒精的香味，是因为酒吧的烟味太浓吗？杯沿上嵌了颗红色的樱桃。昏暗的灯光下看起来还是很艳丽。很奇怪。并不好喝。
+
+厅内有一张台球桌，放着喧闹的DJ劲爆歌曲，以及浓浓的烟味。刚来的时候上了个厕所，厕所内环境还行。相比路对面的杰拉网咖，卫生间环境好太多。过年前杰拉网咖的小便池坏掉，到现在也没修好。
+
+有种酒杯底座，放上酒杯后会发光，亮晶晶的。拿起酒杯熄灭。零点左右来了个黑人。女服务员说了声welcome back。看起来是常客。一来点了瓶酒，开始打台球。可惜不能点歌。有两位女服务员问我要不要再来杯啤酒了。3瓶青岛啤酒，25元每瓶，每瓶210ml左右。越喝越觉得苦。为什么苦味这么明显？结账的时候，支付宝显示的收款方不是聚点酒吧，而是鑫蔡酒吧。结账后我抱怨青岛啤酒太苦。女服务员说青岛就是这么苦。另外有不苦的啤酒。要给我介绍。下次吧。

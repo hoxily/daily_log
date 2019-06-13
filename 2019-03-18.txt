@@ -1,0 +1,22 @@
+2019-03-18
+
+react-native在android模拟器下调出开发者菜单的操作为Ctrl+M。选择Debug JS Remotely即可在RN Debugger上进行调试。
+
+非标品的定制不可收藏。仅与定制意向流程相关。
+
+react-native的调试的实现原理是把网络请求转交给rn-debugger代理。所以如果rn-debugger出现网络请求问题，反过来会影响app的运行。
+“
+Access to XMLHttpRequest at 'http://192.168.31.197:8016/api/open/series?page=1&perPage=0' from origin 'http://localhost:8081' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+”
+当使用chrome浏览器调试时，会报这个跨域错误。切换成专用的独立应用react native debugger即可。
+----
+注意：在src/config/web.js里可以调整对接的服务器。
+----
+iOS Xcode工程中依赖的BVLinearGradient工程没有链接上，需要手动加一下。报错如下：
+“
+invariant violation: require native component bvlineargradient was not found in the uimanager
+”
+
+----
+
+导出的UnityExport不支持iOS Simulator。有时间试试导出Simulator SDK的版本。
