@@ -1,0 +1,5 @@
+2019年07月03日, 星期三, GPS(30.3107, 120.0907)
+
+在Model上添加ui所用的数据很危险。因为这个Model有可能同时被多个ListItemView所使用。可能会造成混乱。比如FabricModel数据里的ui_IsSelected和ui_OnClickItem，因为部件有关联的面料功能，将会出现同时两个面板都使用这两个ui_开头的字段的情况下，造成奇怪的bug。
+
+从原则上来说，Model上最好不要加跟UI直接相关的数据。放在ListItemView上可能会更好。
