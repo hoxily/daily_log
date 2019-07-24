@@ -1,0 +1,9 @@
+2019年07月24日, 星期三, GPS(30.3107, 120.0907)
+
+昨天在回家的路上思考了一下HttpImageTaskManager的TaskId模式潜在的bug。直觉上int的范围很大，不可能会冲突。但是考虑这样一种情况，ListViewA请求下载Texture，拿到一个taskId0，然后再也不滑动列表，也即ListItemView会一直记录着这个taskId0.然后另外的ListView或者需要加载网络纹理的界面加载了很多图片，一直追一直追，终于绕了一圈，重新回到了taskId0.这时如果这个新的下载任务正在进行中，而又滑动了ListViewA，将持有taskId0的ListItemView回收掉，就会执行CancelTask(taskId0)的操作，导致它取消了别人的下载任务。BUG就发生了。
+
+有一个简单的解决方案，但是没有程序上的强制保证。问题发生的原因就是ListViewA记录了一个早已失效的TaskId。理应及时释放掉该ID，以供重新使用。因此简单地在ListItemView的GetTexture回调方法中，将TaskId置为0即可。只要GetTexture任务完成，不管是成功还是失败，及时地把TaskId重置为0即可。
+
+另一种方案则是让GetTexture方法不是直接返回一个int类型的TaskId，而是一个包装起来的Task对象。该对象内部含有唯一识别的ID。因为这个Task对象是GetTexture返回的，所以它也可以记录一份，用于在加载Texture任务完成后自动地将此Task置空。
+
+其实如果是class类型的对象的话，只要是同一台机器，不可能分配两个ReferenceEqual的对象。没有必要含有int字段了。
