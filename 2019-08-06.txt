@@ -1,0 +1,14 @@
+2019年08月06日, 星期二, GPS(30.3107, 120.0907)
+
+我把OnWakeUp和OnSleep方法的参数设为了JObject。仔细想了想，如果要存储委托之类的东西，不就不是标准JSON啦？看起来还是得存Dictionary<string, object>里才行。
+试过Action不能转换成JToken。无法调用JObject.Add(string, JToken)方法。还是得基于Dictionary<string, object>才行。
+
+现在遇到个时间不够的问题。业务的任务使人没有时间去改写之前的烂代码。
+
+对于MulticastDelegate来说，+= 运算生成的新MulticastDelegate，需要重新记录。旧的MulticastDelegate对象里并不包含新添加上去的委托。同样的，-=运算也能产生null结果。因为委托已全部移除。
+
+黄宁海突然在平台组的群里发消息，说是陆康康今天即离职走人。“陆康康因为个人原因会离开我们团队，今天是最后一天，祝康康今后能越来越好”。
+
+怎么突然就离职了，完全没有听到风声呢。
+
+虽然说我写着Unity沾点边的务业代码。但是并不想一直写业务代码。然而我的职业规划是什么呢？这家公司并不能给我答案。
