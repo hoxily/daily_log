@@ -6,7 +6,7 @@
 
 如果下载的是小图片，并且机器内存充足的话，使用UnityWebRequest+DownloadHandlerBuffer会快很多。
 
-也许Unity2018.2.11f1之后的版已经修复了这个bug。可以试试最新版本的Unity。
+也许Unity2018.2.11f1之后的版本已经修复了这个bug。可以试试最新版本的Unity。
 
 试过升级到2018.4.6f1(LTS)版本，发现依然是只能在120秒里下载到35%左右。
 
