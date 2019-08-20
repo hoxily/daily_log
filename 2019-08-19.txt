@@ -1,0 +1,22 @@
+2019年08月19日, 星期一, GPS(30.3107, 120.0907)
+
+周末陪青青去绍兴玩了一下。看了一下鲁迅故居。感觉并不好玩。
+
+网络接口缓存。
+
+当前只有两类接口。HTTP GET接口。以及HTTP POST接口。
+
+其中的GET类型的接口，确定URL加QueryString即可唯一确定一个请求。
+由于QueryString的key顺序不是固定的。需要按照字典序排序 后拼成一个完成的字符串，来作为键名。
+
+对于POST类型的接口，由URL加List<IMultipartFormSection>唯一确定一个请求。同样的，表单项里的单个项排序不固定，需要按照字典序排序。
+
+另外不同的AccessToken，返回的结果也是不同的。考虑到每个iPad仅登录同一个账号的话，可以不用管AccessToken的问题。
+
+需求目标是离线缓存？
+
+参考了一下SDWebImage的磁盘缓存实现，https://github.com/SDWebImage/SDWebImage/blob/master/SDWebImage/Core/SDDiskCache.m#L272 里的 SDDiskCacheFileNameForKey 里面使用MD5哈希值作为缓存文件名称。
+
+虽然已经知道md5和sha1都已不安全，已找到方法做到碰撞攻击。但是应该没有人在URL上进行攻击吧？
+
+可以认为md5哈希后，不同的url就对应于不同的哈希值。
