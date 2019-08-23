@@ -1,0 +1,15 @@
+2019年08月23日, 星期五, GPS(30.3111, 120.0898)
+
+明天又要交房租啦！
+
+使用git reset --hard <commit-id> 回退到上一个版本，然后push的时候提示，本地commits落后远程一个版本。要求我先pull。fuck！https://www.liaoxuefeng.com/wiki/896043488029600/897013573512192 明明是参照这篇教学文章做的。评论说应该使用git revert。
+
+"git push -f"会导致别人的提交丢失。大概服务器端也禁用了--force参数。
+
+“
+这种“回退”(git reset ...)就是在否认历史，如果有其他人也在用你的remote，你push以后将他置于何地呢？
+
+所以，如果仅仅你自己在使用，那么强制push，命令是 @yesmeck 说的 git push -f 如果是与人合作，更漂亮的做法是revert
+”
+
+或者说git push要谨慎。在本地随便怎么搞。去了远端，被别人使用了就麻烦了。
