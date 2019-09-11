@@ -1,0 +1,11 @@
+2019年09月11日, 星期二, GPS(30.3111, 120.0898)
+
+发现华为手机好坑。华为音乐app的通知消息无法禁用。
+
+之前遇到的AliyunOSS路径不规范，含有连续两个或以上斜线时，造成404访问错误。通过对其一个斜线编码成%2f解决了。今天仔细研究了一下，UnityWebRequestModule的dll代码反编译结果。发现内部最终记录的是一个string类型的URL。不管是给uri属性赋值还是给url属性赋值，最终都会调用private extern UnityWebRequestError SetUrl(string url)方法。在调用之前进行了处理。
+
+在string WebRequestUtils.MakeUriString(Uri, string, bool)方法里，当遇到原始url串含有%转义符时，会直接采用原始url串。否则会因为System.Uri.AbsoluteUri而把路径规范化掉。
+
+所以最终，含有%2f的URL被传入了native代码里去处理。那里大概又把%2f转回了斜线，所以请求oss时才能正确下载下来。
+
+经过测试发现，只要原始URL带有%转义符时，UnityWebRequest就不会使用Uri去把路径规约掉。这时就能正常请求oss下载数据。
