@@ -22,6 +22,6 @@
 
 ----
 
-由于数据结构过于复杂，短时间内仅实现了一个各SubMesh独立挂在GameObject上的实现。发现竟然没有奇怪的黑影。在使用CombinedMesh的情况下，该款式渲染正常。看起来是CombinedMesh不支持空的Mesh？
+由于数据结构过于复杂，短时间内仅实现了一个各SubMesh独立挂在GameObject上的实现。发现竟然没有奇怪的黑影。在不使用CombinedMesh的情况下，该款式渲染正常。看起来是CombinedMesh不支持空的Mesh？
 
 得想办法跳过这些空的Mesh。
