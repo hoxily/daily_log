@@ -1,0 +1,11 @@
+2019年09月26日, 星期四, GPS(30.3108, 120.0904)
+
+每天要多陪青青说说话。多表达内心的诉求。不然会被人说成是在谋划着阴谋。
+
+如何从不可读的Texture中读取像素值。https://support.unity3d.com/hc/en-us/articles/206486626-How-can-I-get-pixels-from-unreadable-textures-
+
+暂时没用上上面的方案。因为程序里可以控制xhr的纹理采用readable模式即可。
+
+遇到了背面纹理不生效的bug。使用自定义的面料，在背面纹理上标记明显的叉号，结果在PC WEB端能看到这个叉号，在iPad上看不到。如果给Tester消息填充这个xhr_back字段，也能出现背景纹理的叉号。
+
+那只能是ReactNative端传参数的时候出了问题。
