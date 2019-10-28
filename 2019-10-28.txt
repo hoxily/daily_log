@@ -1,0 +1,36 @@
+2019年10月28日, 星期一, GPS(30.3108, 120.0904)
+
+macos上的信息App竟然不支持批量删除短消息。对于国内的验证码短信，有点麻烦。不过设置里有仅保留30天的选项。这样的话就能自动清理了。如果有重要的信息，另外备份即可。
+
+----
+
+Unity Manual对Cloth组件的描述文档（https://docs.unity3d.com/Manual/class-Cloth.html）摘录：
+
+参数名,解释
+stretching stiffness（拉伸刚度）,布料的拉伸刚度
+bending stiffness（弯曲刚度）,布料的弯曲刚度
+use tethers（使用拴绳）,使用约束来帮助运动的布料粒子跑得离开固定点太远。这能用于减轻过度拉伸。
+use gravity（使用重力）,是否要将重力加速度应用到布料上
+damping（阻尼）,运动的阻尼系数
+external acceleration（外部加速度）,一个应用到布料上的恒定的外部加速度
+random acceleration（随机的外部加速度）,一个应用到布料上的随机的外部加速度
+world velocity scale（世界速度缩放）,角色在世界空间的速度能在多大程度上影响布料的顶点
+world acceleration scale（世界加速度缩放）,角色在世界空间的加速度能在多大程度上影响布料的顶点
+friction（摩擦力）,当布料与角色碰撞时的摩擦力
+collision mass scale（碰撞质量缩放）,要给碰撞的粒子增加多大的质量
+use continuous collision（使用连续碰撞）,使用连续碰撞可以提高碰撞的稳定性
+use virtual particles（使用虚拟粒子）,给每个三角形添加一个虚拟粒子来提高碰撞的稳定性
+solver frequency（求解器频率）,求解器每秒的迭代次数
+sleep threshold,布料的休眠临界值
+capsule colliders,一个胶囊碰撞体数组。布料将会与这些碰撞体发生碰撞
+sphere colliders,一个球体碰撞体数组。布料将会与这些碰撞体发生碰撞
+
+Details
+注意事项
+
+Cloth does not react to all colliders in a scene, nor does it apply forces back to the world. When it has been added the Cloth component will not react to or influence any other bodies at all. Thus Cloth and the world do not recognise or see each other until you manually add colliders from the world to the Cloth component. Even after that, the simulation is still one-way: cloth reacts to those bodies but doesn’t apply forces back.
+布料不会对场景中的任何碰撞体作出反应，也不会把力反向作用回世界中。当一个物体添加了布料组件之后，它不会对其他物体作出反应，也不会影响任何其他物体。布料与世界之间互不相识、互不可见，直到你手动把世界中的碰撞体加入到布料组件中。即便你做了上面的操作，模拟依然是单向的——布料对这些物体作出了反应，但是并不会把力反向作用回去。
+
+Additionally, you can only use three types of colliders with cloth: a sphere, a capsule, and conical capsule colliders, constructed using two sphere colliders. These restrictions all exist to help boost performance.
+
+除此之外，你只能使用3种碰撞体类型：球体、胶囊体以及圆锥胶囊体碰撞体（由2个球体碰撞体构成）。这些限制都是为了提高性能。
