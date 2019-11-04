@@ -33,4 +33,4 @@ Cloth does not react to all colliders in a scene, nor does it apply forces back 
 
 Additionally, you can only use three types of colliders with cloth: a sphere, a capsule, and conical capsule colliders, constructed using two sphere colliders. These restrictions all exist to help boost performance.
 
-除此之外，你只能使用3种碰撞体类型：球体、胶囊体以及圆锥胶囊体碰撞体（由2个球体碰撞体构成）。这些限制都是为了提高性能。
+除此之外，你只能使用3种碰撞体类型：球体、胶囊体以及圆锥形胶囊体碰撞体（由2个球体碰撞体构成）。这些限制都是为了提高性能。
