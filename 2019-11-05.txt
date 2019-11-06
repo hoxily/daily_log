@@ -11,7 +11,7 @@
 
 https://blog.csdn.net/kenight/article/details/92724062 参考这篇文章试试。
 
-导出fbx时，除了Forward使用+Z、Up使用+Y，还需要勾选上Experimental!Apply Transform。这样就OK了。导入时，Model使用File Scale已经是标准的大小了。Blender里是几米，在Unity里就是几。进入Unity后，直接拖上来的模型的Y Scale被设置为了180，改回0即可。这样的话，blender的前+y后-y左-x右+x上+z下-z，就跟unity里的前+z后-z左-x右+x上+y下-y对应了。
+导出fbx时，除了Forward使用+Z、Up使用+Y，还需要勾选上Experimental!Apply Transform。这样就OK了。导入时，Model使用File Scale已经是标准的大小了。Blender里是几米，在Unity里就是几。进入Unity后，直接拖上来的模型的Y Rotation被设置为了180，改回0即可。这样的话，blender的前+y后-y左-x右+x上+z下-z，就跟unity里的前+z后-z左-x右+x上+y下-y对应了。
 
 !!!可以适当调大一点SphereCollider的半径，比Mesh本身稍大一点。这样的话，布料与其作用时，就不会出现白色的孔洞。
 
