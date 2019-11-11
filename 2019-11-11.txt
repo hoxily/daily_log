@@ -67,3 +67,5 @@ self-collision指的是单个Cloth实例内部的碰撞。而inter-collision指�
 布料穿插后会导致布料粘在一块儿。要再施加力才能分开。使用Collider与布料碰撞也是这样。贴近、碰撞后，布料会粘在Collider上。
 
 已将ClothTest工程的所有资源导入libunity3d工程。以后将会在libunity3d工程里调效果和写UI了。
+
+柯欢欢要走了。
