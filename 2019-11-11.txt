@@ -1,0 +1,34 @@
+2019年11月11日, 星期一, GPS(30.3108, 120.0904)
+
+Cloth模拟在三角面数量2048的时候，可以在E3V5的机器上正常编辑。除了Select拖放的时候会出现指示用的小球消失这样的bug。
+
+看起来，不管是选中其中一个小球还是多个小球，当调整Cloth在Inspector面板上的Self-Collision字段中的self-collision distance时，全体小球的半径都会发生变化。也就是说不能单独调整某个小球的碰撞距离。同样的，self-collision stiffness也是所有小球所共享的。
+
+开启自碰撞与不开启自碰撞的最大差别就是布料自身不那么容易刺穿自身了。所以Cloth的Surface penetration表面刺穿，其实是另一个东西。是用于布料的粒子模拟时，总沿着布料的法向向外运动，而不是向内刺入人物？本来Cloth是包裹在人物模型外表面，显然我们并不想让布料刺入人物，所以它的surface penetration说明里说这个参数用于指定粒子能刺入网格多深。
+
+Cloth的编辑器有bug。Duplicate出来的布料物体，调整self-collision与inner-collision后，报Array Index Out of Bounds异常。数据损坏了。
+
+编辑Self-Collision时Inspector面板会出现如下的两个配置参数：
+
+self-collision distance: 以每个粒子为球心的球体的半径。Unity将会确保这些球体不会在模拟过程中互相重叠。这个距离需要比配置中的任意两个粒子的最小距离还要小一些。否则自碰撞将会与某些距离约束发生冲突并导致抖动。
+
+self-collision stiffness: 两个粒子之间的排斥力有多强。布料求解器计算这个值，这个值需要足够大，以将粒子分开。
+
+自碰撞与相互碰撞会消耗大量的模拟时间。可以考虑保持一个较小的碰撞距离，并且使用Cloth.SetSelfAndInterCollisionIndices(List<uint> indices)来减少参与碰撞计算的粒子数。
+
+自碰撞使用顶点而不是三角形来模拟。所以别指望那些三角面明显大于布料厚度的网格能产生良好的碰撞效果。
+
+也就是说，虽然面数变大了之后，无法在编辑器里进行自碰撞与相互碰撞的调整。但是可以通过调用Cloth的方法，进行设置。我完全可以在运行获取全部的顶点下标，设置它们参与自碰撞与相互碰撞。
+
+public void GetSelfAndInterCollisionIndices(List<uint> indices);
+public void SetSelfAndInterCollisionIndices(List<uint> indices);
+public float selfCollisionStiffness;
+public float selfCollisionDistance;
+
+自碰撞与相互碰撞所使用顶点是同一套。而每个顶点的self-collision distance与self-collision stiffness则是共享这两个数值。对于inter-collision来说，inter-collision distance 和 inter-collision stiffness则是所有的Cloth实例共享这两个参数值。需要在 Physics类里进行设置。
+
+！！！我终于知道self-collision与inter-collision有什么差别啦！
+
+self-collision指的是单个Cloth实例内部的碰撞。而inter-collision指的是归属于多个Cloth实例的粒子之间相互碰撞，即多个布料之间的相互碰撞。
+
+在解 Physics.interCollisionDistance 的文档里，有提到这个参数用于将归属于不同的Cloth物体的粒子一旦小于这个距离则会被强制分开。
