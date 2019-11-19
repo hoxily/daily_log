@@ -17,3 +17,7 @@ Cloth与CapsuleCollider或ClothSphereColliderPair的作用，并不会因为Coll
 使用Debug输出Time.frameCount测试可以发现，接下来的OnBeginDrag与OnDrag其实就是同一帧里干的事情。这样的话，显然就来不及更新棍子的位置，形成剧烈拉扯。
 
 其实最开始就应该想到点击PointerDown事件的。那时就应该去初始化棍子位置。
+
+----
+
+何欣阳离开了。但是我却并没有感到悲伤。
