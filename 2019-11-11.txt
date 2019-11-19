@@ -31,7 +31,7 @@ public float selfCollisionDistance;
 
 self-collision指的是单个Cloth实例内部的碰撞。而inter-collision指的是归属于多个Cloth实例的粒子之间相互碰撞，即多个布料之间的相互碰撞。
 
-在管方的 Physics.interCollisionDistance 的文档里，有提到这个参数用于将归属于不同的Cloth物体的粒子一旦小于这个距离则会被强制分开。
+在官方的 Physics.interCollisionDistance 的文档里，有提到这个参数用于将归属于不同的Cloth物体的粒子一旦小于这个距离则会被强制分开。
 
 ----
 
