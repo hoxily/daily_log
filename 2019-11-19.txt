@@ -3,3 +3,17 @@
 昨晚想了一下，其实还可以用scriptableobject来存储菜单栏的每一项。这样的话，更换位置就会比较方便了。
 
 其实更加直观的应该是场景的树状结构本身。也可以方便了操纵树状结构，调整节点位置，而且还可以有UI效果的预览。是不是直接从当前的静态菜单栏初始化会更好？
+
+最终还是采用了InitializeFromScene的方案。可以沿用之前花大力气配置好的成果。同时，想要调整菜单的结构与位置也很直观。
+
+----
+
+Cloth与CapsuleCollider或ClothSphereColliderPair的作用，并不会因为Collider所在的GameObject未active为false就不生效。所以需要把Collider从Cloth.capsuleColliders里移除才行。
+
+除此之外，还有一个跳变的问题。引起这个问题的原因是，当上一次EndDrag结束时，棍子Collider位于结束拖放处，也就是Cloth所在处。开始下一次BeginDrag时，由于直接把Collider从Stop处快速地挪移到BeginDrag的点击处，这两处并不重合，造成Cloth被拉扯得很厉害。需要在BeginDrag里把棍子移动，但是又不附加CapsuleCollider到Cloth上，这样的话，就不会剧烈拉扯了。
+
+使用IInitializePotentialDrag消息可以完美解决初始化时，布料被剧烈拉扯的问题。每次点击下去但不进行拖动，都会触发IInitializePotentialDrag消息，这时去把棍的位置更新为点击处。
+
+使用Debug输出Time.frameCount测试可以发现，接下来的OnBeginDrag与OnDrag其实就是同一帧里干的事情。这样的话，显然就来不及更新棍子的位置，形成剧烈拉扯。
+
+其实最开始就应该想到点击PointerDown事件的。那时就应该去初始化棍子位置。
