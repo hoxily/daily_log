@@ -1,0 +1,9 @@
+2019年11月21日, 星期四, 紫金广场B座1610室
+
+原本想直接在3DViewCamera下挂ScreenSpace的Canvas来渲染平面背景。但是发现另一个全景图会受到3DViewCamera的FOV影响。这样就没法像ThreeD模块那样的分开调节两者的效果了。看起来还是得再加一个BgCamera。
+
+功能已搬运完成。是否需要把Background功能封装到一个类里面，减少重复代码？但是有可能后续动态面料场景的背景功能与ThreeD的背景功能不一致。
+
+_OcclusionStrength (LightIntensity): 
+    0: 背面与正面的光照将会一致；
+    1：背面将会无光照。
