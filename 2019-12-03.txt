@@ -1,0 +1,24 @@
+2019年12月03日, 星期二, 紫金广场B座1610室
+
+尝试更新tshow工程到2018.2.11f1的时候，又经历了一波资源的导入过程。console面板上有一些error和warning。有一些模型的rig被判定为有错误，好像大部分都是Mocap的男性动画，暂时不用管。
+
+另外则是Morph3D做的OnPostprocessModel操作，自动添加CIClothing组件失败了。也可以忽略。Morph3D还做了模型导入时的Material的自动处理，创建了无效的文件名的资源，例如：“.mat”，“p:blinn1.mat”。这些问题，手动建个材质就行。
+
+最后剩下的则是Morph3D/Standard-2pass-double sided half depth 着色器编译出错。这个就比较麻烦了。
+
+shader结构变动比较大。需要改很多地方。可以参考builtin shader以及google搜索结果。勉强可以改得动。
+其中VertexOutput结构变动，可以参考UnityShaderCore.cginc的条件编译指令，加上条件即可。有一些结构体名称改动。
+
+把tshow工程放到macmini上之后，使用unity hub直接以ios的BuildTarget启动。导入所用时间远远比我的pc机要久。查看 ~/Library/Logs/Unity/Editor.log 可以发现，都是些模型引用的纹理做转换特别耗时。一个10秒到几十秒不等。CPU使用率达到500%左右，而GPU使用率为0%。unity为什么不使用GPU来加速这个导入过程呢？Macmini的风扇一直吹出热风来。
+
+“
+Updating /Applications/Unity/Unity.app/Contents/UnityExtensions/Unity/VR/WindowsStoreApps/uap_x64/PerceptionSimulationManager.dll - GUID: 1638f3415e6a8594ba9323f0ba3c5acf...
+ done. [Time: 21.152631 ms]
+Updating Assets/FemaleMovementAnimsetPro/Audio/Steps/Step3.wav - GUID: 186fb744d97888e45b444dc35c92895d...
+2019-12-03 17:06:31.038 Unity[24191:3673740] *** -[NSConcreteTask terminationStatus]: task not launched
+”
+unity在导入这个Step3.wav时卡住了。并没有像其他资源那样给出done. [Time: ...]的输出。反而给出一个NSConcreteTask terminationStatus]: task not launched。
+macos 系统版是 catalina。 https://forum.unity.com/threads/installing-unity-on-macos-catalina.689089/ 根据这个帖子里的说法，因为FMOD Tool是32位程序，在macos catalina上不兼容，导致wav文件导入失败。建议升级Unity版本以解决问题。
+
+尝试升级Unity版本到2018.4.x的lts版本。
+在macmini上使用unity2018.4.13f1导入tshow工程太慢了。用了两个多小时。由于手头暂时没有iPad，打出来包在iPhone X上一运行却闪退。明天再使用有线调试看一下什么情况。
