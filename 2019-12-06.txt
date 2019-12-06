@@ -1,0 +1,5 @@
+2019年12月06日, 星期五, 紫金广场B座1610室
+
+为了把2018.4.13f1导出的UnityExport集成进pad端。修改了一些导出配置。变化并不大。除了一些头文件路径变动、以及一个DynamicEngineLib的东西。在macmini上成功安装了cocoapods。走了一遍全贺菁的编译流程。
+
+目前最新的导出位于lt_lib_unity3d工程的upgrade-unity2018.4.13f1分支上。再测试一下没问题就合入dev了。
