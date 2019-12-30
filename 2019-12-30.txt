@@ -1,0 +1,32 @@
+2019年12月30日, 星期一, GPS(30.3108, 120.0904)
+
+我的拖延症又犯了。星期日磨蹭一天，愣是没把年终总结做完。
+
+看了一下去年的年终自评中的不足，发现今年依然没有有效的改进。怎么才能对不确定的东西，做出确定性的估计与安排呢？就好比完全没有做过的Cloth组件、SkinnedMeshRenderer的骨骼动画这些东西。
+
+----
+
+我找到一个siki的教程，关于换装的，http://www.sikiedu.com/my/course/130 
+我只是想要了解骨骼动画相关的东西，是否有必要把整个教程视频全看了呢。
+
+----
+
+修改SkinnedMeshRenderer.bones确实可以让其他模型共享人模的骨骼。但是改动过这个值之后，该怎么还原呢？比如期望在Editor下联动地编辑人模与裙子。可以把裙子模型的SkinnedMeshRenderer.bones指向人模的骨骼。这时，弯折人模的骨骼，就能同时看到人模的变化和裙子的变化。但是在编辑完成后，如果想把裙子模型打包成prefab，显然bones数组会变成null。这样一来，骨骼绑定信息就丢失了。
+
+可以换个角度。有需要联动时，主动同步人模与裙子模型各自的骨骼，这样就不会造成丢失。
+
+----
+
+当ilspy在decompile 某个dll报找不到引用的dll错误时，并且被引用的dll并不存放在同一个目录的情况下。这时可以打开被引用的dll。然后reload之前decompile报错的dll。这样的话，就不会再出现缺失dll的问题。
+
+----
+
+使用ilspy看了一下Morph3D的M3DCustomImporter，发现它里面果然把SkinnedMeshRenderer.bones和Mesh.bindposes都给备份了。以防改动之后，无法恢复为模型从建模软件导出时的状态。
+
+令我比较好奇的是，为什么默认导入的蒙皮模型FBX文件，把它拖到Hierarchy上后，SkinnedMeshRenderer的bones并没有取满bip骨骼节点，而仅仅是挑了其中的一些。
+
+----
+
+在export-test工程里，Dress1在walkforward动画下，有穿模的痕迹。是因为QualitySettings里没有取到最高SkinQuality吗？测试了下，发现在TShow工程里，赋予TShow的AnimatorController后，人物开始走动，这时转到人物的背面就会发现穿模了。所以不是SkinQuality的问题。
+
+使用网上找的水平、垂直方向都均匀分布的网格线纹理，用在Dress1上。然后比较了一下开Cloth与不开Cloth，纯骨骼动画的差别。Cloth对于骨骼动画纹理过度拉伸有比较好的优化效果。缺点在于使用Cloth后，会穿模。如果不想穿模，添加Collider，则会因为受限于SphereCollider、CapsuleCollider，衣服会被强行撑开，不贴合大腿，显得丑。
