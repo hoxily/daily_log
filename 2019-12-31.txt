@@ -1,0 +1,9 @@
+2019年12月31日, 星期二, GPS(30.3108, 120.0904)
+
+邱岩岩推荐使用ObiCloth来实现MeshCollider级别的布料碰撞。
+
+于是找骆立康在AssetStore上买了ObiCloth插件。
+
+下面是Obi的基础文档，http://obi.virtualmethodstudio.com/tutorials/collisions.html
+
+它是一个基于粒子加上约束的Position Base Dynamics系统。
