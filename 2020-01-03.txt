@@ -1,0 +1,14 @@
+2020年01月03日, 星期五, GPS(30.3108, 120.0904)
+
+在看ObiCloth的说明文档的过程，突然醒悟到华晋航、邱岩岩所要求的Mesh级别的碰撞，在Animator驱动下的SkinnedMeshRenderer是不可能的。
+
+MeshCollider所要求的形状是一个Mesh对象。然而SkinnedMeshRenderer的Mesh一直在变化，总不能每一帧都BakeMesh，然后赋值给MeshCollider吧？
+
+所以布料在静态人体上作用还行。布料想要在运动人体上则没法做到。
+
+Samples/Cloth/CharacterCloth里最终还是使用在骨骼上绑Collider的方案，来使布料不致于与人体相穿插。
+
+----
+
+使用逐帧刷新MeshCollider的Mesh的思路，用ObiCloth的蒙皮试了下，发现效果很差。没有样子里CharacterCloth的效果。Blueprints里的粒子参数太多了。设置mass质量有啥用？在文档上没看到有提到mass啊。
+
