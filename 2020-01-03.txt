@@ -10,5 +10,5 @@ Samples/Cloth/CharacterCloth里最终还是使用在骨骼上绑Collider的方�
 
 ----
 
-使用逐帧刷新MeshCollider的Mesh的思路，用ObiCloth的蒙皮试了下，发现效果很差。没有样子里CharacterCloth的效果。Blueprints里的粒子参数太多了。设置mass质量有啥用？在文档上没看到有提到mass啊。
+使用逐帧刷新MeshCollider的Mesh的思路，用ObiCloth的蒙皮试了下，发现效果很差。没有例子里CharacterCloth的效果。Blueprints里的粒子参数太多了。设置mass质量有啥用？在文档上没看到有提到mass啊。
 
