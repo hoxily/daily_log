@@ -1,0 +1,35 @@
+2020年01月14日, 星期二, GPS(30.3108, 120.0904)
+
+老爸老妈已于早上07：00左右到家。
+
+----
+
+都已经写了AssetPostprocessor脚本，把obj导入设置设为一模一样。结果在导出obj资源的顶点缓存的时候发现有9个obj在unity里看来是21668个顶点。明明应该是21667个顶点才是。
+
+这下麻烦了。真是导入Unity后顶点数量发生了变化。那就得想办法读取obj文件了。
+
+想差了。triangles三角面索引的顺序不一致不要紧。只要vertices里的顶点顺序一致就行。
+
+----
+
+使用亮哥给的normal数据，会在播放的时候闪烁。只有前面几帧闪烁，而后面几帧闪烁并不明显。如果调用Mesh.RecalculateNormals方法，则不会再闪烁。
+
+----
+
+仔细检查了我的Export代码和StreamingVertexAnimation的代码，没有找到会引起间每隔一帧，normals损坏的bug。在Editor下把模型拖上场景，使用ShowNormals着色器，都是正常的朝外凸起的法线线条。但是StreamingVertexAnimation有bug的帧，其法线线条竟然几乎全部沿着同一个方向。
+
+唯一有可能的就是初始模型拆分成了多个SubMesh。
+
+再找了找，最终发现是FileStream.Seek时，计算normals区块的offset错误。在脑子里合并同类型合并错了。
+
+----
+
+直接调用Mesh.RecalculateNormals方法，反而速度更快一些。也就是从buffer里读float值，再拼装反而更慢一些。真是奇怪了。
+
+那么就采用仅含有Vertex Position的顶点缓存吧。
+
+----
+
+通过将顶点缓存文件首尾拼接，人为造出了一个4.28GB大小的顶点缓存文件。这个流式逐帧加载的顶点动画依然可以播放。搞定。在Profiler里查看，Mono只使用了20MB左右。
+
+显然随着模型顶点数的提高，读取磁盘和从字节数组里解析float值将会耗去大量时间。诶，这个时候就要用到减面了。
