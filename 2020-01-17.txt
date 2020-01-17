@@ -1,0 +1,21 @@
+2020年01月17日, 星期五, GPS(30.3108, 120.0904)
+
+Wavefront obj模型，以一个obj文件作为一个模型。如果其中的三角面使用了不同的材质，那么就会在Unity里以Submesh的形式呈现。
+当导入模型时，同时提供obj文件以及mtl文件，Unity就会切分submesh。如果仅仅拖obj文件进unity，那么只能看到一个完整的mesh。
+
+通过将obj里的usemtl <MaterialName> 指令按顺序替换为material0, material1, material2, ...，那就可以得到所有的板片。裤子与手臂白带共享材质的问题就可以解决了。
+
+裤子播放起来后，StreamingVertexAnimation很明显跟不上Animator的动作了。可能是因为腿部分的动作幅度比较大吧。其实也有解决方案，那就是由StreamingVertexAnimation这边来驱动动画的时间进度，以StreamingVertexAnimation的30FPS为准即可。
+
+----
+
+发现了一个超神奇的API：AnimationClip.SampleAnimation(GameObject go, float time)
+使用这个API，即可主动驱动动画了。时间由我作主。
+
+坑呀！已经是以StreamingVertexAnimation的时间为主，得出snapTime作用于AnimationClip了。但是有穿模的问题。是不是得用给的obj文件名上的时间戳才行？
+
+已尝试过使用obj文件名上的时间戳，但是还是穿模。
+
+----
+
+向郭亮询问上述问题，我给了三个穿模的帧时刻，他在Style3D的录像里也发现了穿模的问题。那么并不是我没有对齐时间轴的原因。而是原始输入的序列帧就是穿模的状态。
