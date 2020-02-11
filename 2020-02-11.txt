@@ -1,0 +1,25 @@
+2020年02月11日, 星期二, GPS(28.2297, 121.0983)
+
+按需加载的内存管理，目前有3种方案，从简单到复杂分别是场景（Scene）、Resources文件夹、AssetBundle。
+
+1. 基于场景的内存管理。也就是直接在场景里引用资源，或者该场景的某个MonoBehaviour的Inspector面板上拖放资源。
+
+这种方式直接借助Unity的场景来管理资源。切换场景即做资源的卸载和加载。
+
+优点是简单直观，资源引用关系明确。打包流程与Editor运行流程简单。
+
+缺点是凡是直接在场景中或者Inspector面板拖放的资源，在场景加载后会占用内存。即使实际使用过程中并没有用上。比如很少会SetActive的某个节点。或者很少Instantiate的某个预设体。这些节点和预设体依然会占用内存。
+
+2. 使用Resources文件夹来管理资源。
+
+在Unity项目的Assets目录下的任何命名为Resources的文件夹，其内的资源会被打包成内置资源包，通过Resources类可以动态加载。
+
+优点：基于相对Resources目录的资源路径可以按需加载资源。相比AssetBundle，简单方便。
+
+缺点：1. 凡是放入Resources目录的资源总是会被打包。不像场景那样，只有直接引用的资源才会打包。对于多用途的libunity3d项目来说，Resources下的资源有冗余。2. 一旦调用Resources.Load方法加载资源，就没有办法释放该资源占用的内存。销毁Instantiate出来的对象，并不会影响已经加载的资源。依然会有内存浪费。（待证实。需要验证Resources.UnloadUnusedAssets是否能释放这部分资源）。
+
+3. 使用AssetBundle
+
+优点：使用AssetBundle可以带来最大的资源管理自由度。
+
+缺点：影响libunity3d项目的export导出流程。影响Editor下的资源加载流程。使用方式复杂。
