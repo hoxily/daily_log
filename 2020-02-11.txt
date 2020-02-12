@@ -16,7 +16,7 @@
 
 优点：基于相对Resources目录的资源路径可以按需加载资源。相比AssetBundle，简单方便。
 
-缺点：1. 凡是放入Resources目录的资源总是会被打包。不像场景那样，只有直接引用的资源才会打包。对于多用途的libunity3d项目来说，Resources下的资源有冗余。2. 一旦调用Resources.Load方法加载资源，就没有办法释放该资源占用的内存。销毁Instantiate出来的对象，并不会影响已经加载的资源。依然会有内存浪费。（待证实。需要验证Resources.UnloadUnusedAssets是否能释放这部分资源）。
+缺点：1. 凡是放入Resources目录的资源总是会被打包。不像场景那样，只有直接引用的资源才会打包。对于多用途的libunity3d项目来说，Resources下的资源有冗余。2. 一旦调用Resources.Load方法加载资源，就没有办法释放该资源占用的内存。销毁Instantiate出来的对象，并不会影响已经加载的资源。依然会有内存浪费。（Resources.UnloadUnusedAssets是能释放这部分资源的，只要该资源不再有引用。）。
 
 3. 使用AssetBundle
 
