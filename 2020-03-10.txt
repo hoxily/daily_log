@@ -1,3 +1,13 @@
 2020年03月10日，星期二，杭州，多云转晴，6~16摄氏度
 
 已将电脑上的Kingston内存条拔下。内存频率从2400MHz提升到了2666MHz。希望这样能稳定一些。
+
+有一个疑惑点：
+
+看板里的dashboard接口返回数据，里面有attachStyle和attachUserProduct，查看3D详情时不会请求user_product和product_model_path这两个接口。但是从其他方式（供应商款式、展厅）加载款式还会请求一个product_model_path的接口。attachUserProduct集成了user_product和product_model_path这两个接口的数据？
+
+万园说现在3D模块并不关心user_product接口和product_model_path，而是只关心外层传入的UserProduct对象。已经包装好了。
+
+俊哥发了一张getUserProductCallback和getProductModelPathCallbck的截图。从图中可以看出，我疑惑的product_model_path请求的数据，其实是用当前的attachUserProduct拼出来的代替了。
+
+盘古的UserProduct，其中的clothings、modelling、components解析起来还算方便。只需要转换一下就能套用到lt_lib_unity3d里的UserProductData里。但是fabrics面料数据就相当复杂了。涉及到两个问题：1. 此面料应用在哪个mesh上，需要理清楚对应关系；2. 面料的数据格式发生巨变，看起来没办法套用到旧格式上去。
