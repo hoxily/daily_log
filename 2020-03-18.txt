@@ -20,3 +20,7 @@ attribute更名为in，varying更名为out。更加直观了。
 但是呢，这就很坑了啊。webgl的shader它是完全的字符串源代码格式，想启用什么样的feature都行。Unity的话一旦Build打的包里面不含相关shader就会出问题。
 
 我在lt_lib_unity3d\src\libunity3d\Assets\Editor\ShaderVariantCollectionEditor.cs 里用穷举法构造了一个ShaderVariantCollection。同样的，这样子打出来的包shader会特别占内存。另一个恶心人的地方就是Build时会将所有变体都Build出来，特别费时间。明明我只是改动脚本而已。
+
+----
+
+webgl里shader可以传递结构体，但是在Unity Shader里好像没有对应的结构。由于Unity里的Material类没有提供SetStructure的方法，看起来并不能传递一整个结构体。那么，只能拆分成平坦结构了。也就是从树状结构转换成以节点路径为名称的平坦变量。
