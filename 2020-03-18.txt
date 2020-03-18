@@ -1,0 +1,22 @@
+2020年03月18日，星期三，杭州，晴，13~25摄氏度
+
+OpenGL里的uniform、attribute、varying变量的差别。https://blog.csdn.net/tianxiawuzhei/article/details/50113383
+
+uniform变量是application传递给vertex shader和fragment shader的变量。在顶点和片元着色器内部只能读取，不能修改。uniform变量一般用来传递变换矩阵、材质、光照参数和颜色等信息。
+
+attribute变量是只能在顶点着色器中使用的变量。一般用来表示一些顶点数据，如顶点坐标、法线、纹理坐标、顶点颜色等。在Unity Shader里，对应于 VertexInput结构体，也就是#pragma vertex <vertex_function_name> 指令指定的函数的输入参数。
+
+varying变量是顶点着色器的输出结果，将处理过的数据传递给片元着色器。在Unity Shader里，对应于VertexOutput结构体，也就是#pragma fragment <fragment_function_name>指令所指定的函数的输入参数。
+
+----
+
+这篇文章说最新版本已经更名。https://blog.csdn.net/eloudy/article/details/53992615
+attribute更名为in，varying更名为out。更加直观了。
+
+----
+
+这篇官方手册在说明使用脚本修改Material参数时提到Unity的Standard着色器使用的黑科技。file:///D:/Users/hoxily/Documents/UnityDocs/Documentation.2018.4/en/Manual/MaterialsAccessingViaScript.html
+
+但是呢，这就很坑了啊。webgl的shader它是完全的字符串源代码格式，想启用什么样的feature都行。Unity的话一旦Build打的包里面不含相关shader就会出问题。
+
+我在lt_lib_unity3d\src\libunity3d\Assets\Editor\ShaderVariantCollectionEditor.cs 里用穷举法构造了一个ShaderVariantCollection。同样的，这样子打出来的包shader会特别占内存。另一个恶心人的地方就是Build时会将所有变体都Build出来，特别费时间。明明我只是改动脚本而已。
