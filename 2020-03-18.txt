@@ -24,3 +24,5 @@ attribute更名为in，varying更名为out。更加直观了。
 ----
 
 webgl里shader可以传递结构体，但是在Unity Shader里好像没有对应的结构。由于Unity里的Material类没有提供SetStructure的方法，看起来并不能传递一整个结构体。那么，只能拆分成平坦结构了。也就是从树状结构转换成以节点路径为名称的平坦变量。
+
+但是在unity shader内部，还是可以创建struct来组织数据的。
