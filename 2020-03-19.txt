@@ -1,0 +1,7 @@
+2020年03月19日，星期四，杭州，晴，9~23摄氏度
+
+将C#里的FabricChanger和LincStandard着色器，跟lib_webgl的Legacy_ThreeMaterial.ts进行对比，会发现Legacy_ThreeMaterial多了originalNormalMap和lightMap、backLightMap。这些好像是跟模型本身相关，不管换什么面料都不会改变的。
+
+而在Unity里，并不区分来自Geometry的配置，还是来自面料的配置。看起来，webgl同时使用了两个normal、两个intensity。
+
+在src/engine/shaders/material_h.glsl里，这些绑定在模型Geometry上的normal、intensity称之为BAKINGNORMALMAP和BakingLight。
