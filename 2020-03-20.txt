@@ -1,0 +1,5 @@
+2020年03月20日，星期五，杭州，晴，12~25摄氏度
+
+见鬼了。接近每隔2天电脑蓝屏一次。是windows系统里有什么自动启动的任务计划定时执行引起的蓝屏？已把windows电源管理的快速启动关掉了。看看会不会好一点。
+
+开心。终于把getProductModelPath里的Cloth加载出来了。复用了之前的LincStandard着色器。如果要完整实现盘古新的Style3DMaterial，需要改写Shader。头疼。
