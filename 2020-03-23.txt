@@ -10,3 +10,15 @@
 成功跑起来opencv的highgui。窗口出现了。
 
 至于作业1依赖的opencv，使用“sudo apt install libopencv-dev”即可安装。
+
+----
+
+调试Shader bug的时候找到了抄的Matrix3x3的bug。在UvTransform方法里，把Mathf.Sin抄成了Mathf.Sign。应该是自动补全的时候没注意到。输入si的时候先跳出来的是Sign。要仔细点哦。
+
+另一处bug则是LoadGeoRenderConfig方法里，还没设置好matInfo.uvSize就早早结束。虽然Basic模式用不上光照贴图和法线贴图，但是uvSize还是需要的。不然在后续的LoadInLtMat的时候，材质的缩放就不对了。
+
+虽然代码里设置的_UvMatrixBase是错误的，但是在Inspector面板里双击材质进去，修改Shader，换成Custom/LincBasicTransparent或Custom/LincStandard就会发现它又是显示正常的，相当于传入的_UvMatrixBase是单位矩阵。这让我误以为在LoadInLtMat里设置了Material的Matrix，不能立即生效。
+
+----
+
+看了下libwebgl里的JsonFormatter.UpgradeUserProduct，又是一个庞然大物，214行。ProductManager.FromUserData也相当繁杂。
