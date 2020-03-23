@@ -1,0 +1,12 @@
+2020年03月23日，星期一，杭州，阴转多云，12~21摄氏度
+
+折腾了一下GAMES101课程的代码运行环境。在WSL（ubuntu18.04lts）环境下运行作业0成功。然而作业1就用到了GUI。
+
+参考这篇文章，安装了xfce桌面环境和xrdp远程桌面连接服务。 https://blog.csdn.net/CS95DN/article/details/93224607 
+这样一来就可以使用windows的远程桌面连接连上wsl里的ubuntu了。
+
+打开终端，会发现无法显示中文，显示成方框里面带有16进制数值的占位符。我在apt里搜了一遍ttf字体。竟然没有找到source-han-sans思源字体。没办法，只好用了ttf-unifont。里面的中文和英文都是点阵字体，调节到12pt才是清晰锐利的。
+
+成功跑起来opencv的highgui。窗口出现了。
+
+至于作业1依赖的opencv，使用“sudo apt install libopencv-dev”即可安装。
