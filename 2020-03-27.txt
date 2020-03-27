@@ -69,3 +69,17 @@ Style3D数字样衣的版权问题。
 凌笛大厦
     邮政挂牌的楼，四季青地铁站边上。
     自主产权的，今年底有审批结果。
+
+----
+
+直接按照ScoJson的class定义去解析数据，应该是跟JsonFormatter.UpgradeSco在material和geometry在哪个值做键上有差异。导致我解析的标准sco数据，没法加载面料。
+
+直接解析时
+    material 的键为 ScoMaterialJson.id
+    geometry 的键为 ScoGeometryJson.id
+作为对比，UpgradeSco时
+    material 的键为 ScoMaterialJson.id
+    geometry 的键为 ScoGeometryJson.id
+竟然是一样的。
+
+那么为什么会找不到？
