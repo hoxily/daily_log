@@ -11,3 +11,50 @@
 我大概知道哪里出问题了。ScoJson解析后，material这个字典会经历一个MaterialConfig编辑的过程。在javascript端，使用了o.hasOwnProperty("name") 的方式来判断ScoJson里对应的字段是否需要替换。
 
 而在C#的FromJson(JToken data)方式的解析方法体里，使用BaseModel.DecodeObjectList就会将不存在的geometryIds解析成Count为0的List<ID>对象。就跟是否编辑过这个隐含的含义冲突了。造成bug。
+
+----
+
+遇到一个很奇怪的shader编译错误。明明最近没有改动shader代码。但是却在调试customProductModelPath和customUserProduct的时候，遇到了报错。也就是当我成功消去了上面提到的MaterialConfig替换bug，成功加载人台上的贴图时，Custom/LincStandard着色器报了如下的错误：
+
+undeclared identifier 'UNITY_SETUP_BRDF_INPUT_ShadowGetOneMinusReflectivity'
+Compiling Vertex program with UNITY_PASS_SHADOWCASTER SHADOWS_DEPTH _ALPHAPREMULTIPLY_ON
+Platform defines: UNITY_ENABLE_REFLECTION_BUFFERS UNITY_USE_DITHER_MASK_FOR_ALPHABLENDED_SHADOWS UNITY_PBS_USE_BRDF1 UNITY_SPECCUBE_BOX_PROJECTION UNITY_SPECCUBE_BLENDING UNITY_ENABLE_DETAIL_NORMALMAP SHADER_API_DESKTOP UNITY_COLORSPACE_GAMMA UNITY_LIGHT_PROBE_PROXY_VOLUME UNITY_LIGHTMAP_RGBM_ENCODING
+
+实际上，Custom/LincStandard里的很多feature都是通过#pragma shader_feature的方式进行开关的。那么，只能是错误的#if #endif嵌套定义导致的。
+
+我查看过Builtin shaders里的UnityStandardShadow.cginc，这个UNITY_SETUP_BRDF_INPUT_ShadowGetOneMinusReflectivity是通过三个#define宏定义造出来的。而这个标识符是应该是一个函数。
+
+尝试搜索了一下，并没有找到这个UNITY_SETUP_BRDF_INPUT_ShadowGetOneMinusReflectivity。
+
+----
+
+shader代码里很多#define， #if， #ifdef， #ifndef等宏定义。它们是有差别的。
+
+#ifdef 检查给定名字的宏是否有定义。并不管这个宏的值是多少。
+#ifndef 与 #ifdef 相反。检查给定的名字是否不存在宏定义。
+#if 求解跟在后面的表达式，检查这个表达式的值是否为true。
+#if defined(Name1) && !defined(Name2) 表达的是如下的结构：
+    #ifdef Name1
+        #ifndef Name2
+            //...
+        #endif
+    #endif
+
+----
+
+查看git日志，没有发现最近改动过shadow相关的东西。
+
+----
+
+又研究了一番FabricChanger里的4种Material，结果搜索过程中发现跟Assets\TShow\Morph3D\Vendor\Unity\Shaders\Hair\Editor\HairShaderGUI.cs 里定义的四种BlendMode是一样的。使用Visual Studio 的查找引用可以发现BlendMode.Transparent并没有被引用过。所以尝试换成Fade模式。但是改完后，在Unity Editor里还是显示这个shader错误。即使我退出unity再进，还是有这个error。
+
+----
+
+于是我又去builtinshaders里搜索UNITY_SETUP_BRDF_INPUT这个全大写的字符串。看到UnityStandardCore.cginc里定义了#define UNITY_SETUP_BRDF_INPUT SpecularSetup。恍然大悟，这个UNITY_SETUP_BRDF_INPUT本身是需要先替换成SpecularSetup或者RoughnessSetup或者MetallicSetup三者之一，也就是UnityStandardShadow.cginc里的这三个函数开头的_ShadowGetOneMinusReflectivity(half2 uv)函数。
+
+那么问题就在于，为什么它没有正确替换？
+
+----
+
+搜索UNITY_SETUP_BRDF_INPUT这个字符串，可以在Standard.shader和StandardSpecular.shader里看到分别定义了
+MetallicSetup和SpecularSetup。那么很大的可能就是，LincStandard里漏了这个定义。
