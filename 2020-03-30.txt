@@ -1,0 +1,13 @@
+2020年03月30日，星期一，杭州，小雨转阴，8~12摄氏度
+
+为了拿到测试数据，测试我写的C#代码。在测试服务器上，建立成衣采购商用户，使用gys001用户上传STYLE3D导出的sco文件。折腾很久的数据，在STYLE3D发新版的时候，被重置了。网页端的操作逻辑怎么这么复杂。
+
+要不还是直接丢进去JSON串给Lt3D算了。
+
+即便不管默认面料那个材质，导出的sco含有女性人台，至少也应该显示完整人台的皮肤。但是实际测试发现，人台显示成白模。
+
+----
+
+我大概知道哪里出问题了。ScoJson解析后，material这个字典会经历一个MaterialConfig编辑的过程。在javascript端，使用了o.hasOwnProperty("name") 的方式来判断ScoJson里对应的字段是否需要替换。
+
+而在C#的FromJson(JToken data)方式的解析方法体里，使用BaseModel.DecodeObjectList就会将不存在的geometryIds解析成Count为0的List<ID>对象。就跟是否编辑过这个隐含的含义冲突了。造成bug。
