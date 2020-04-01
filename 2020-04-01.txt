@@ -1,1 +1,7 @@
 2020年04月01日，星期三，杭州，多云，7~17摄氏度
+
+遇到个DecalMaterial类型。于是去看Unity里的用的第三方库LlockhamIndustry的DynamicDecals。头疼。感觉写不动了。
+
+但是目标还是明确的吧？只是中间过程、实现方法不知道。
+
+想要把libwebgl的东西搬运到unity，感觉不仅要熟悉Unity那套，还得熟悉webgl。
