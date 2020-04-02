@@ -1,0 +1,9 @@
+2020年04月02日，星期四，杭州，多云转小雨，10~17摄氏度
+
+读了一些DynamicDecals的代码和3D以前的DecalMaker，以及在网上找的 https://blog.csdn.net/puppet_master/article/details/84310361 Decal贴花（SelfDecal、Alpha Blend、Mesh Decal、Projector、Deferred Decal），前面三种大概还能看懂。后面的实在看不懂。硬着头皮看也没看懂。
+
+所以决定还是沿用DynamicDecals吧。外面用DecalMesh和DecalMaterial包裹，假装跟libwebgl的接口一致。内部实现，哪天需要更换的时候再换吧。
+
+----
+
+单位换算的时机是否应该是FromJson的时候？如果内部还换算来换算去，也太麻烦了。这样的话，内部生成JSON的时候，再次变换为web所使用的厘米单位。感觉应该是OK的。
