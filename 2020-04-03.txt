@@ -31,3 +31,11 @@ z' = y,
 1. 坐标点、向量：x分量取相反数；
 2. 三角形索引序号顺序翻转。需要与DracoMeshLoader的翻转保持一致：每个三角形的索引 1,2,3 翻转为 3,2,1。
 同理，当程序内部数据需要输出为JSON提供给外部时，需要做一个相反的变换。
+
+----
+
+发现了一个bug。ResourceManager.GetRawBytes方法传入的callback会堆积起来。如果成功加载文件数据，就有可能遇到一个buffer多次提供给不同的callback使用的情况。如果其中的callback修改了buffer的数据，那么就会造成后续的callback拿到了损坏的数据。
+
+所以这个接口的更安全的版本是复制一份buffer？对于其它网络请求也会有同样的问题。如果前一个callback修改了数据，就会造成后续的callback拿到错误的数据。
+
+但是注意到INetworkManager的Api类请求，返回的都是string数据，相当于是只读的不可变更的。所以并没有造成问题。
