@@ -1,3 +1,10 @@
 2020年04月09日，星期三，杭州，晴，11~23摄氏度
 
 前天去乐清市民政局办理了结婚证。昨天在绅坊站候车大厅等车时，青青拉住我的手放到她的肚子上，感受到里面的小宝宝在踢腿。
+
+在libwebgl里的utils.ts文件里看到一个newUUID函数。里面有一个格式化字符串让我感觉很奇怪。它长这个样子：
+xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx，其中的x全部是随机的0~15的16进制数值。第13位有一个固定的数值4。第17位的y占位符只能取8,9,a,b,c,d,e,f八种数值。不过使用这个格式化串在Google上搜索，找到的uuid v4版本，y的取值范围与libwegbl里的y的取值范围有点差异，取值范围更小一些。网上的版本只能取值到8,9,a,b四种数值。
+参考：https://stackoverflow.com/questions/105034/create-guid-uuid-in-javascript ， https://www.ietf.org/rfc/rfc4122.txt
+竟然一共有5种UUID。而v4版本是随机数版本。
+
+C#里的System.Guid.NewGuid方法生成的也是v4版本的UUID，y占位符只能取值8,9,a,b四种数值。
