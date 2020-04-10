@@ -9,3 +9,7 @@
 看three里的WebGLRenderer会发现，里面有一个render方法，但是却要求传入Scene和Camera。与Unity里差别很大。查看ThreeD里的截图操作就会发现，Render操作是被放在Camera上的，并且不需要传入Scene对象，因为Unity里永远只有一个场景。
 
 Unity里的MeshRenderer、SkinnedMeshRenderer与three的Renderer应该不是一个东西。CanvasRenderer才跟three里的renderer比较像。
+
+----
+
+由于ThreeJS里可以自行使用Renderer.render(Scene,Camera)方法渲染。所以也就没有像Unity里那样给GameObject设置Layer，并配合Camera的CullingMask进行有选择性的剔除。但是看three的源代码，里面确实有Layers这个类。
