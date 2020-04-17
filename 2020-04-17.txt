@@ -1,3 +1,12 @@
 2020年04月17日，星期五，杭州，小雨转阴，15~24摄氏度
 
 Bounds使用注意事项：无参构造函数创建出来的Bounds总是包含(0,0,0)，在后续的Encapsulate扩张中，会继续保留这个特性，造成bug。
+
+double Math.Atan2(double y, double x)，https://docs.microsoft.com/en-us/dotnet/api/system.math.atan2?view=netframework-4.7.2#System_Math_Atan2_System_Double_System_Double_
+这个Atan2函数很厉害。可以根据y和x，求出一共4个象限的角来。Atan(double d)方法的角范围只有2个象限。
+
+----
+
+LtOrbitControl的内部实现逻辑太复杂了。而且跟我设想的直接利用Spherical球坐标系跟直角坐标系换算有很大差异。是否要从网页端实际操作效果上用自己的简单思路来实现呢？
+
+完全可以给Camera套两层Transform，第一层用来Orbit跟踪target物体，透视模式的贴近、拉远。第二层放Camera，允许在局部坐标下的xy平面上下左右平移，实现Pan平移效果。
