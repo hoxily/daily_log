@@ -28,6 +28,6 @@ Screenspace is defined in pixels. The bottom-left of the screen is (0,0); the ri
 
 ----
 
-机智的我使用分步欧拉角，每一层Transform只设置一个分量，成功验证了Unity里的欧拉角所谓的zxy顺序是什么意思。从旋转时固定坐标系来理解就是分别绕y轴旋转，然后绕x轴旋转，然后绕z轴旋转。而转换成嵌套的坐标系，则是Z->X->Y的从外到内的嵌套。
+机智的我使用分步欧拉角，每一层Transform只设置一个分量，成功验证了Unity里的欧拉角所谓的zxy顺序是什么意思。从旋转时固定坐标系来理解就是分别绕z轴旋转，然后绕x轴旋转，然后绕y轴旋转。而转换成嵌套的坐标系，则是Y->X->Z的从外到内的嵌套。
 
 参见unity_euler_angle_test项目。
