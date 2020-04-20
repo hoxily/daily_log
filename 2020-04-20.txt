@@ -1,0 +1,33 @@
+2020年04月20日，星期一，杭州，多云转小到中雨，14~23摄氏度
+
+关于欧拉角的应用，我想到了一个极好的策略。
+在unity项目中，万园有时候会创建空的gameobject，仅仅是为了利用上面的transform组件进行变换。
+同理，我们完全可以创建具有三级结构的transform来观察各种不同顺序的欧拉角的效果。
+
+比如问题1，不能理解unity自带的欧拉角的zxy是什么顺序。那么创建具有三个层级的gameobject，在第一层只设置z角。在第二层只设置x角。然后在第三层只设置y角。这样一来，物体就是按照从内向外的顺序进行了旋转。
+
+上面的变换也可用于总是相对世界坐标系的。只创建一个gameobject，依次在相对世界坐标系的条件下执行绕坐标轴旋转的操作，也就得到了外旋结果。
+
+结合上面两种方法，即便threejs使用的欧拉角旋转顺序与unity的欧拉角不一样，也可以这样子换算过来。
+
+昨晚和早上路上又思考了下结合多个层级的GameObject来换算欧拉角。忽然发现入门精要里所谓的外旋顺序与内旋顺序颠倒的原理了。
+
+考虑Unity里的Hierarchy层级结构。第一层GameObject的变换所造成的效果，对于子物体来说相当于一个变换后的坐标系。再加一层，依然是再嵌套一层坐标系。但是呢，从坐标点想要从模型坐标系变换到世界坐标来考虑，又相当于不断地由内而外的与一个个变换矩阵进行运算，一直以世界坐标系来作为参考。所以这就是书中所说的颠倒。
+
+原来如此！
+
+----
+
+ScreenPointToRay所得的射线其实是从近截面开始的起点。
+官网文档上明明白白的说了射线的起点。
+“
+Returns a ray going from camera through a screen point.
+Resulting ray is in world space, starting on the near plane of the camera and going through position's (x,y) pixel coordinates on the screen (position.z is ignored).
+Screenspace is defined in pixels. The bottom-left of the screen is (0,0); the right-top is (pixelWidth -1,pixelHeight -1)
+”
+
+----
+
+机智的我使用分步欧拉角，每一层Transform只设置一个分量，成功验证了Unity里的欧拉角所谓的zxy顺序是什么意思。从旋转时固定坐标系来理解就是分别绕y轴旋转，然后绕x轴旋转，然后绕z轴旋转。而转换成嵌套的坐标系，则是Z->X->Y的从外到内的嵌套。
+
+参见unity_euler_angle_test项目。
