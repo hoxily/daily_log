@@ -1,0 +1,55 @@
+2020年04月21日，星期二，杭州，雨，11~16摄氏度
+
+为什么3D模型中的人物喜欢用光头或者贴头短发的女性？因为头发的渲染效果很差，所以干脆把头发干掉。
+
+果然直接看高阶的渲染相关的网络文章没有实质性效果，只是熟悉一些专有名词罢了。还是老老实实看入门精要吧。
+
+----
+
+找到了一个使用单个层级Transform，配合Rotate方法实现欧拉角旋转的方法。对于外旋的情况，处理的不妥当。应该是初始化成Tranform.rotation，也就是没变，这样就是在世界坐标系下的初始状态，然后使用Space.World模式来逐个旋转，得到的结果依然是Transform.rotation，也不需要再次赋值。
+
+反观Space.Self模式，则是先
+Transform.localRotation = Quaternion.identity;
+然后依次执行三个轴的Rotate操作。
+
+上面这个初始化还是有个，更准确地说，应该是初始化成source.parent.rotation。这样才能让target的最终旋转跟上source的旋转。
+
+试了下发现不对。Space.World模式的初始化应该是什么呢？
+
+根据矩阵不断左乘的规律，只要当前节点的父级变换不是identity，永远变不回去了。真的想要使用Space.World模式，那么最好先将当前节点放到世界坐标系下。
+
+从矩阵乘法来理解，设父级的变换为M，设欧拉角(x,y,z)的变换为X,Y,Z，那么Space.Self模式变换就是：
+MYXZ
+而Space.World模式变换则是
+MNYXZM
+显然不可能对的上。
+
+其实Space.Self模式可以直接在局部坐标系下进行集成。而Space.World模式必须借助一个WorldSpaceRotateHelper节点，进行Space.World模式变换。但是注意了，这个变换的初始状态也是identity，变换的结果依然是赋予当前transform.localRotation。相当于把嵌套的4层坐标系中连续的YXZ变换给单独拿出来放到世界坐标系下执行。为什么要拿到世界坐标系下，因为选用了Space.World模式。
+
+这样说起来，不能直接嵌套于当前transform的Space.World模式反而更麻烦？
+
+话说回来，使用Quaternion可以节省辅助用的Helper节点。代码如下：
+
+//注意for循环里更新四元数总是在左边乘以新的Quaternion。因为使用Quaternion变换向量时是 q * vector，
+//而多个相邻的Quaternion可以压缩为一个：q3 * q2 * q1 * vector = (q3 * (q2 * q1)) * vector;
+Quaternion q = Quaternion.identity;
+foreach (var r in rotateOrders)
+{
+    if (r is XAxisRotator)
+    {
+        q = Quaternion.Euler(source.localEulerAngles.x, 0, 0) * q;
+    }
+    else if (r is YAxisRotator)
+    {
+        q = Quaternion.Euler(0, source.localEulerAngles.y, 0) * q;
+    }
+    else if (r is ZAxisRotator)
+    {
+        q = Quaternion.Euler(0, 0, source.localEulerAngles.z) * q;
+    }
+}
+transform.localRotation = q;
+
+----
+
+既然Quaternion.Euler可以这样子使用，那么之前所设想的从threejs换算欧拉角的问题就完全可以不需要任何多层嵌套transform辅助，也不需要单个位于世界坐标系下的辅助节点。真是妙啊！只要知道threejs的欧拉角顺序，使用Quaternion.identity一路变换过来即可。
