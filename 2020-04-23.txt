@@ -1,0 +1,13 @@
+2020年04月23日，星期四，杭州，多云，10~19摄氏度
+
+魏昌华说使用yarn尝试一下。毕竟yarn.lock与package-lock.json可能版本依赖有差异。
+npm 与 yarn 是两个不同的包管理器。
+
+----
+
+备份android里的apk。参考：https://blog.csdn.net/zhouyuanjing/article/details/78562542
+直接adb shell的方式，cd /data 目录后执行ls会提示无权限。但是使用adb pull /path/to/xxx/base.apk 又是可以获取到该文件的。
+
+1. adb shell pm list packages找到要提取apk的包名
+2. adb shell pm path 定位apk所在系统路径
+3. adb pull <remote> [<local>] 从手机把apk pull下来
