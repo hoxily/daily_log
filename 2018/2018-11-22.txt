@@ -1,0 +1,6 @@
+2018-11-22
+
+昨天在简单浏览过react-native中文版教程文档后，重新尝试了一下前天祝旭东给的react-native-unity-view。也就是说，之前不成功，是因为没有init一个react-native工程？？？缺失一些操作步骤导致的？
+
+就卡在react-native JS代码出问题上。能打出apk包了。
+可是我不懂react-native代码呀。

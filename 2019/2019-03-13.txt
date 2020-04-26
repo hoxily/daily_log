@@ -1,0 +1,10 @@
+2019-03-13
+
+照着react-native-unity-view的教程做，出现了
+“Failure to initialize, your hardware is not support this application,sorry!”
+的弹框。网上的说法是jniLib里需要限制一下abi，保持为Unity支持的那些abi。这样的话，就只有
+x86, armeabi-v7a了。
+
+----
+
+执行react-native run-android的过程中，总是被打断。但是再次重试，会换一个打断过程的错误。多次重试后就执行成功了。这是什么缘故呢？

@@ -1,0 +1,17 @@
+2019年05月31日, 星期五, GPS(30.3108, 120.0906)
+
+已找到可以复现react-native-unity-view导出脚本没有正确移除pbx里的文件引用，造成xcode build失败的方法。比如在C#脚本里引用UnityEngine.JsonUtility.ToJson方法，这时就会引入UnityEngine.JsonSerializationModule.dll，il2cpp就会生成新的cpp文件。然后再在C#代码里移除这个ToJson方法的引用，这个cpp文件就会消失。这时，对应的pbx文件也应该移除对此文件的引用。
+
+感谢光哥的厝内小眷村奶茶。芋圆颗粒。
+
+----
+
+感觉f111fei对XCodePostBuild.cs脚本的使用并不正确。它的注释里说设计起来是build目录为/tmp下的build目录，而Xcode工程在另一处地方。但是f111fei提供的Build.cs脚本，将Unity build导出目录与原生的Xcode工程合为同一个地方。这样的话，XCodePostBuild.cs里的目录比较操作，就检测不出来extraFile了。
+
+感觉这个bug很难修。不如配合git status来判断，手动在xcode里移除引用项。
+
+----
+
+尝试在macos上使用xcode创建cocoa touch static library工程，可以成功build引入的Classes和Libraries。算了，暂时还是使用这个脚本吧。结合手动操作来打包。
+
+按全贺菁的说话，可以使用高可编程配置的cocospods来管理工程项目之间的依赖。Unity这边只需要全量导出一个包含所有文件的文件夹即可。这样的话，主工程open3d的依赖可以变得简单。

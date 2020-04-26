@@ -1,5 +1,0 @@
-2019年07月05日, 星期五, GPS(30.3107, 120.0907)
-
-在干净的测试工程里测试发现，如果把纹理调成ReadWrite Enable，并且勾上Generate Mipmap，打出的AssetBundle加载出来的Texture2D就跟WWW直接加载jpg图一样的大小了。差不多是按照像素数量乘以每像素3字节得出的结果是3倍左右。
-
-Unity没有一个好一点的api，以控制jpg或者png的加载参数。于是想能不能把下载下来的jpg图，打包成AssetBundle。使用测试工程生成了一个2x2大小的图，打出来的AB包很复杂。并不清楚它的二进制格式。除非有Editor的源码。

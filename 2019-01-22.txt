@@ -1,5 +1,0 @@
-2019-01-22
-
-使用preserveAspect功能受Image所在GameObject的RectTransform的pivot影响。只有当pivot为0.5,0.5时才会居中显示。
-
-鼠标滚轮出问题了。外轮无法带动内部轮，滑脱了。失去了一格格的感觉。算起来也差不多有4个月的使用寿命。

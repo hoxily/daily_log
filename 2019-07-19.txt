@@ -1,5 +1,0 @@
-2019年07月19日, 星期五, GPS(30.3107, 120.0907)
-
-修了几个bug。对ThreeD模块不够熟。有个bug转交给万园了。
-
-在QQ群上看到群主发的Console面板集成了Android的logcat功能，说是unity2019的某个package实现的。如果能用在unity2018上那就好了。之前都是需要打开一个超大的Android Studio来看log。

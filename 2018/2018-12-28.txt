@@ -1,0 +1,7 @@
+2018-12-28
+
+实现GetUserProductData后，测试发现通过saveTexture接口提交给服务器时总是成功。但是，web端在解析时会因为renderConfig为null导致出错。
+
+另外发现的问题则是，使用saveTexture保存过之后。重新加载详情页，变化的面料成功加载，但是再次切换面料时遇到3D模块使用null key访问Dictionary的异常。
+
+所以保存用户编辑状态的功能暂时不可用。

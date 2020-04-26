@@ -1,0 +1,18 @@
+2019年06月11日, 星期二, GPS(30.3108, 120.0907)
+
+在MacBook Pro上安装了mono，可以执行csharp解析器，交互式地执行代码片段，可以方便验证API。
+
+System.IO.Path.GetFullPath(string path)方法可以将含有“..”表达的路径转换成不含“..”的路径。
+
+“
+csharp> Path.GetFullPath("/Users/hoxily/.ssh/../Downloads")
+"/Users/hoxily/Downloads"
+csharp> Path.GetFullPath("/Users/hoxily/.ssh/../../Downloads")
+"/Users/Downloads"
+csharp> Path.GetFullPath("/Users/hoxily/.ssh/../../..")
+"/"
+csharp> Path.GetFullPath("/Users/hoxily/.ssh/../../../..")
+"/"
+”
+
+从上面的测试可以看出，GetFullPath其实并不需要文件系统上真的存在这个文件夹，完全是针对“..”做的逻辑上的路径变换。相比自己去切割、拼接字符串，GetFullPath要方便很多。

@@ -1,0 +1,10 @@
+2018-11-23
+
+（Init 为空白页，等待RN端消息）
+
+(showProductDetail,传入token,refreshtoken,pid,is_open等)
+
+（退出ProductDetail页时，跳转回空白页，并通知RN端。）
+
+遇到了一个神奇的单例重复错误。检查后发现是Controller没有销毁，导致再来一条消息时，进入了两遍ProductDetail页面。需要主动调用Controller的OnDestroy。Karma架框并没有自动调用Controller的OnDestroy方法。
+

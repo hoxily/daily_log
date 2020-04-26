@@ -1,0 +1,14 @@
+2019-04-10
+
+一探建议在不修改React C++源代码的情况下，解决Archive生成的ipa运行crash问题。
+
+----
+
+WARNING！
+src/config/web.js里后半段的线上配置是错的。client_id与client_secret并不正确。应该使用deployment/conf/js/web_prod.js里的配置。
+
+配置的原理是程序本身总是读取src/config/web.js文件。而仅在打包的时候，根据参数，复制deployment/config/js/目录下的配置文件，将src/config/web.js覆盖掉。
+
+----
+
+受UnityView常驻内存的影响，以及只有ShowProductDetail，而没有EndShowProductDetail，所以如果消息指令的顺序不正确的话，SwitchStandardProduct指令会被当成当前是上一个ShowProductDetail会话的操作，而不是最新的ShowProductDetail之下的操作。

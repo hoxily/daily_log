@@ -1,9 +1,0 @@
-2018-11-07
-
-JSON接口中多次出现的reXXX字段是后端框架自动追加的方便视图层展示的数据。
-
-searchInfo.knitMode中有重复的cid，建议以列表中后出现的项为标准，即后出现的同cid项覆盖先出现的项。
-
-----
-
-由于接口请求是以异步的方式通过HttpServerManager来做的。所以会出现当前页面已经销毁但是请求的结果回调才到的情况。这时，应该忽略这个回复结果。否则会触发MissingReferenceException。

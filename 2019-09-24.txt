@@ -1,5 +1,0 @@
-2019年09月24日, 星期二, GPS(30.3108, 120.0904)
-
-当含有空Mesh（"new Mesh()"操作生成的空Mesh）时，CombinedMesh渲染时有脏东西在衣服表面。可以理解为Mesh与对应的Material关联被打乱了。网格使用了错误的材质。
-
-消去这个空Mesh，再CombineMesh，正常了。

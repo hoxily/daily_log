@@ -1,9 +1,0 @@
-2019-04-16
-
-截图看的大小已调试OK。还需要接入卫哥提供的上传接口。
-
-----
-
-虽然万园并没有把Project Settings里的Script Symbol Definition给提交。但是由于她使用过之后，macmini的open3d工程是处于XCodePostProcess未生效的状态。同时，当前又是iOS的buildtarget，所以autobuild脚本执行过程中并没有执行正确的后处理操作，造成打包出错。
-
-也就是说，光添加-buildTarget iOS切换工程build目标还不够。得强制让Unity Reload一遍Editor脚本。

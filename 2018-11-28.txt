@@ -1,7 +1,0 @@
-2018-11-28
-
-ODM 移动端（HTML5）版本的bug，可以在JIRA的LT项目提交。
-
-在App Store Connect看到一条通知消息，知道为什么等这么久上传的app还没开始审核。
-“App Store Connect 放假安排：12 月 23 日至 27 日
-请确保您的 App 为最新版本，以准备迎接假期。App Store Connect 在 12 月 23 日至 27 日（太平洋时间）期间不接受新 App 和 App 更新，因此请提前处理任何与发布相关的提交、审批和计划事宜。其他 App Store Connect 和开发人员帐户功能不受影响。”

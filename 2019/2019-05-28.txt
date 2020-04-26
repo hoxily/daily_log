@@ -1,0 +1,7 @@
+2019年05月28日, 星期二, GPS(30.3108, 120.0907)
+
+什么是“轮系主席”？凌笛技术委员会筹备.pdf里提到这个词。百度查到的意思只有齿轮传动系统的意思。CHC说是轮席主席，那就有点像了。
+
+UnityWebRequest处理string类型的url的时候，会自动地将连续的两个斜线合并成一个斜线，有点像是canonicalize操作。但是对于AliyunOSS的资源来说，除去hostname之外的路径部分，只是一个key而已。存入的时候命名的key是什么样，访问这个资源的时候就得一模一样才行。如此一来，UnityWebRequest反而不能正常访问 https://hostname/path/to//filename.jpg 这种资源。
+
+经实验测试，使用URLEncode方式，将连续的两个斜线替换成“/%2F”可以访问到该资源。即上面的例子，经处理后得到的URL为 https://hostname/path/to/%2Ffilename.jpg 。

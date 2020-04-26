@@ -1,0 +1,38 @@
+2019年07月08日, 星期一, GPS(30.3107, 120.0907)
+
+Unity动态加载Texture2D内存消耗测试。
+图片大小，4096x2048，
+Read/Write Enabled: true,
+Generate Mip Maps: true,
+Alpha Source: None,
+Compression: None,
+在Inspector看，预览图上标记的是 4096x2048 RGB 24 bit.
+
+静态引用大小：在Scene场景中直接引用Project里的这张图，使用Profiler查看是74.7MB。
+
+如果使用WWW加载，再用其texture属性取得Texture2D，其大小与静态引用的大小相同。
+
+如果使用UnityWebRequest方式加载，设置或者不设置nonReadable，都是占用56.0MB。有点像是Editor下无法区分出Read/Write。相比WWW，能省去的是Mipmaps的大小。
+
+如果使用AssetBundle加载Read/Write设置为false的Texture，那么内存可以节省32.0MB，只占用42.7MB，省掉的内存是一个整的Texture大小。
+
+总的来说，AssetBundle < UnityWebRequest < WWW。由于AssetBundle不可用，只能选择UnityWebRequest。
+
+在脚本中，动态加载的Texture如果Resize后不再需要用CPU读写像素值，那么可以调用Apply时，给markNoLongerReadable参数传true，让它上传到GPU，CPU里就不再留了。省出内存。
+
+----
+
+https://github.com/RaduMC/AssetStudio/blob/master/AssetStudio/BundleFile.cs
+https://github.com/HearthSim/UnityPack/blob/master/unitypack/assetbundle.py
+
+上面第一个链接对UnityFS的解析只有文件头的3个版本号加上文件大小。
+第二个链接很详细。看得头晕。
+算了，不在这上面浪费时间了。明明已经是Unity Editor提供的功能，何苦非得把打包功能移植到Player运行时。
+
+在Player运行时，根据得到的JPG或者PNG，以及所需的Texture大小等属性，动态地生成一个AssetBundle，然后使用AssetBundle相关API进行加载。这个思路行不通。
+
+----
+
+还有一个思路是使用Texture2D的构造方法，创建一个目标大小、目标纹理格式、目标MipmapCount的Texture2D对象，调用它的GetRawTextureData<T>方法，得到NativeArray<T>数组，把这个数组内容用实际纹理数据填充，并调用Apply方法完成上传。这样就跟复杂的AssetBundle格式无关了。
+
+看了一下Unity的文档，没有例子。只有LoadRawTextureData与GetRawTextureData互相配合的例子。从Texture2D里取出数据，又塞回Texture2D里。

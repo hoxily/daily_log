@@ -1,7 +1,0 @@
-2018-11-05
-
-refresh_token永不过期？之前做微博的oauth时，refresh_token都会失效的吧。
-
-refresh_token失效也没有关系，跳转到登录页重新登录即可。
-
-/oauth/token + /api/home/userInfo 组合两者实现非采购商不可登录，虽然逻辑上没有问题，但是因为成功地登录了，所有也就有权限请求各个接口，比较危险。不如干脆在/oauth/token接口登录处就掐断。

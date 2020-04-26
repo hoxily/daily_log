@@ -1,6 +1,0 @@
-2019-01-10
-
-Texture2D.Resize方法无法缩放纹理。Resize操作后，纹理的像素颜色是undefined状态。脚本手册里说了。我还以为可以缩放大小。
-
-逐像素GetPixel，再SetPixel写到新建的Texture2D里太慢了。特别是图像很大的时候。经过测试发现，ThreeD.GetProductScreenshots(Rect rect) 方法，所谓的截屏区域并不是指相对当前屏幕大小，截取其中一部分。而是rect的大小本身，也限定了RenderTexture的大小，相当于是把Camera渲染结果缩放到指定的rect大小上。调用GetProductScreenshots方法时，传入合适的大小即可。
-

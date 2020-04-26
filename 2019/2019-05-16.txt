@@ -1,0 +1,12 @@
+2019-05-16
+
+当Text组件的文本中含有空格时并且内容特别长时，其word wrap生效后会导致单行内容可能只显示空格前的一小部分内容，空格后的内容被换到下一行去了。但是因为vertical overflow勾选的是truncate，所以只能看到一小部分内容。
+如果确定只显示单行内容的话，可以将horizontal overflow设成overflow，vertical overflow设成truncate，同时给Text增加一个父节点，加上Image与Mask组件，进行截断，以保证左右留白效果。
+
+截图的bug修一下午。没有思路。试着从万园写的CalculateCamera方法入手，把里面的显眼的0.95与0.85给提取出来，大概判断为屏幕填充率，测试了一下大致符合预期结果。
+
+然后尝试修改ThreeD.GetScreenshot2方法。一开始是想着把RenderTexture包裹屏幕、包裹有效区域，遇到了Texture2D.ReadPixels方法报错，根本没有读进去。不允许读取超出RenderTexture的范围。
+
+最后改变思路，让RenderTexture包裹屏幕，但是只截图其中指定宽高范围，同时让3D物体本身缩小到截图范围内。这下子就成了。
+
+感觉思路还是不顺畅。

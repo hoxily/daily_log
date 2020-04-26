@@ -1,0 +1,3 @@
+2020年01月06日, 星期一, GPS(30.3108, 120.0904)
+
+上周尝试使用DynamicMeshCollider脚本，逐帧更新MeshCollider，在自己建的测试场景里效果不好。这次试了一下使用Sample场景中的CharacterCloth，还是一样，并不起作用。

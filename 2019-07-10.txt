@@ -1,7 +1,0 @@
-2019年07月10日, 星期三, GPS(30.3107, 120.0907)
-
-今天是支付宝花呗还款日。欠了它好多钱。忆乡客的蒸饺超级难吃，别买。
-
-昨天写的截图考虑不完整。第一重是3D模型初始化填充屏幕，有可能是以宽度贴合（竖屏时），也有可能是以高度贴合（横屏时）。在这之下，还存在截图的目标尺寸溢出的问题。如果再加上贴边预留内边距，那么就有更多因素了。需要再改进一下算法。
-
-使用RenderTexture时需要注意Y方向的翻转。使用SystemInfo.graphicsUVStartsAtTop来判断是否需要翻转。纹理坐标默认是左下角为(0,0)。 https://docs.unity3d.com/ScriptReference/SystemInfo-graphicsUVStartsAtTop.html

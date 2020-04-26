@@ -1,0 +1,71 @@
+2019年11月11日, 星期一, GPS(30.3108, 120.0904)
+
+Cloth模拟在三角面数量2048的时候，可以在E3V5的机器上正常编辑。除了Select拖放的时候会出现指示用的小球消失这样的bug。
+
+看起来，不管是选中其中一个小球还是多个小球，当调整Cloth在Inspector面板上的Self-Collision字段中的self-collision distance时，全体小球的半径都会发生变化。也就是说不能单独调整某个小球的碰撞距离。同样的，self-collision stiffness也是所有小球所共享的。
+
+开启自碰撞与不开启自碰撞的最大差别就是布料自身不那么容易刺穿自身了。所以Cloth的Surface penetration表面刺穿，其实是另一个东西。是用于布料的粒子模拟时，总沿着布料的法向向外运动，而不是向内刺入人物？本来Cloth是包裹在人物模型外表面，显然我们并不想让布料刺入人物，所以它的surface penetration说明里说这个参数用于指定粒子能刺入网格多深。
+
+Cloth的编辑器有bug。Duplicate出来的布料物体，调整self-collision与inner-collision后，报Array Index Out of Bounds异常。数据损坏了。
+
+编辑Self-Collision时Inspector面板会出现如下的两个配置参数：
+
+self-collision distance: 以每个粒子为球心的球体的半径。Unity将会确保这些球体不会在模拟过程中互相重叠。这个距离需要比配置中的任意两个粒子的最小距离还要小一些。否则自碰撞将会与某些距离约束发生冲突并导致抖动。
+
+self-collision stiffness: 两个粒子之间的排斥力有多强。布料求解器计算这个值，这个值需要足够大，以将粒子分开。
+
+自碰撞与相互碰撞会消耗大量的模拟时间。可以考虑保持一个较小的碰撞距离，并且使用Cloth.SetSelfAndInterCollisionIndices(List<uint> indices)来减少参与碰撞计算的粒子数。
+
+自碰撞使用顶点而不是三角形来模拟。所以别指望那些三角面明显大于布料厚度的网格能产生良好的碰撞效果。
+
+也就是说，虽然面数变大了之后，无法在编辑器里进行自碰撞与相互碰撞的调整。但是可以通过调用Cloth的方法，进行设置。我完全可以在运行获取全部的顶点下标，设置它们参与自碰撞与相互碰撞。
+
+public void GetSelfAndInterCollisionIndices(List<uint> indices);
+public void SetSelfAndInterCollisionIndices(List<uint> indices);
+public float selfCollisionStiffness;
+public float selfCollisionDistance;
+
+自碰撞与相互碰撞所使用顶点是同一套。而每个顶点的self-collision distance与self-collision stiffness则是共享这两个数值。对于inter-collision来说，inter-collision distance 和 inter-collision stiffness则是所有的Cloth实例共享这两个参数值。需要在 Physics类里进行设置。
+
+！！！我终于知道self-collision与inter-collision有什么差别啦！
+
+self-collision指的是单个Cloth实例内部的碰撞。而inter-collision指的是归属于多个Cloth实例的粒子之间相互碰撞，即多个布料之间的相互碰撞。
+
+在官方的 Physics.interCollisionDistance 的文档里，有提到这个参数用于将归属于不同的Cloth物体的粒子一旦小于这个距离则会被强制分开。
+
+----
+
+昨天与前天去了青青的老家——仙居。横溪镇。S322国道边上。S322与西二路交叉口向西走，经过加油站，天诚汽车装潢左数第二间。边上有桃园村、桃园禅寺、横溪中学、绿道等。从杭州去仙居的车，先是走诸永高速经过白塔，然后向东走，去仙居县城——青青称之为城关。然而再去青青家的话，就得重走一遍白塔到仙居县城的路，继续向西才是青青的家。乡下的公交车不支持支付宝、微信，需要使用现金。从仙居汽车站到横溪镇，车费为9元。
+
+青青于上周五（2019-11-08）晚上回仙居，去准备周六的事业单位考试。而我是周六（2019-11-09）下午13:00出去，从杭州到仙居。路上一共用了4个小时，多几分钟。
+
+在青青家见到了青青妈妈、青青哥哥、青青嫂子、青青哥哥的儿子、青青姐姐的儿子。
+
+仙居那儿挺冷的。跟杭州一样的最高、高低温度。但是在杭州夜间并不会出门，并不会感受到多冷。
+
+由于在车上无聊，重新玩腾讯的全民飞机大战。消磨时间挺好的。因为里面的任务都是特别费时的东西。每个任务完成也有很明确的评判结果。但是怎么说呢，无论玩再久，也只是在游戏设计好了的世界框架下搬砖而已。用去的1个小时或者2个小时，所得到的快乐真的值吗？把时间投资在玩飞机上，对未来有什么好处吗？
+
+今天早上，青青突然说她流鼻血了。右鼻子流血。
+
+有种情况下也会出血。就是空气很干燥，于是早上起来时鼻屎变硬，如果运气不好，就可能戳到自己而受伤。
+
+----
+
+官方面料模型上传参数：
+    模型名称：string
+    模型类型：enum （getDimensions接口返回的data对象里的type_text字段）
+        褶皱（Cloth可以模拟）
+        正反面
+        悬垂球（Cloth可以模拟）
+        三角吊卡（Cloth可以模拟）
+    模型文件：sco文件
+    适应克重范围：range(0, 1000)
+
+
+使用 SetSelfAndInterCollisionIndices 方法确实可以避开Editor来设置自碰撞。但是，布料本身每个局部都会抖得很厉害。看起来就不够光滑。增大Solver Frequency可以平滑。但是对机器性能要求高。我看看有没有其他办法可以降低局部表面抖动。
+
+布料穿插后会导致布料粘在一块儿。要再施加力才能分开。使用Collider与布料碰撞也是这样。贴近、碰撞后，布料会粘在Collider上。
+
+已将ClothTest工程的所有资源导入libunity3d工程。以后将会在libunity3d工程里调效果和写UI了。
+
+柯欢欢要走了。

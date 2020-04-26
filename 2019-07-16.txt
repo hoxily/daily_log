@@ -1,9 +1,0 @@
-2019年07月16日, 星期二, GPS(30.3107, 120.0907)
-
-在Profiler可以看到ObjectBrowser.OnGUI方法真的每帧被调用了两次。
-
-从OnMouseDrag到OnMouseUp之间可以是一个很长的时间，只要用户按钮鼠标不松开。可以通过记录最近一次OnMouseDrag的时刻，在OnMouseUp时判断是否丢弃惯性旋转速度。
-
-ObjectBrowser的代码相当难懂。绝大部分的变量没有标明单位。看得稀里糊涂的。
-
-里面有一个TrackBallZ的算法，具有奇怪的特性。当缓慢的Drag时，计算出来的Speed很小。快速地Drag时，计算出来的Speed很大。在一定的程度上可以允许用户降低速度进行微调。但是同时会造成不跟手的延迟感。

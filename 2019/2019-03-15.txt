@@ -1,0 +1,8 @@
+2019-03-15
+
+又找到一个坑点。react-native的ios工程在build期间会下载third-party库，连网下载的。会卡在building double-conversion等第三方库。耐心等待下载完成即可。
+期间如果出现build input file cannot be found的话，用Finder确认文件确实已经存在，那么在Stop Build之后clean一下，再试一遍。
+
+在一探的帮助下，成功运行了react-native-unity-view的demo工程。那么参照教程，把自己的工程集成进去，应该也不是太大问题。
+
+react-native工程根目录下有一个名叫package-lock.json的文件。里面记录了严格的依赖的软件包的版本号。当本地使用taobao镜像服务器时，使用npm install指令安装node_moudles后，会出现package-lock.json里的一些url地址变动的情况。这时使用版本管理工具Revert即可。

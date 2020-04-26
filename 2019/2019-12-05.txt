@@ -1,0 +1,9 @@
+2019年12月05日, 星期四, 紫金广场B座1610室
+
+提高QualitySettings里的画质级别，调到最高，就可以解决骨骼动画穿模问题。当在Editor下查看无穿模问题，但是打包到iPad上后出现穿模问题，可以试试调高画质级别。怀疑是SkinnedMeshRenderer.quality设置为auto后，每个顶点只被少量骨骼驱动的问题。SkinQuality枚举最高可以让每个顶点被4个骨骼驱动。
+但是在QualitySettings里的SkinWeights枚举，最高可以设置为Unlimited，无限制。
+从ModelImporter.maxBonesPerVertex来看，最大可以达到每个顶点被32个骨骼驱动，https://docs.unity3d.com/ScriptReference/ModelImporter-maxBonesPerVertex.html
+
+
+
+tshow工程里出现过皮裤在走秀时报AABB aabb数值异常的错误，导致骨骼动画不起作用，裤子僵硬。去除Cloth组件后修复。可以尝试重新添加Cloth组件并调整相应参数。

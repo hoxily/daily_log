@@ -1,5 +1,0 @@
-2019年07月29日, 星期一, GPS(30.3107, 120.0907)
-
-可以在OnBeginDrag操作时，调用EventSystem.current.SetSelectedGameObject(go, e)，然后在ObjectBrowser里检测是不是有EventSystem.current.currentSelectedGameObject。以此来避开拖动印绣花列表项时，触发ObjectBrowser的旋转模型操作。
-
-令人感到奇怪的是，主料面板里的列表项也是同样的拖动原理，为什么主料面板的列表项拖动时，不会引起ObjectBrowser的旋转模型操作呢？

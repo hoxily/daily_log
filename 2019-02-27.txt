@@ -1,3 +1,0 @@
-2019-02-27
-
-尝试给3D模块的图片加载也采用DownloadHandlerTexture方式后，加载出来的图片出现了非常明显的摩尔纹。旧的WWW.texture不会有这样的问题。

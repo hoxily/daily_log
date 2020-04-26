@@ -1,0 +1,3 @@
+2019-04-19
+
+很奇怪。使用react-native-unity-view提供的导出脚本，出现了Assembly-CSharp-firstpass_0.cpp找不到的情况。理论上导出后的文件有增减，应该会自动更新pbxproj文件。

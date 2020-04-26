@@ -1,0 +1,16 @@
+2019-04-02
+
+昨天折腾一天，没搞定Archive->Export Adhoc包安装后启动阶段闪退的问题。
+今天早上的晨会，黄宁海说可以先不用管它。USB连接着xcode安装的包能运行就行。完整打包以后再说。
+黄宁海说让我做自己擅长的事，流程先全部跑通更重要。
+
+----
+
+api/open/product/product_user_product
+接口的设计与实际实现有误差。
+标准款的时候，用不上data/default数据，必须使用data/sku下的数据，并且sku个数大于等于1；
+如果是定制款的话，用不上data/sku下的数据，使用data/default的数据作为定制的初始状态；
+
+----
+
+TODO: 使用有Plus License的macmini做UnityExport导出，以去掉Made with unity logo。

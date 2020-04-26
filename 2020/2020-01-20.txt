@@ -1,0 +1,29 @@
+2020年01月20日, 星期一, GPS(30.3108, 120.0904)
+
+我在新建的Unity工程，普通的Cube都能在Plane上或者其他Cube上投射实时的阴影。但是把这样的场景导入到libunity3d工程后，再打开这个场景就会发现没有阴影了。
+
+Game窗口的Stats里Shadow Casters数量为0。
+
+检查过 Renderer的castShadows属性为on，receive shadow属性为on。pixel light count为3。最终在Project Settings -> Quality -> Shadows 里的 Shadow Distance参数找到的原因。把Shadow Distance调大，Stats就会显示更多Shadow Casters数量。就会有实时的阴影了。
+
+----
+
+我发现了一个资源无法卸载的bug。那就是App节点上的UIManager引用了很多prefab资源。但是只要一加载最初的空场景，这些资源也会被加载从而占用内存。即便它们并没有用上。
+
+看起来得打包成AssetBundle？
+
+写了个测试工程测试了一下。只要整个场景使用Inspector拖动的方式引用了这些资源，不管有没有Instantiate，都会占用内存。
+
+随着App内置的资源越来越多，原先的一股脑儿Inspector拖放的模式不再适合。需要考虑资源的使用时间。
+
+需要测试一下以下这些内存管理方案：
+1、使用Resources文件夹配合Resources类来动态加载。怀疑prefab本身还是会占用内存，特别是Load过一次后；
+2、使用AssetBundle方式管理，可以卸载整个AssetBundle；
+
+本来Unity的Scene场景方式就挺好。切换一个Scene，旧Scene的内存会全部释放。是否可以从场景切换入手？
+----
+
+坑。AnimationClip.Sample方法不允许在Editor之外调用。Xcode调试运行的时候，Console会有报错提示：
+Cannot sample animationclip outside editor. Please add Animator component to this gameObject.
+
+在人模物体上加上Animator后，可以Sample操作了。

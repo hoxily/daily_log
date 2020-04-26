@@ -1,7 +1,0 @@
-2019年06月21日, 星期五, GPS(30.3107, 120.0907)
-
-试着把MacBook Pro的分辨率调节成显示器物理分辨率的0.5倍，即1280x800，以为safari在展示网页时，图片不至于太模糊。但是并没有什么卵用。并不是blocky模式的缩放，而是平滑缩放，所以与在windows上看到的网页ICON图标还是有一点差别。按理说整数倍缩放不应该变模糊。
-
-Unity里的TextureImport设置里，FilterMode有Point模式和Bilinear和Trilinear，就类似Bilinear和Trilinear的效果。糊糊的。
-
-unity2019.3.a2版本以上支持unity as library模式了。但是有点弱。真要用的话，之前适配好的一些代码得重新实现了。https://blogs.unity3d.com/cn/2019/06/17/add-features-powered-by-unity-to-native-mobile-apps/ 

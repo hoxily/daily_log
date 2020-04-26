@@ -1,0 +1,13 @@
+2019年07月04日, 星期四, GPS(30.3107, 120.0907)
+
+昨天去金华佬吃午饭。因为骑车比苏斌到得早，所以花了一些时间用语言解释我坐在哪个位置。突发奇想，是不是可以给常去的地点做一些地图，当我们两个都拥有相同的地图时，指明地点就容易多了。看图便知。
+
+最近中午午睡做梦很严重。睡过之后感觉更虚了。
+
+Texture2D纹理不要记录在FabricModel或SceneModel等Model上面。应该记录到ListItemView上。因为当前的ListView就是同一时刻，所能展示的ListItemView数量有限，比较小。但是Model的数量可以很大。为了节省内存，应该绑定到ListItemView上，并在OnRecycle时把引用清除。
+
+从收藏夹进入详情页加载失败的bug是因为，全贺菁传递product_id与favorite_state_id时传错了参数，两者都传成了product_id。造成我自己模拟消息能正常加载，但是打包出来的iPad App运行，就无法加载收藏夹里的款式。
+
+何欣阳提出了一个闪退的bug。推测是内存不足。拿到了iPad的型号号码：“MRJN2CH/A”，但是在Google上搜不到该机型的RAM大小。怀疑很小。https://www.gsmarena.com/apple_ipad_9_7_(2018)-9142.php 从这里可以查到是2GB内存。比iPhone X少1GB。
+
+在Editor环境下使用Profiler查看性能，会发现加载全景图，出现过240MB的GC Alloc。会是这个原因吗？

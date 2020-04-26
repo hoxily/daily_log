@@ -1,7 +1,0 @@
-2019-03-25
-
-提供给苏斌的ios测试包，需要修改src/config/web.js中的url为内网测试库，即 192.168.31.3:6060
-
-发生了一个很奇怪的现像。除了测试机不同，开发环境都是一样的，但是在小智提供的测试机上运行，会因为连接超时自动转为打包时写入的jsbundle。也没有办法Debug JS Remotely。提示连接不上 localhost:8081 。但是正常情况下应该连接打包的MacBookpro的ip才对。
-提示在RCTWebSocketExecutor.m中配置正确的ip地址。进去看则发现在setUp里分别调用了[[_bridge bundleURL] port] 和 [[_bridge bundleURL] host]，然后进行URL地址拼接操作。
-所以，应该是这个_bridge对象没有正常读取到配置里的host和port。因为手机系统不一样而不能正常工作？

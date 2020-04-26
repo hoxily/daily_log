@@ -1,0 +1,9 @@
+2018-10-17
+
+调用 /oauth/token 接口时，如果用户名或者密码错误时，服务器返回的HTTP Response Code状态码不再是200，而是401.这时UnityWebRequest会将error属性设置为“Generic/unknown HTTP error”。因此当前的HttpServer代码，在PostText时，即便检测到error属性非空，依然去检查downloadHandler所下载下来的文本数据。
+
+----
+
+DTO，OAuth2.0
+Log剥离
+i18n国际化

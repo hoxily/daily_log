@@ -1,5 +1,0 @@
-2019年11月26日, 星期二, 紫金广场B座1610室
-
-Transform.TransformDirection与TransformVector最大的差别就是前者会保持传入向量的膜不变，而后者不会。也就是Scale影响到了TransformVector的计算。
-
-王方圆给了一个蒙皮的骨骼动画的fbx模型。在editor下查看可以发现网格资源比我在blender里建出来的平面多了一个skin信息。怪不得我看半天拖动场景里的人物，没有在SkinnedMeshRenderer上找到网格与骨架的对应信息。原来集成在网格里了。

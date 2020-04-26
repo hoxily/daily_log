@@ -1,0 +1,18 @@
+2019-04-04
+
+很奇怪。昨天明明郑强说那个xcode工程引用的Unity的Data目录使用了绝对路径，造成问题。我以为是Build脚本的问题。但是试了一下用macmini做build导出，再在我的MacBook Pro上打开工程，并没有报错。Archive归档也成功了。
+算了，反正优先级不高，先不管它了。
+
+----
+
+打印机就放在我的边上。每次打印都有一股刺鼻的味道。清明回来后更紧搬吧。
+
+----
+
+不可以把open3d这个unity工程的android package设置为com.style3.sukuan。否则会在导出后构建open3d这个rn工程时merge dex时报错：Program type already present: com.style3d.sukuan.BuildConfig。
+所以从语义上来说，这个工程其实是一个unity导出插件，取名为unityexport更好。
+
+----
+
+git默认会删除空的文件夹。这时该文件夹的meta文件还在，unity检测到meta文件对应的文件夹不见，又会自动把该meta文件删除。
+其效果就是A的提交，在B pull下来后，出现了删除meta文件的问题。

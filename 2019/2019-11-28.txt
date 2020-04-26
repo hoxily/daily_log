@@ -1,0 +1,9 @@
+2019年11月28日, 星期四, 紫金广场B座1610室
+
+xsshow的T台秀工程使用的unity版本在ProjectSettings/ProjectVersion.txt里显示为2017.3.1f1.去官网找到了该版本的installer，但是下载无力，降速降到1kB/s。只好开代理下载。但是万园说它的shadowsocks套餐有流量限制，大约是200GB/年。
+
+为了避免改动xsshow的t台秀程改坏了，建了一个本地的git仓库。半天都commit不完第一次全工程。
+
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+

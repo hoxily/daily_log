@@ -1,0 +1,7 @@
+2019年09月19日, 星期四, 紫金广场B座
+
+看了一下代码以及实际模型的json数据。定义的MaterialData与网格模型其实是关联绑定的关系，统一在RenderMesh之下。而额外的面料其实是依附在RenderMesh之上的东西。面料会依据材质本身的固有属性，来作出调整，才能正确渲染。
+
+当面料不是方的时候，会出现旋转后变形的问题。使用 https://forum.unity.com/threads/rotate-texture.19018/ 上提供的TRS变换来做，会丢失offset偏移。可以在shader代码中手动加一下offset。
+
+见鬼！gimp无法保存完全透明的png图。这样子的透明图被unity识别成全黑的不透明图片了。我感觉我以前遇到过这样子的问题。
