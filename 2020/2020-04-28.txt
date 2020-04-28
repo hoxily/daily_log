@@ -1,0 +1,3 @@
+2020年04月28日，星期二，杭州，晴，11~23摄氏度
+
+尝试使用以前定义的ShowFabricDetail消息里的FabricInfo结构，结果放到LoadWithRawFabric里出现了尝试把空白字符串转换成float数值的情况。试试线上的JSON数据吧。
