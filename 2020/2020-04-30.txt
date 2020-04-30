@@ -1,0 +1,43 @@
+2020年04月30日，星期四，杭州，多云转阴，20~33摄氏度
+
+libwebgl里似乎对Fabric参数里的baseColor和FabricState里的color进行了区分。然而在以前做的面料商iPad版，是直接使用的baseColor来作为颜色。
+
+看起来还是把MaterialDiyConfig跟RenderConfigSingle里自身的颜色、旋转区分开来比较好。
+
+相当于网页端是基于style3d已经调整过的面料参数之上，进一步调整面料参数。
+
+----
+
+接上次提到的贴药膏后红肿的问题。现在，痒倒是不那么痒了。红色快要变成黑色，快要结痂了。昨晚开始发现会隐隐约约渗出汁液。早上坐在工位上不久，挪到古军年边上看他写灯光控制的时候发现裤子跟结痂处的皮肤粘连了。
+
+另外还发现，这玩意儿会引起膝盖以下的腿部、脚踝浮肿。跟右腿对比会发现很明显变胖。用手指按压下去会变扁，要很久才弹回来。
+
+----
+
+需要设计一个Unity与ReactNative之间RPC调用的机制，可以方便把两者之间的逻辑上同步的方法调用进行封装。允许支持函数返回值。还需要实现Unity里的用户输入、Update等更新暂停。
+
+/// <summary>
+/// OnMessage 收集到的消息需要放到队列里。然后在Update里根据CallDepth是否为0来决定要不要处理。
+/// 其他的Update也需根据CallDepth，临时屏蔽更新逻辑。直到本次调用结束。
+/// 由于Call ReactNative，对方有可能反过来再调用自己，而自己有可能进一步Call对方，造成CallDepth
+/// 深度增加。……
+/// </summary>
+private int CallDepth = 0;
+
+private async UniTask<JToken> Call(string cmd, JObject args)
+{
+    CallDepth++;
+    UniTaskCompletionSource<JToken> utcs = new UniTaskCompletionSource<JToken>();
+    OutMessage msg = new OutMessage();
+    msg.data = args;
+    msg.name = cmd;
+    msg.callBack = (object result) =>
+    {
+        CallDepth--;
+        utcs.TrySetResult((JToken)result);
+    };
+    SendMessageToRN(msg);
+    return await utcs.Task;
+}
+
+感觉这样子太复杂了。还必须得严格平衡栈帧。越是精妙的东西，越可能出bug。为了减少UI的工作量，而额外付出的工作量和稳定性是否不值呢？
