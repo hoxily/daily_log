@@ -1,0 +1,15 @@
+2020年05月06日，星期三，杭州，阴转多云，18~24摄氏度
+
+UV的最终变换是 _MaterialDiyMatrix * _UvMatrixBase * _GeometryFabricMatrix。其中涉及到的旋转，在OpenGL下与Unity下有差异。Offset与Cycle倒是一致的。
+
+那这不就意味着，我无论如何都是错误的？_GeometryFabricMatrix里的旋转怎么还原？_UvMatrixBase里的旋转至少还是一个rotation角度换算过来的Matrix3x3.总不可能期望_UvMatrixBase 和 _GeometryFabricMatrix 都不含旋转成分吧。
+
+之所以在旋转角度上不一致，主要原因就是DracoDecode时，将顶点做了了沿yoz平面镜像（x' = -x）的变换。虽然UV保持不变，但是因为纹理是贴到模型上的，所以Rotation旋转也反了。
+
+这就很麻烦了！难不成还得分解_GeometryFabricMatrix和_UvMatrixBase，还原出TRS分量，分别针对上面提到的镜像？
+
+暂时只有从Matrix3x3反解旋转量了。
+
+----
+
+看了下RPC和JSON RPC，感觉与我想做的函数调用还是有点差别。反正面料商版本暂时用不上这么复杂的Direct Invoke功能，先放一放好了。
