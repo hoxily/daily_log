@@ -1,0 +1,7 @@
+2020年05月07日，星期四，杭州，多云转阴，19~28摄氏度
+
+如果还是保留老的Unity、RN通信控制方案的话，需要搞定UniRx.Async引入的UniTask异步任务的取消操作。貌似是使用CancellationTokenSource。难道Lt3D暴露出来的每一个async方法，最后一个参数都必须带上CancellationTokenSource才行。
+
+用Google找到一个UniTask作者写的Slides，Deep Dive async/await in Unity with UniTask(EN)，https://www.slideshare.net/neuecc/deep-dive-asyncawait-in-unity-with-unitasken 相比github项目Readme，多了一些设计时的思路讲解。
+
+为什么会有两个控制中心？能不能把所有控制权都交给ReactNative端，并实现同步调用的概念，Unity这边的控制就可以只保留很少的东西了吧。
