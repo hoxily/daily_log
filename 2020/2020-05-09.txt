@@ -1,0 +1,11 @@
+2020年05月09日，星期六，杭州，阴转小雨，19~27摄氏度
+
+看了下FabricDetailController，里面其实大部分都是在干RN消息与ThreeD消息中转的活。还有少量Unity端实现的UI元素，也是通过此Controller与ThreeD进行消息中转。
+
+由于新版本计划将大部分UI面板移到RN端，那么消息中转这种类型的代码会越来越多。能让这一部分自动化吗？
+
+为什么需要中间人这部分代码？
+
+----
+
+这个MainMenuView里的Button是否可以搞一个BoolValueProperty的包装体，然后对着这个property.isOn进行设置，即可设置菜单的isOn。不然代码看着太繁琐。
