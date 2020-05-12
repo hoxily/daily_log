@@ -1,0 +1,28 @@
+2020年05月12日，星期二，杭州，多云，17~29摄氏度
+
+遇到一个很奇怪的事情。new Lt3D对象的过程中，初始化灯光时，使用Screen.width 和Screen.height获取到的宽高是624，947.
+然而等到加载完款式，点击灯光编辑按钮时，读取Screen.width和Screen.height获取到的值就变成了1024,768。问题是Game视图一直设置的1024x768没变过啊。
+
+是因为我用了两个显示器？
+
+我仔细检查了一下Editor界面上的窗口大小，具有624x947大小的就是那个发出MessageTester消息的Inspector面板窗口。正好就是624x947。也就是说，Screen.width在Editor窗口下也可以使用，由于发MessageTester消息时处于Editor上下文，所以并没有取到Game视图的分辨率，而是取了Inspector面板的分辨率。
+
+等后面点击Game视图里的灯光按钮时，上下文又切换到了Game视图，于是就能使用Screen.width,Screen.height拿到正确的大小了。
+
+试着调整了一下发出消息的Inspector面板的大小，果然初始化的时候使用Screen.width Screen.height拿到的大小发生了变化。
+
+这验证了我的猜想。
+
+那么得把MessageTester挪到Game里，使用UGUI重新写一个消息测试器？不太好，没有Editor面板方便。
+
+试试把消息代理到UnityMessageManager上，存储转发一下。而不是直接调用下去。或者看看有没有什么API，可以先激活Game视图，再处理消息响应函数。
+
+试过找出GameView，调用Focus方法没有效果。EditorWindows.FocusIfOpen方法也没有效果。
+
+把消息放到UnityMessageManager使用队列存储一下，推迟到Update时再执行就OK了。这样看起来，像是EditorWindows的事件响应完成后，自动恢复Screen.width和Screen.height为Game视图的大小。
+
+----
+
+考虑到上面所说的东西，那么MonoBehaviour里打上ContextMenuAttribute标记的函数在执行代码时又是在什么上下文环境呢？（猜想就是正常的Game环境）
+
+由于所有的代码在unity下本质都是回调函数。所以Unity完全有能力根据它自己的判断，决定在调用回调函数前设置什么样的上下文环境。从而导致了一些API的自动感知环境的能力。比如Time.deltaTime在Update中取到的就是上一帧耗时，而在FixedUpdate中取到的就是FixedUpdate的固定时间间隔。Screen.width和Screen.height同理。
