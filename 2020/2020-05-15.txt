@@ -1,0 +1,5 @@
+2020年05月15日，星期五，杭州，小雨转小到中雨，22~28摄氏度
+
+遇到个很奇怪的事情。明明是抄的lib_webgl，网页端可以正常显示面料的法线和背面纹理。但是我这边却不行。除非网页前端在调用loadWithRawFabric之前，把服务器给的Fabric数据进行了键名替换。
+
+像git bash for windows那样的命令提示符，可以在这里找到：https://github.com/git/git/blob/master/contrib/completion/git-prompt.sh 设置PS1变量使用__git_PS1函数即可生效。
