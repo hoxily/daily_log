@@ -1,0 +1,7 @@
+2020年05月18日，星期一，杭州，多云转晴，17~30摄氏度
+
+Lt3D里的事件响应并不像DOM的冒泡。因为LtCloth与Fabric、Accessory、Decal并不是上下级的树状连接关系。大家都是依附于LtMesh上的东西而已。从优先级上理解可能更合理一些。
+
+根据当前的状态以及优先级，决定分发给FabricOperator或AccessoryOperator或DecalOperator或LtOrbitControl。
+
+收到徐青芝给的一张京东E卡。面值100元。
