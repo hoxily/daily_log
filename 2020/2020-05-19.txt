@@ -1,0 +1,10 @@
+2020年05月19日，星期二，杭州，晴转多云，17~30摄氏度
+
+在网上搜索到两种Decal实现方式。
+
+1. 简单的Quad面片，贴附在其他物体表面。视频里作者指出这种方式会出现ZFighting问题，提供了一个BlendedDecal的shader，但是没找到这个shader。视频地址：https://www.youtube.com/watch?v=VKP9APfsRAk
+2. Unity Deferred Decals。视频演示中的效果跟lib_unity_3d工程里的DynamicDecals插件很像。都是操作一个长方体的物体，通过让这个长方体与其他物体相交，印花就会神奇的印到物体表面了。视频中使用了unity 2018.3就已经支持的HDRP里的Decal材质，配合DecalProjectorComponent组件，实现印花的投影效果。视频地址：https://www.youtube.com/watch?v=8Y1VwAOBuEc
+
+我感觉我可以使用它。但是如果要改写成libwebgl那样的印花，估计会很麻烦。
+
+除此之外，完成款式详情页还有两大难点：多种多样的Accessory。LincStandard着色器升级。
