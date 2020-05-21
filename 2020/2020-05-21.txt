@@ -1,0 +1,11 @@
+2020年05月21日，星期四，杭州，小雨阴，20~27摄氏度
+
+看了下Lt3D目前的setExternalAPI函数里引用的查询函数，都是比较正常的。虽然isSelectedDropable函数被调用的次数和复杂程度比较高。
+
+另外还有一个setCallback函数，里面引用了一个onSelectedCallback非常可疑。
+
+有没有可能在触发onSelectedCallback之后，立即进行setExternalAPI里的查询操作呢？
+
+看起来都是查询过xxxable之后再触发的onSelected。
+
+
