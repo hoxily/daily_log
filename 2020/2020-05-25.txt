@@ -1,0 +1,12 @@
+2020年05月25日，星期一，杭州，多云，21~27摄氏度
+
+全贺菁早上开心地说他终于找到了Unity与ReactNative之间消息通信丢失的原因。
+
+最主要的原因是错误地使用DeviceEventEmitter的RemoveAllListeners方法。
+
+在RN内部父子节点跨越多个层级也是使用DeviceEventEmitter来通信。
+
+如果某个页面暴力地RemoveAllListeners的话，就会造成其他页面注册的消息监听也被移除了。从而引发奇怪的消息丢失的bug。
+
+当设置 UnityEngine.Object.hideFlags 为 DontUnloadUnusedAsset 或 HideAndDontSave 或 DontSave时，Resources.UnloadUnusedAssets方法就不会自动释放不再引用的物体。需要手动在 OnDestroy 的时候删除。
+
