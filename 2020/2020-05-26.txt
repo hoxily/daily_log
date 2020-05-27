@@ -1,5 +1,5 @@
 2020年05月26日，星期二，杭州，小雨转多云，17~23摄氏度
 
-Lt3D.ChangeComponents和Lt3D.ChangeRawComponents函数设计采用了ComponentInfo数组的形式。据说是为了方便未来扩展成单词函数调用批量切换部件。谷军年说法则是因为，每此切换部件都会有一定的开销。而把多个部件的切换合并到一起，可以减少这部分重复的开销。
+Lt3D.ChangeComponents和Lt3D.ChangeRawComponents函数设计采用了ComponentInfo数组的形式。据说是为了方便未来扩展成单次函数调用批量切换部件。谷军年说法则是因为，每此切换部件都会有一定的开销。而把多个部件的切换合并到一起，可以减少这部分重复的开销。
 
 然而我并没有找到FromUserProduct加载的时候调用这两个函数。
