@@ -1,0 +1,15 @@
+2020年05月28日，星期四，杭州，阴，22~31摄氏度
+
+海哥说优先升级ipad端的shader效果到网页端的shader效果。有不懂的地方咨询万园。
+
+遇到了一个很麻烦的问题了。根据我自己理解的简化版LtOrbitControl的摄像机因为是两层结构，第一层负责在球坐标系表面并LookAt球心，第二层负责在父级的坐标系基础上做XOY平面的偏移。一切都挺完美的，实现起来也很好理解。
+
+当遇到网页端仅仅提供position + target两个坐标时就很难换算回Unity的层级结构。反过来估计也很难算。
+
+明明是个球坐标系的东西，怎么写的函数竟然是AnimateToPostion(Vector3 position, Vector3 target)。按我的理解，应该是(radius, theta, phi) + (x, y, 0) 的形式。
+
+有个思路，动画过程直接移动Camera，不去管CameraParent节点。移动过程中，想办法换算出(radius, theta, phi) + (x, y, 0)中的参数值。动画结束后，交还给LtOrbitControl的OnUpdate。期间禁用OnUpdate。
+
+上面这个效果不好。直接插值 position 会造成不在球面上绕转，而是直接穿过球体。
+
+最理想的应该是计算出 (radius0, theta0, phi0, x0, y0) 以及 (radius1, theta1, phi1, x1, y1)。然后插值球坐标和xy偏移。使用插值出来的值并使用球坐标系公式得出CameraParent的位置和朝向，以及Camera的localPosition的xy。
