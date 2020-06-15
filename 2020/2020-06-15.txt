@@ -1,0 +1,15 @@
+2020年06月15日，星期一，杭州
+
+看到unity官方手册里说PBR不是为Gamma颜色空间设计的。使用PBR需要在线性颜色空间中。需要在工程设置里切换到线性颜色空间才行。
+
+然而这样的话，问题就来了。
+
+常规的Texture导入Assets，会有一个sRGB(Color Texture)的选项，true或者false。然后在Texture2D或者其父类Texture并没有找到相关的属性。那么对于使用UnityWebRequest或者WWW加载的Texture，其sRGB属性是什么呢？只在Texture2D的构造方法或类似的方法里提供了bool linear参数。
+
+----
+
+遇到个lightMap不起作用的bug。查了半天，从JSON解析到前置条件，最后发现是shader代码里取了tex2D采样结果的alpha分量。而lightMap的图片格式是JPEG，导致加载出来的纹理的alpha分量全是1.0，没有任何变化。
+
+这样一来，shader代码里其他用到纹理的alpha分量的地方也可能会出错。需要加以排查。
+
+换句话说，这种lightMap、aoMap的有效值到底存储在rgba哪个分量上面，难道没有约定吗？
