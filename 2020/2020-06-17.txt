@@ -1,0 +1,18 @@
+2020年06月17日，星期三，杭州
+
+测试了一下，发现三角吊卡并不容易出现卡死的情况。即使反复进出动态布料模式，也没有出现卡死的症状。而悬垂球则很容易出现卡死。奇怪了。
+
+插上usb线连接电脑，使用控制台查看实时的日志可以发现，在悬垂球卡死的情况下，会有三行Physics.PhysX的报错。然后app就不响应了。接下来按home键退到桌面再重新打开app，就会闪退。日志中给出了 XPC connection interrupted 的错误信息。
+
+10:08:45.084177+0800    lt_sukuan_hd    [Physics.PhysX] Call to PxCloth::setTargetPose() not allowed while simulation is running.
+(Filename: PhysX/Source/PhysX/src/buffering/ScbCloth.h Line: 580)
+
+10:08:45.084217+0800    lt_sukuan_hd    [Physics.PhysX] Call to PxCloth::setMotionConstraints() not allowed while simulation is running.
+(Filename: PhysX/Source/PhysX/src/buffering/ScbCloth.h Line: 252)
+
+10:08:45.084323+0800    lt_sukuan_hd    [Physics.PhysX] PxScene::simulate: Simulation is still processing last simulate call, you should call fetchResults()!
+(Filename: ./PhysX/Source/PhysX/src/NpScene.cpp Line: 1970)
+
+10:10:04.886415+0800    lt_sukuan_hd    XPC connection interrupted
+
+从Log的英文描述里看，是指simulate正在执行，不允许设置各项参数。那么我在加载Cloth预设体之后，先把Cloth组件enabled设为false，然后把相关参数设置上去。过一段时间再把Cloth.enabled设置true？
