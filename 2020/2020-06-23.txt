@@ -1,0 +1,13 @@
+2020年06月23日，星期二，杭州
+
+一位同事借走了暂时由我保管的公司的iPad。他说客户使用iPad查看 https://www.style3d.com/ 网页时出现了一些问题，比如视频无法正常播放等。
+
+理论上mp4格式应该是iPad能解码的格式呀。有可能是在https的页面引用了一个http的mp4链接导致不能播放。
+
+----
+
+根据这篇文章找到了 Magic.NET，https://forum.unity.com/threads/jpg-color-space.615205/ 。然而官方提供的Native库只有windows、linux、macos。并不支持ios。所以JPEG图加载失败显示红色问号的问题暂时还是无法解决。网页端能正常显示，因为常规的web浏览器能支持大部分图片格式。然而Unity提供的WWW或者UnityWebRequest只能加载JPEG、PNG图，而且还不能是奇葩的颜色空间。
+
+----
+
+收到4件印有公司最新视觉锤的文化衫短袖。
