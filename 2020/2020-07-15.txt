@@ -1,0 +1,3 @@
+2020年07月15日，星期三，杭州
+
+Parallax Normal Map 与 Normal Map有一些差异。前者是视差贴图，后者是法线贴图。Parallax Normal Map相比Normal Map多存储了一个高度信息在Alpha通道。利用这个高度信息，可以变换UV坐标实现遮挡效果，在接近平视网格表面的情况下，效果比Normal Map要好得多。
