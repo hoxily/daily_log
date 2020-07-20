@@ -1,0 +1,35 @@
+2020年07月20日，星期一，杭州
+
+由于可以给windows下的网络适配器配置两个IP地址，因此可以同时拥有公司局域网的192.168.31.131/24地址，同时还可以拥有额外的192.168.211.99/24的地址，而这个地址配置了pc.hoxily.com域名。操作步骤为在网络适配器上右键属性，在弹出的窗口上设置为静态地址，确认后再次打开网络适配器的属性，点击高级，在里面的IP地址里填入第二个网段的IP地址。
+
+MacOS也可以做到一块网卡同时分配两个地址。只需要在设置时添加一个Wi-Fi即可。即点击位于“Wi-Fi, 蓝牙PAN，雷雳网桥”列表的下方的那个加号，可以再添加一个Wi-Fi。新添加的Wi-Fi不再自动分配IP地址，需要手动配置。
+
+----
+
+使用 uniform 变量代替 keyword 来控制分支，虽然可以避免构建出过多的着色器变体，但是有可能会因为代码过长而超出限制。也就是着色器编译后的指令超出限制。
+
+现在欠缺的是什么？Unity 运行时的场景里组件数据是如何传入Shader里执行的，Pass的处理结果传输到哪里去。把它们整个儿串起来的线索就是数据的流转过程。
+
+需要知道这个流转过程，才能知道DynamicDecals插件到底在干嘛。
+
+----
+
+文档上明明说Deferred Shading时，LightMode为Deferred的Pass才会被使用。但是实际测试发现，将Camera的renderPath设置为Deferred，LincStandard着色器依然能将服装渲染出来。明明LincStandard着色器里只有ForwardBase和ForwardAdd两个LightMode，而且我已经把FallBack "VertexLit"注释掉了。
+
+是因为LincStandard不含Deferred的Pass，所以回退到Forward了？
+
+简单的浏览了一下Standard的LightMode为Deferred的Pass，它所引用的fragDeferred函数的输出看上去根本就没有输出结果颜色到屏幕，而是奇怪的GBuffer,Emission,ShadowMask。所以实际上Deferred模式需要跟ForwardBase或ForwardAdd配合使用？
+
+使用FrameDebugger调试了一下，可以发现：
+
+在ShowDynamicProduct场景里，排除掉干扰的FXAA、LincStandard的衣服，只留下Shoes的情况下，这个鞋子使用了Standard着色器。确确实实执行了Deferred模式的绘制。经过fragDeferred函数运算之后，再经过一些 Hiddent/Internal-Deferred-XXX的着色器，鞋子就绘制完毕了。所以实际上，LightMode=Deferred的Pass并不需要ForwardBase或者ForwardAdd配合，而是Unity内部另外有一些Hiddent/Internal-Deferred-XXX的着色器完成最后的绘制。
+
+Deferred Path的Camera遇到不支持Deferred的着色器，就会使用Forward Rendering的方式来渲染。
+
+----
+
+发现了LincStandard的一个可能的bug，在ForwardAdd里执行的效果永远只有一个逐像素点光源有效，也就无法像文档中所说的，随着逐像素的光源增加物体越来越亮。而在使用Standard的物体上，点光源越多物体越亮。使用FrameDebugger也可以发现随着点光源增加，DrawMesh指令也变多了，调用的都是ForwardAdd的Pass。
+
+----
+
+SL-RenderPipeline.html文档一共列举了4种渲染路径。分别是 Forward Rendering Path, Deferred Shading Path, Legacy Deferred Lighting Path, Legacy Vertex Lit Rendering Path。由于先有了Deferred Lighting，所以后面出来的延迟渲染为了避免歧义使用了更加偏门的Shading这个词，叫Deferred Shading Path。一开始看到Forward Rendering和Deferred Shading还很疑惑，为什么不统一使用Rendering来对应渲染这个词。
