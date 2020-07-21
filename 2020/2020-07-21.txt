@@ -1,0 +1,12 @@
+2020年07月21日，星期二，杭州
+
+办公室台式机挂机，开着teamviewer以备不时之需。结果今天早上来的时候发现系统重启过了。查看windows的系统日志，在早上02：00左右的时候重启了。具体错误原因并不清楚。
+
+另外还发现一个很神奇的现象。之前把DHCP自动分配的IP地址转为静态配置。重启后使用这个*.131竟然不能联网了。一开始以为IP冲突了，就又手动换了两个地址，还是不能联网。甚至ping网关都不通。重新开启DHCP模式，自动分配了IP地址才能恢复。应该是网关那边必须要DHCP分配地址后才能通信。
+
+可是那台 linctex-macmini 不就是手动配置的静态IP地址么？为什么它可以正常联网？
+
+----
+
+如何在Unity Hub里安装列表里没有列出来的Unity版本？
+在windows系统下可以使用翻墙软件或者在线代理（例如 https://proxy.thegwak.com/ ）查看Unity的Download Archive（ https://unity3d.com/get-unity/download/archive ）。在那里找到所需要的版本。然后复制绿色的Unity Hub按钮的链接，例如 Unity 2018.4.13f1 的hub链接就是 unityhub://2018.4.13f1/497f083a43af 。使用这个链接打开unity hub即可进行安装。macos系统可以使用open指令打开，windows下可以使用 Win+R的组合键打开。
