@@ -1,0 +1,7 @@
+2020年07月22日，星期三，杭州
+
+看起来网页端都是Forward Rendering。可以简略地看Deferred Shading。
+
+而且LincStandard.shader里也只有ForwardBase和ForwardAdd。
+
+还有Forward Rendering Path里的多灯光的像素灯光判定问题好像也不用细看，因为目前项目里一般就只有一盏灯。
