@@ -13,3 +13,5 @@ Unity官方的 Bolt 可视化脚本免费了！https://assetstore.unity.com/pack
 ----
 
 https://zhuanlan.zhihu.com/p/62755689 这篇文章说，如果Macos更新在下载过程意外断开，也有可能引起不能正常更新，使用终端进 /Library/Updates ，删除里面的下载异常的文件和文件夹，再重新试一试。
+
+重新下载了3.6GB的更新文件。结果还是原来的错误提示。
