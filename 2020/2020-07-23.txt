@@ -5,3 +5,7 @@
 虽然Unity的Forward渲染路径相当复杂，灯光数据的传递也很麻烦。但是实际上也可以不管Unity的那套东西，自己传递灯光数据，自己计算光照效果。
 
 就像咿呀游的麻将shader，直接在Properties列表里加了方向光，在shader里直接计算。
+
+----
+
+Unity官方的 Bolt 可视化脚本免费了！https://assetstore.unity.com/packages/tools/visual-scripting/bolt-163802 有空下载下来试试。支持的unity版本为2017.4.39或更高。
