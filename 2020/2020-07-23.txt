@@ -1,6 +1,6 @@
 2020年07月23日，星期四，杭州
 
-遇到一个很奇怪的事情。MacBookPro成功更新了系统到10.15.6.但是MacMini总是报错，提示需要互联网连接才能安装macOS，请接入互联网并再试一次。明明连着网啊。
+遇到一个很奇怪的事情。MacBookPro成功更新了系统到10.15.6.但是MacMini总是报错，提示需要互联网连接才能安装macOS，请接入互联网并再试一次。明明连着网啊。尝试过重启MacMini还是更新失败。
 
 虽然Unity的Forward渲染路径相当复杂，灯光数据的传递也很麻烦。但是实际上也可以不管Unity的那套东西，自己传递灯光数据，自己计算光照效果。
 
@@ -9,3 +9,7 @@
 ----
 
 Unity官方的 Bolt 可视化脚本免费了！https://assetstore.unity.com/packages/tools/visual-scripting/bolt-163802 有空下载下来试试。支持的unity版本为2017.4.39或更高。
+
+----
+
+https://zhuanlan.zhihu.com/p/62755689 这篇文章说，如果Macos更新在下载过程意外断开，也有可能引起不能正常更新，使用终端进 /Library/Updates ，删除里面的下载异常的文件和文件夹，再重新试一试。
