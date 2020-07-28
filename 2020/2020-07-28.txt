@@ -1,0 +1,40 @@
+2020年07月28日，星期二，杭州
+
+Z-Fighting的本质是depth buffer的数值精度不足。而Camera的near和far参数，depth数值趋向于在near处聚集更多数值。因此增大near，可以提高精度。另一个opengl的解决方案是使用polygonOffset。在Unity里则是Pass级别的“Offset Factor, Units”的指令。但是没有找到在哪里可以关闭这个指令。但是对于当前的LincDecal.shader来说，实在不行就写两个着色器，一个含有Offset指令，一个不含Offset指令。
+
+----
+
+有同事过来说利郎的订货会展示设备选用了ipad mini2，尝试内嵌webview展示3D内容很慢。于是询问是否能结合Style3D iPad端app来做3D内容展示。
+
+http://product.cnmo.com/pad/1620328/param.html
+
+从查到的资料来看，1GB内存的系统能分配给app的最大内存大约只有500MB。而且是2013年的上市时间，处理器是A7。主要就是处理和性能是否足够展示3D，另一个则是内存是否足够加载Style3D的大型模型和纹理。
+
+估计在ipad mini2上使用app打开详情页都很难不闪退。如果是采用URL Scheme方式在App之间跳转，很可能跳转到3D内容后，回去的时候发现订货会app重启了。
+
+同事反馈，无法在ipad mini2 上打开款式。
+
+----
+
+简单浏览了一下web端的版片印花网格生成算法，PatternDecalGeometry类。里面涉及了解析draco文件提取的patterns信息。在SCO的JSON描述文件里只有各个板片的ID，realuv，板片的名字信息，并不含有精确到每个顶点或者三角面的板片归属信息。
+
+所以需要改造Unity工程里的Draco解析库，让它能解析Attributes里的GENERIC数据。暂不考虑点云等其他数据类型的话，只需要多一个GENERIC数据的读取即可。
+
+在github上发现官方版本的Draco已经是1.3.6了。unity项目里是1.3.4。1.3.6的更新文档上说官方支持generic和其他attributes的读取了。改写了Draco Unity的API函数，对比新老版本的 DracoMeshLoader.cs ，差别挺大的。github上1.3.4的版本竟然跟unity项目里的不一样。看起来unity项目里的这个版本被人更改过。
+
+官方说1.3.6的Draco Unity的性能提升了15%。在 DracoMeshLoader.cs 里面用上 Unity.Collections.LowLevel.Unsafe.UnsafeUtility 的 AddressOf 和 MemCpy 方法来复制数据。
+
+由于需要翻转FaceIndex的顺序，所以没办法使用UnsafeUtility提速。
+由于需要翻转Position的x分量，所以没办法提速。
+由于需要翻转Normal的x分量，所以没办法提速。
+
+（也许也能提速也说不定，可以先UnsafeUtility.Memcpy直接复制，然后再调整，就看调整操作是不是比大量的ReadFloatFromIntPtr和Marshal.ReadInt32函数调用的开销小。需要实际测试一下才能确定哪个更快。）
+
+剩下只有uv和uv2可以直接复制。
+
+从官方的1.3.6开始改的话需要处理color转uv2的逻辑。
+从现有的1.3.4魔改版开始改的话，不考虑UnsafeUtility的优化，那么只需要添加generic的读取。感觉好像更简单一些。
+
+官网的building文档只提到MacOS、Windows、Android。那么ios系统呢？是包含在macos里的意思吗？
+
+前面的目录里确实没有列出ios，但是继续往下翻可以找到ios的版本的构建指南。
