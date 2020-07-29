@@ -1,0 +1,5 @@
+2020年07月29日，星期三，杭州
+
+新买的转页扇竟然在转页时有噪声。质量比我两年前买的还差。问淘宝客服，客服说这是已知的通病。它把转页的开关跟风速档位集成在一块儿了，没有独立的开关。
+
+编译MacOS版本时，无法在xcode里使用Archive指令，在Link时会报67各找不到.o文件的错误。但是可以通过修改dracodec_unity 这个Scheme的Run里的Configuration为Release来打出大约1MB的dracodec_unity.bundle包，跟unity工程里的bundle包大小差不多。
