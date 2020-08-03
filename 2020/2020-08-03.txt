@@ -1,0 +1,22 @@
+2020年08月03日，星期一，杭州
+
+从lib_draco库得到启发。完全可以仿照它的工程打包结构，搞个JPEG, PNG, GIF等图片格式加载器插件。也就可以突破Unity不支持CMYK颜色空间的JPEG图的问题。
+
+如果允许以时间换空间的话，还可以加入RGBA32格式纹理转压缩格式纹理的处理方法，得到更省内存空间的ETC、PVRTC、ASTC格式的纹理。
+
+想想还真是完美。
+
+Texture2D有两个API可以从Native代码创建实例对象。
+
+第一种是 http://pc.hoxily.com/Documentation.2018.4/en/ScriptReference/Texture2D.CreateExternalTexture.html 文档描述的方法，这个CreateExternalTexture要求的IntPtr texPtr参数是图形API依赖的指针，“Native texture object on Direct3D-like devices is a pointer to the base type, from which a texture can be created (IDirect3DBaseTexture9 on D3D9, ID3D11ShaderResourceView on D3D11). On OpenGL/OpenGL ES it is GLuint. On Metal it is id<MTLTexture>”。这样的话就不够纯粹了。还得针对不同的图形API写组装的方法。
+
+第二种是使用 http://pc.hoxily.com/Documentation.2018.4/en/ScriptReference/Texture2D-ctor.html 、 http://pc.hoxily.com/Documentation.2018.4/en/ScriptReference/Texture2D.GetRawTextureData.html 配合实现纹理数据的加载。
+
+首先使用 public Texture2D(int width, int height, TextureFormat textureFormat = TextureFormat.RGBA32, bool mipChain = true, bool linear = false) 方法创建指定宽高、纹理格式、mipmap、是否是Linear颜色空间的纹理。
+然后使用 public NativeArray<T> GetRawTextureData<T>() 方法获取NativeArray对象，再使用 NativeArrayUnsafeUtility 拿到 void* 指针，传给 Native 插件去填充数据。
+数据填充完毕后，最后使用 Texture2D.Apply(bool updateMipmaps = true, bool makeNoLongerReadable = false) 方法将CPU端数据上传到GPU端。其中 Native 插件可以干各种图片格式的解析工作，或者额外压缩为当前平台支持的压缩纹理格式。而且因为数据都是在内存中，所以不会受到图形API的纹理的MaxSize的限制，仅仅会受到内存容量的限制。
+
+测试发现Unity的Texture2D.Apply方法的一个bug。如果updateMipmaps参数设置成false，它并不会保留我在NativeArray里计算好的Mipmap0以外的值。而如果设置成true的话，它就会根据mipmap0自动计算出其他的mipmap levels。
+不过这个bug影响不大。就让它自动计算其余的mipmaps吧。
+
+仔细检查了下，发现是自己的代码的bug。Apply方法的updateMipmaps设置为false时，确实是使用了我指定的mipmap数据。我的锅。
