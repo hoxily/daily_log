@@ -5,3 +5,14 @@
 打包原生库好麻烦。libdraco至少还有cmake的脚本，自动生成特定平台的工程文件或者makefile。但是昨天尝试的FreeImage，直接提供了Visual Studio 的sln文件，以及其他平台的Makefile文件。这套路不一样了啊。
 
 按我的理解，模仿libdraco的工程组织形式应该是比较好的。FreeImage的打包脚本上面引用的Xcode编译连接都是2009年的Xcode 4.6. 很老了。
+
+equirectangular (equirect), 等矩形，参见180度或者360度全景图，它就是一个方形的纹理。如果是CubeMap的话，则是6个正方形的纹理。
+
+unity的builtin shader里在使用 #pragma multi_compile 指令时，有时候会提供1个下划线的占位符，有时候给的是2个连续下划线的占位符，有时候给的是3个连续下划线的占位符。这些都是相同的含义吗？手册上只说使用下划线可以减少对keyword的占用。但是并没有解释连续下划线的数量。
+
+是我看的不够仔细，手册的原话是：“
+When any of the names are all underscores, then a shader variant will be produced, with no preprocessor macro defined. This is commonly used for shaders features, to avoid using up two keywords (see notes on keywork limit below). For example, the directive below will produce two shader variants; first one with nothing defined, and second one with FOO_ON defined:
+
+#pragma multi_compile __ FOO_ON
+”
+任何一个名字如果全部由下划线构成，那么就会有一个shader变体使用空定义来编译。
