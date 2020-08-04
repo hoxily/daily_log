@@ -1,0 +1,7 @@
+2020年08月04日，星期二，杭州
+
+台风黑格比来了。早上03：00登录了乐清老家。
+
+打包原生库好麻烦。libdraco至少还有cmake的脚本，自动生成特定平台的工程文件或者makefile。但是昨天尝试的FreeImage，直接提供了Visual Studio 的sln文件，以及其他平台的Makefile文件。这套路不一样了啊。
+
+按我的理解，模仿libdraco的工程组织形式应该是比较好的。FreeImage的打包脚本上面引用的Xcode编译连接都是2009年的Xcode 4.6. 很老了。
