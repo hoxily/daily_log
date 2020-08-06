@@ -1,0 +1,5 @@
+2020年08月06日，星期四，杭州
+
+我整理了部分 multi_compile 和 shader_feature 的关键词列表。但是感觉还不够。像是Fallback 语句回退到另一个着色器，就会有共享Properties属性变量的需求。也就是要尽可能使用兼容的uniform变量名。
+
+也许只需要兼容两个变量名？从 Material.color 和 Material.mainTexture 暴露出来的属性来看，所有的Shader可能也就 _Color 和 _MainTex 两个属性是同名的。其他的理论上没有约束啊。
