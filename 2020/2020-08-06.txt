@@ -3,3 +3,57 @@
 我整理了部分 multi_compile 和 shader_feature 的关键词列表。但是感觉还不够。像是Fallback 语句回退到另一个着色器，就会有共享Properties属性变量的需求。也就是要尽可能使用兼容的uniform变量名。
 
 也许只需要兼容两个变量名？从 Material.color 和 Material.mainTexture 暴露出来的属性来看，所有的Shader可能也就 _Color 和 _MainTex 两个属性是同名的。其他的理论上没有约束啊。
+
+之前在iPhone上遇到短信验证码自动填充功能有时候自动填写两遍的bug。很恶心。还得手动再删掉多余的字符。问邹静磊，他却说从来没有遇到过。他说他一般都是手动输入验证码。百度上搜索ios验证码自动填充2次，搜到的结果都是教你设置文本框的maxLength为验证码的长度来规避这个bug。但是对于那种验证码长度可变的情况就不行了啊。很明显是App开发者没有正确处理UIKit的事件造成的这个bug。更奇怪的是，在Google上搜索 ios autofill sms security code twice 竟然没有找到任何相关的页面。外国人都不会遇到这样的bug吗？
+
+在看Unity Shader入门精要.pdf的168页时，调用clip函数之前竟然计算了 worldNormal 和 worldLightDir，感觉有点浪费。反正clip掉的情况下，这两个值也用不上了。按理说，应该在fragment函数的最开头做AlphaTest，AlphaTest用不上的计算都应该放到后面。但是书上只是说clip函数和discard语句是“舍弃”该片元。但是并没有明确说明，所谓的“舍弃”是否类似于函数提前return。
+
+邹静磊提议使用死循环或者无限递归函数，让显卡驱动报错的方式来判断，“舍弃”后面的代码是否还被执行。
+
+写了如下的代码，将循环次数调到适合显卡性能的大小可以发现Play时Unity的帧率降到很低。
+
+fixed4 frag (v2f i) : SV_Target
+{
+    fixed4 col = tex2D(_MainTex, i.uv);
+    bool needCutoff = (col.a - _Cutoff) < 0;
+    clip(col.a - _Cutoff);
+    float sum = 1;
+    if (needCutoff)
+    {
+        for (int i = 0; i < 1000000; i++)
+        {
+            sum = sum + i;
+        }
+    }
+    return col / sum;
+}
+
+这说明clip函数并不是跳过了之后的代码。把clip(col.a - _Cutoff) 换成 if (needCutoff) { discard; } 也一样。
+
+在Shader的Inspector面板上点击Compile and Show code(勾上current build platform，也就是windows的directx)，就能看到hlsl的反汇编代码。原始的discard被编译成discard_nz指令。在 https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/discard--sm4---asm- 上有解释：“This instruction flags the current pixel as terminated, while continuing execution, so that other pixels executing in parallel may obtain derivatives if necessary. Even though execution continues, all Pixel Shader output writes before or after the discard instruction are discarded.”
+
+于是又试了一下把Graphics API切换成OpenGL Core（也就是OpenGL 4.5），然后重新点击Play运行就会发现完全不卡。点击Compile and Show code按钮，得到的就是glsl代码，截取如下：
+
+void main()
+{
+    u_xlat10_0 = texture(_MainTex, vs_TEXCOORD0.xy);
+    u_xlat1 = u_xlat10_0 * _Color;
+    u_xlat0 = u_xlat10_0.w * _Color.w + (-_Cutoff);
+    u_xlatb0 = u_xlat0<0.0;
+    if(((int(u_xlatb0) * int(0xffffffffu)))!=0){discard;}
+    if(u_xlatb0){
+        u_xlat0 = float(1.0);
+        for(int u_xlati_loop_1 = int(0) ; u_xlati_loop_1<1000000 ; u_xlati_loop_1++)
+        {
+            u_xlat4 = float(u_xlati_loop_1);
+            u_xlat0 = u_xlat4 + u_xlat0;
+        }
+    } else {
+        u_xlat0 = 1.0;
+    //ENDIF
+    }
+    SV_Target0 = u_xlat1 / vec4(u_xlat0);
+    return;
+}
+
+这说明在ShaderLab里的discard指令，编译到不同的Graphics API上之后，是否继续执行discard之后的代码是跟平台相关的。
