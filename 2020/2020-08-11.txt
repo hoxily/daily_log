@@ -1,0 +1,13 @@
+2020年08月11日，星期二，杭州
+
+买了早场的07：00~09：00的月卡B套餐，有效期4个月，800.00元，限本人使用。算上骑自行车来回的1个小时，每天早上差不多能健身2个小时。能瘦下来吗？目前的净重是83kg。
+
+昨天抄了一遍lib_webgl的bsdfs.glsl文件。这个好像就是PBR了。没有看到积分函数啊。也没有看到for、while循环。这样就能计算出PBR？
+
+lib_webgl里有时候会引用一些搜索不到的函数。这个时候需要去node_modules下的threejs包里搜索才能找到。
+
+邹静磊推荐看lib_webgl里新版本的Style3DMaterial所使用的shader，来了解PBR渲染流程。他说PBR基本上就是采样纹理，拿到各种各样的颜色参数，然后叠加成最终结果。感觉跟Unity的延迟渲染有点像，G-Buffer里面存储了漫反射、高光、金属都等的参数，然后一次性计算光照。
+
+PBR相比Blinn-Phong模型的最大差别好像就是用到了更多的纹理，提供了更多的参数。而这些参数具有现实的物理意义。因而可以直接查表获取或者测量得到。带入后就能在计算机上得到现实物体的样子。
+
+碰到一个ddx、ddy函数。对应的glsl函数是dFdx、dFdy。参数可以是一个表达式。Returns the partial derivative of the specified value with respect to the screen-space x-coordinate.返回导数，关于屏幕空间的x或者y分量。可以理解为在屏幕空间上x0, x0+1两个片元函数在计算ddx函数的参数的变化率？也就是每一个 ddx(P) 这样的语句等价于将P表达成关于屏幕空间(x, y)坐标的函数，即 P = F(x, y);
