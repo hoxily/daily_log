@@ -1,1 +1,5 @@
 2020年08月12日，星期三，杭州
+
+我想到一个减少着色器变体的方案了。可以通过统计当前的模型的材质都使用了哪些贴图，然后挑出那些基本上都会使用的贴图，将这些贴图对应的Keyword改为常量定义。并使用一种兼容的处理代码和默认纹理，让它能在默认贴图的情况下效果跟不进行这个计算的效果相同。比如乘以1，或者加上 0 这种。代价就是会有一些冗余的指令。
+
+https://blogs.unity3d.com/cn/2018/05/14/stripping-scriptable-shader-variants/ Unity提供了一个IPreprocessShaders接口，允许在着色器变体列表编译前做一个过滤处理。在 public void OnProcessShader(Shader shader, ShaderSnippetData snippet, IList<ShaderCompilerData> shaderCompilerData)方法里筛选出无意义的Keyword组合从shaderCompilerData列表里移除。
