@@ -1,0 +1,11 @@
+2020年08月17日，星期一，杭州
+
+使用Debug配置publish出来的程序，可以在Visual Studio里使用附加到进程的方式进行断点调试。好给力。
+
+查了半天发现原来不是自己计算JsonReader.Depth出错。而是因为提供的Version匹配上了，所以没有日志输出。
+
+遇到个很麻烦的事情。在NativeMessageHost里使用Process.Start(ProcessStartInfo)启动的进程归属于Chrome.exe进程之下，然后无法弹出测试用的GIMP的窗口。像是被什么东西阻塞了。更加奇怪的是，第二次调用Process.Start方法竟然成功使用GIMP打开了图片。
+
+换成Windows自带的画图程序 C:\\Windows\\System32\\mspaint.exe ，则又是正常的，不管是第几次启动，都是打开了新的窗口。
+
+估计是GIMP想要合并窗口，哪里写的不对吧。
