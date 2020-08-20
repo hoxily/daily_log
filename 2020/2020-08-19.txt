@@ -5,3 +5,7 @@
 拖动demo里的gif生成参数，只需零点几秒就能生成结果。
 
 很奇怪。
+
+第二天早上，邹静磊尝试检查性能下降的原因。使用Performance工具的查看函数调用火焰图，buildColormap特别费时间。buildColormap反复调用learn，learn反复调用contest。后来对比了一下引用静态js文件的方式，build生成在浏览器上的脚本是不一样的。直接import Worker方式会被webpack打包。
+
+我估计就是这个缘故吧。
