@@ -13,3 +13,7 @@
 url scheme能传送的数据量太少了。也不确定windows系统下，命令行参数能传多长。另外每条url scheme唤起都会创建一个进程，如果想要实现持续性的会话概念，跟踪当前已有的任务，还得自行维护多个进程之间的通信。
 
 可以参考QQ客户端的第三方登录功能。在 https://graph.qq.com/oauth2.0/ 页面会对 localhost.xxx.qq.com 的域名发起请求。检查这些域名的ip会发现正好就是 127.0.0.1 的本地回环地址。只要当前QQ已经登录并且正在运行，网页就能通过这个方式跟本地客户端进行通信了。为了避开跨域的麻烦，QQ登录使用了JSONP方案。这样的话，只能使用GET方式，所有的参数都得编码放到URL QueryString里。
+
+----
+
+之前为了在vscode里使用vim，从github上clone下来一个im-select小工具。使用Visual Studio 2017打开发现找不到#include <xxx>引用的头文件。时间紧迫，直接用了仓库里编译好的exe文件。今天重新看了下，原来是项目设置里使用的windows 10 sdk选的不对。对方使用的windows 10 sdk版本在我本地电脑上并没有安装，导致编译失败。将使用的windows sdk改为本地电脑已安装的版本，就能正常编译输出了。
