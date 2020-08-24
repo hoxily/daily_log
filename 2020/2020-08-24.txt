@@ -1,1 +1,29 @@
 2020年08月24日，星期一，杭州
+
+插件的需求稍有些变动。暂时不需要回传数据。仅做一键下载附件，并调用插件配置的本地软件来打开附件的功能。是一个单向的过程。
+
+今天尝试了一下调用Style3D.exe，结果发现Chrome在每次我创建好Style3D.exe进程后就结束了跟Host的通信。怀疑是Host的标准输入输出流被创建的子进程共享了。然后子进程在输出流里输出了一些文本，由于不符合底层的消息格式，导致Chrome断开通信。
+
+使用ProcessStartInfo的RedirectStandardOutput功能，再试了一次。这次Chrome没有结束Host进程了。但是Host程序并没有在log里打印出猜测中的Style3D.exe输出。而且Style3D.exe依然是卡在欢迎屏界面，进不去。
+
+调试半天，使用git命令测试RedirectStandardOutput，结果发现log里一点输出也没有。正常情况下git肯定会给出输出才是的啊。去看msdn文档，发现除了要在 OutputDataReceived 和 ErrorDataReceived 事件上做监听，还要分别调用 Process.BeginOutputReadLine 和 Process.BeginErrorReadLine方法。于是git的error输出就能在Host程序的log看到了。
+
+在stdin, stdout, stderr重定向后，Style3D.exe也能正常启动了！
+
+这样的话，就不需要使用平台特有的Windows API了。
+
+----
+
+给Style3D.exe的log输出设置了不同的Encoding，发现都会乱码。最后使用BigEndianUnicode感觉是最接近的。但是好像Style3D.exe输出的不是纯粹的BigEndianUnicode，log消息头部带有一串无法解析的东西。
+
+算了，不同的editor程序输出log的编码都不一样，甚至还有像Style3D.exe这样的非纯文本内容，不去纠结完美还原editor的输出。
+
+----
+
+在macOS下，虽然能直接使用Process启动bundle里的可执行文件，但是Preview.app预览程序并不会显示到前台。如果用户没有注意dock栏的话，根本不会发现新打开了一个窗口。
+
+在Process和ProcessStartInfo找了一圈，没有合适的API。尝试将ProcessStartInfo的WindowStyle属性 从ProcessWindowStyle.Normal改为ProcessWindowStyle.Maximized，还是没啥效果。
+
+是否要尝试一下 /usr/bin/open 程序呢？使用 "open -a /Application/AppName.app --args ..." 在Terminal.app里可以正常打开预览应用，并且是自动将窗口展示到前台。
+
+使用open指令可以完美的弹出前台的预览窗口。“--args”参数并不如我所想的那样，可以把要打开的文件路径也放这里。反而需要把要打开的文件的路径提供给open才行。
