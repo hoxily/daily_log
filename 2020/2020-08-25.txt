@@ -1,1 +1,19 @@
 2020年08月25日，星期二，杭州
+
+如果不方便在Material的Inspector面板上直接编辑float4x4的矩阵，那么可以试试使用4个float4的格式来定义一个4x4的矩阵。这样就可以实现矩阵变量的默认值，而不用借助脚本来进行初始化。
+
+Properties {
+    _FabricMatrixRow0 ("Fabric Matrix Row 0", Vector) = (1, 0, 0, 0)
+    _FabricMatrixRow1 ("Fabric Matrix Row 1", Vector) = (0, 1, 0, 0)
+    _FabricMatrixRow2 ("Fabric Matrix Row 2", Vector) = (0, 0, 1, 0)
+    _FabricMatrixRow3 ("Fabric Matrix Row 3", Vector) = (0, 0, 0, 1)
+}
+
+float4 _FabricMatrixRow0;
+float4 _FabricMatrixRow1;
+float4 _FabricMatrixRow2;
+float4 _FabricMatrixRow3;
+
+然后在代码里使用到这个矩阵的地方，使用 float4x4(_FabricMatrixRow0, _FabricMatrixRow1, _FabricMatrixRow2, _FabricMatrixRow3) 的方式组装起来。
+
+就是不知道开销会不会变大很多。
