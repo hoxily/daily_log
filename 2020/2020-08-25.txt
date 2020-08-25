@@ -1,6 +1,6 @@
 2020年08月25日，星期二，杭州
 
-如果不方便在Material的Inspector面板上直接编辑float4x4的矩阵，那么可以试试使用4个float4的格式来定义一个4x4的矩阵。这样就可以实现矩阵变量的默认值，而不用借助脚本来进行初始化。
+如果无法在Material的Inspector面板上直接编辑float4x4的矩阵，那么可以试试使用4个float4的格式来定义一个4x4的矩阵。这样就可以实现矩阵变量的默认值，而不用借助脚本来进行初始化。
 
 Properties {
     _FabricMatrixRow0 ("Fabric Matrix Row 0", Vector) = (1, 0, 0, 0)
