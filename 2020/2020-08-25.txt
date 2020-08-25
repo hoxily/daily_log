@@ -17,3 +17,15 @@ float4 _FabricMatrixRow3;
 然后在代码里使用到这个矩阵的地方，使用 float4x4(_FabricMatrixRow0, _FabricMatrixRow1, _FabricMatrixRow2, _FabricMatrixRow3) 的方式组装起来。
 
 就是不知道开销会不会变大很多。
+
+----
+
+妈耶，windows上的程序兼容好麻烦。尝试了一下在虚拟机里安装Windows 7 ultimate sp1 x64版本，然后把native_message_host那一套弄过去，发现直接无法运行。按照错误提示把 vcredist 和 kbxxxx补丁安装后终于可以运行了。
+
+一想到客户使用老旧的windows7系统，那么是否意味着有可能使用的x86版本的windows7呢？还得分别为x64和x86的windows系统打包exe程序。
+
+这太麻烦了。为了使用.net core程序，还得预先安装好多东西。
+
+总不能切换到C/C++程序吧。太蛋疼了。
+
+突然羡慕做服务端开发的人了。服务器的硬件和系统版本都是受控的。
