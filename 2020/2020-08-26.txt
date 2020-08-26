@@ -1,1 +1,14 @@
 2020年08月26日，星期三，杭州
+
+原来chrome extension的id在“加载已解压的扩展程序”模式下生成的ID是根据chrome extension的manifest.json里的key字段计算得出的。如此一来就有了唯一的扩展id，不用担心会跟官方demo的id冲突了。参见 https://developer.chrome.com/apps/manifest/key 。
+
+
+看起来如果想要自动化配置.net core构建出来的self-contained程序的运行环境，还得编写nsis脚本，将依赖的vcredistributable和windows update都打包进去，根据运行的系统版本执行不同的操作。这样的话就引出两个任务：
+1. 针对不同的windows系统版本，编写nsis脚本和收集依赖包；
+2. 使用虚拟机在要支持的windows系统版本上分别测试installer是否能正常工作；
+
+假如将最低支持windows系统版本定义为 windows 7 sp1，跳过 windows 8.1，但是 windows 10虽然都叫windows 10，内部其实会有很多小版本。挑几个有代表性的来测试吧。按照windows系统的良好兼容性来看，选大版本中的最旧小版本应该就可以。
+
+好像还得区分 x86 跟 x86_64的版本区别。
+
+其实因为x64的系统上可以运行32位的程序，所以其实只需要编译x86的版本就可以。这样打包构建的负担就小很多。
