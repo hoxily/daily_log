@@ -1,0 +1,7 @@
+2020年08月27日，星期四，杭州
+
+不管是打包x86的文件还是打包x64的文件，生成的installer程序本身都是x86的架构。因此在x86系统上是正常的路径， 而到了x64系统上，默认的Program Files路径添加了(x86)后缀，读写注册表的时候也被转移到了wow6432node节点下。虽然Google Chrome依然能正常读取到wow6432node下的NativeMessageHost注册信息，但是感觉并不好看。
+
+在nsis的Function里无法使用InstallDir和InstallDirRegKey，所以得自行实现它的逻辑。
+
+!define CONST_NAME "content of this define." 宏定义的常量，需要使用 ${CONST_NAME} 的方式引用它。如果写成 $CONST_NAME 会引用不到，并且在makensis编译时给出警告。
