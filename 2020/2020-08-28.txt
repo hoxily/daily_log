@@ -1,0 +1,9 @@
+2020年08月28日，星期五，杭州
+
+windows 8.1的安装过程中弹出的账号设置界面竟然没有提供本地账户。选择注册新的windows账户，弹出的新界面里才有创建本地账户的选项。藏得真深。哦，我可能把创建新的windows账户误解成创建新的microsoft 账户了。
+
+很不可思议。installer在win7不带sp1的系统上也能正常安装和运行。dotnet core的文档上是说最低到win7 sp1的。可能是因为我的程序比较简单，没有使用复杂的API。还是遵守dotnet core的文档要求，最低为 win7 sp1吧。
+
+----
+
+尝试了下在VirtualBox下安装macOS Catalina，直接安装是会失败的。需要添加一些特定的字符串到EFI配置里。其中就有一条是：“ourhardworkbythesewordsguardedpleasedontsteal(c)AppleComputerInc”。Our hardwork by these words guarded please don't steal。
