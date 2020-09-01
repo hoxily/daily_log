@@ -1,0 +1,5 @@
+2020年09月01日，星期二，杭州
+
+第一次遇到打开Google Chrome浏览器，整个窗口全黑的情况。连最小化、最大化的按钮都看不到。https://www.zhihu.com/question/64447202/answer/1117420860 参考这个回答，把 %USERPROFILE%\AppData\Local\Google\Chrome\User Data\ShaderCache\GPUCache 下的着色器缓存删掉就OK啦。大概是因为我安装了新的显卡驱动，但是没有重启windows系统的缘故吧。
+
+Unity之所以不提供Runtime的shader编译服务，是因为它使用HLSL转其他平台的编译器的缘故？
