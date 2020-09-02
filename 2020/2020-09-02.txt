@@ -1,1 +1,11 @@
 2020年09月02日，星期三，杭州
+
+尴尬了。在github网站直接修改readme.md，然后提交。导致macbookpro上的远程仓库跟github上的远程仓库不同步了。搞半天，都不对劲。最后使用push -f 强制以macbookpro上的为准提交上github了。
+
+正常来说，一般只会有一个远程仓库吧。
+
+----
+
+当我的一台主机域名保持不变，但是IP是动态变化的时候，ssh一连接就会让我确认添加一个跟IP关联上的known_host项到.ssh/known_hosts文件里。https://unix.stackexchange.com/questions/285520/why-does-ssh-add-a-known-host-entry-for-an-ip-address 参考这篇文章的回答，在.ssh/config里添加
+CheckHostIP no
+就可以避免逐IP的已知主机项记录了。.ssh/known_hosts里记录的将仅有主机的域名。
