@@ -9,3 +9,11 @@ DracoMeshLoader其实已经不关心到底是哪个Geometry了，所以像这种
 其实也有点像函数调用的栈帧列表，每个栈帧都完整记录了局部变量等信息，也就有办法逐级向上访问到需要的信息。
 
 手动加字段显然不方便。如果有任意访问栈帧的能力，那就方便多了。当然，遇到递归调用的函数，使用栈帧估计也会很麻烦。
+
+----
+
+https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/Data_URIs  
+
+格式为 data:[<mediatype>][;base64],<data> 的东西被称之为 Data URLs。用于将小文件内嵌到HTML文档里。
+
+一探老哥传递data数据给我的时候，多了纯base64之外的头，导致System.Convert.FromBase64String出错。虽然他也在代码里处理了image/xxx类型的文件，但是漏了其他类型的文件。
