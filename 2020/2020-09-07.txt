@@ -1,0 +1,13 @@
+2020年09月07日，星期一，杭州
+
+早上更换了新的工位。
+
+----
+
+虽然我已经将Windows的3D对象、视频、图片、文档、下载、乐音、桌面这几个文件夹移动到D盘的某个目录下。但是依然出现钉钉下载的文件、IISExpress、My Web Sites出现在C:\Users\hoxil\Downloads 和 C:\Users\hoxil\Documents 下。
+
+这个时候可以使用mklink工具创建SYMLINKD链接或者JUNCTION链接。把原始文件夹删除，然后使用 mklink /D Downloads D:\Users\hoxily\Downloads 的方式，创建一个符号链接指向 D:\Users\hoxily\Downloads 。如果想创建JUNCTION链接，要将/D选项替换为/J。
+
+SYMLINKD与JUNCTION最大的差别就是，JUNCTION支持在远程的mac电脑上查看链接的目录。而SYMLINKD的链接，在windows本地机器上看正常，但是在mac电脑上就会出现读取不了指向的目录的bug。
+
+最后，mklink工具需要管理员权限才能使用。
