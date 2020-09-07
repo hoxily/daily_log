@@ -11,3 +11,7 @@
 SYMLINKD与JUNCTION最大的差别就是，JUNCTION支持在远程的mac电脑上查看链接的目录。而SYMLINKD的链接，在windows本地机器上看正常，但是在mac电脑上就会出现读取不了指向的目录的bug。
 
 最后，mklink工具需要管理员权限才能使用。
+
+----
+
+在 light_frag.js 里发现一个灯光结构特有的字段：decay。而这个玩意儿在Unity里是无法获取到的。根本就没有在Light组件里列出来过。
