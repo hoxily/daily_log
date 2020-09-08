@@ -1,0 +1,5 @@
+2020年09月08日，星期二，杭州
+
+lib_webgl的印绣花材质更新啦。Decal整合到Style3DMaterial的着色器里面了。老的shaderOur还没抄完呢。新代码暂时在remotes/origin/Style3DDecalMaterial分支。
+
+Style3D shader抄起来还是挺顺手的。可能是因为之前抄shaderOur熟悉过一部分的缘故吧。
