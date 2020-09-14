@@ -5,3 +5,5 @@ Visual Studio Code里使用正则表达式提取出来的Group，需要使用$0,
 难以置信。直接把代码里的LegacyMaterial换成最新移植的Style3DMaterial竟然可以直接用。只是场景里使用的灯光的类型不对，需要换成方向光。估计关于灯光的操控代码也得修改。
 
 试了两个CustomUserProduct，发现相比web端的效果，画面显得灰蒙蒙的。对比度和饱和度很低的样子。
+
+发现一个比较奇怪的事情。理论上我已经在脚本里使用Material.EnableKeyword将某个宏定义打开了。但是在Inspector面板看，所有的关键词都是关闭的状态。
