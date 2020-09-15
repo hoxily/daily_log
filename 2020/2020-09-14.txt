@@ -7,3 +7,5 @@ Visual Studio Code里使用正则表达式提取出来的Group，需要使用$0,
 试了两个CustomUserProduct，发现相比web端的效果，画面显得灰蒙蒙的。对比度和饱和度很低的样子。
 
 发现一个比较奇怪的事情。理论上我已经在脚本里使用Material.EnableKeyword将某个宏定义打开了。但是在Inspector面板看，所有的关键词都是关闭的状态。
+
+关于这个问题，应该是[Toggle]标记的属性主要还是关注那个Int变量，关键词仅仅额外加上去的东西。因为使用Material.EnableKeyword操作时，仅仅设置了关键词，而没有设置对应的_ToggleXXX，所以在Inspector上依然显示成没有启用关键词的样式。
