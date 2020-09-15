@@ -4,7 +4,7 @@
 
 其实可以写一个测试的shader，使用标准的球体作为模型，遇到env-map的颜色值超出(1,1,1,1)时就显示成紫红色，其他的情况显示成黑色。这样就可以看出来导入的hdr资源是不是真的起作用了。
 
-发生一件很奇怪的事情。我抄builtin shaders里的 #error 错误输出语句。当未检测到 UNITY_COLORSPACE_GAMMA 将会报一个错，提示用户切换到gamma颜色空间。但是在将颜色空间切换到gamma后，点击使用了style3d着色器的材质文件，unity就陷入假死状态。在Editor.log里可以看到不断地执行编译style3d着色器，不断地报错。
+发生一件很奇怪的事情。我抄builtin shaders里的 #error 错误输出语句。当未检测到 UNITY_COLORSPACE_GAMMA 将会报一个错，提示用户切换到gamma颜色空间。但是在将颜色空间切换到linear后，点击使用了style3d着色器的材质文件，unity就陷入假死状态。在Editor.log里可以看到不断地执行编译style3d着色器，不断地报错。
 
 builtin shaders里对#error好像就是这么用的啊？
 
