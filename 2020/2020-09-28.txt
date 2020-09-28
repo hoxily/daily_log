@@ -1,3 +1,5 @@
 2020年09月28日，星期一，杭州
 
 safari有一个很神奇的功能。可以给网站的favicon变色。
+
+升级了一下 WANYUAN_TEST 宏定义，改为 STANDALONE_TEST 。用于独立于ReactNative打包。同时添加了RemoteNativeMessage机制，可以在Editor端发送模拟的NativeMessage给STANDALONE_TEST 模式的Player。
