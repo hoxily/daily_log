@@ -1,0 +1,38 @@
+2020年09月30日，星期三，杭州
+
+今天王文建也没来游泳。他只说不去了，但是没有给出理由。
+
+----
+
+在Unity里一个Mesh如果含有特别多的SubMesh，并且每个SubMesh有自己独立的Material的话，一旦超出一定数量，在Inspector面板预览时就会报错。一共会出现4种错误在Console面板刷屏。
+
+Attempting to open > 63 preview scenes, this is not supported, ensure you dispose of preview scenes properly
+UnityEngine.GUIUtility:ProcessEvent(Int32, IntPtr)
+
+InvalidOperationException: Preview scene could not be created
+UnityEditor.PreviewScene..ctor (System.String sceneName) (at D:/unity/Editor/Mono/Inspector/PreviewRenderUtility.cs:23)
+UnityEditor.PreviewRenderUtility..ctor () (at D:/unity/Editor/Mono/Inspector/PreviewRenderUtility.cs:107)
+UnityEditor.MaterialEditor.Init () (at D:/unity/Editor/Mono/Inspector/MaterialEditor.cs:1710)
+...
+
+GUI Error: You are pushing more GUIClips than you are popping. Make sure they are balanced.
+UnityEngine.GUIUtility:ProcessEvent(Int32, IntPtr)
+
+A PreviewRenderUtility was not clean up properly before assembly reloading which lead to leaking this scene in the Editor. This can be caused by not calling Cleanup() during the OnDisable of an Editor or an EditorWindow.
+UnityEditor.PreviewRenderUtility:Finalize()
+
+看起来要求SubMesh的数量小于等于63才行。遇到过的最变态的一个Cloth模型一共有300多个SubMesh。在Unity这边是否要拆解一下呢？
+
+----
+
+查内存溢出的bug的过程中，发现升级一下UniTask库效果很棒。但是引出了一个bug。PauseApp(Time.scaleTime = 0)之后UniTask.Timeout永远不会超时了。需要改为DelayType.UnscaledDeltaTime。
+
+后面继续跟进发现在ResourceManager的两个CompleteXXX函数里做一下GC.Collect效果拔群。另外，顺便把LtCache里的geometry缓存也清理了。还有TexturePool里的纹理也清理了。
+
+重复加载同一个款式，在完成加载的状态下，还是会有一点点的内存上涨。但是相比之前ABC多个款式来回切换，很快就闪退要好多了。
+
+----
+
+从上周四，也就是9月24日，杭州的桂花开始飘香。
+
+今天去游泳馆，使用我常用的那个柜子发现，竟然有人跟我设置了一样的密码。真是巧了。同一个柜子，同一个密码。
