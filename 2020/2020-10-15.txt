@@ -101,3 +101,7 @@
     思考题
         人生的方法论
             靠运气挣来的，都可能会靠实力输回去。
+
+----
+
+可以使用TextMesh来生成一个放置到3D场景里的文本。但是它会自动创建一个MeshRenderer，然后使用了默认的GUI/Font着色器。如果想让文本始终朝向相机，需要手动调整。但是也许可以使用Shader来让这个文字正面朝向相机。麻烦的是MeshRenderer的sharedMaterial是被TextMesh接管的。
