@@ -5,3 +5,5 @@
 今天我也没去。雨天不方便。
 
 黄宁海组织的每周跳绳2000个达标群，我加入后，今天收到了无绳跳绳。好高级。
+
+发现了MeshRenderer与TextMesh配合使用时，替换了被接管的FontMaterial的shader时，x方向翻转的bug。可以通过设置Transform.localeScale = (-1, 1, 1)来临时解决。但是更好的方案，应该是想办法让这个参数被Style3DBillboardFont着色器感知到，并作出处理。
