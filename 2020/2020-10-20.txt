@@ -1,1 +1,27 @@
 2020年10月20日，星期二，杭州
+
+其实还有一个奇怪的地方。我单独拖动一个印花在3D模型上移动，都是能正常生成PatternDecalGeometry的。但是为什么应用到面料时批量生成就失败呢？
+
+邹静磊给了个建议，使用顶点和面数比较小的受控模型来测试。
+
+在www.style3d.com上，使用hoxily3账号找了一个比较简单的模型，也是含有patterns数据的老模型。测试的时候发现生成的DecalMesh翻倍了。检查发现continue语句写的位置不对，不小心把continue写进else分支里面，导致执行了2边CopyFullDecalOnPattern。
+
+另外，虽然在生成其中一个PatternDecalGeometry时，虽然报了错误，生成了一个完全空的网格物体。但是一旦排除掉这个错误的网格物体，正好就是一共4个Decal，与网页端的数量一致了。
+
+----
+
+修复continue的重复bug之后，继续调试之前的那件卫衣。给CopyFullDecalOnPattern方法，MakeIntersectionByFace构造出来的RuntimeIntersection的point位置分别生成了调试用的小球。可以发现，基本上碰撞点的位置与网页端执行应用到面料执行后的印花出现位置是一致的。
+
+进一步屏蔽PatternDecalGeometry里对intersectFaceIndex必须要有效的判断，可以发现所有的印花都是在卫衣的明线模型上。
+
+换句话说，intersectFaceIndex没有找到，意味着碰撞点其实在另一个submesh上。
+
+----
+
+小心。在Inspector面板上显示的Material列表与MeshRenderer里的Materials数组的顺序是反着的。
+
+----
+
+通过对异常的materialPatternFaceMap的跟踪，终于定位到了LtGeometry.GetMaterialIdxByIndex方法要求的是三角面的索引下标，而不是Vertex的索引下标。也就是取 Mesh.triangles[index]这里的index。通过查找对LtGeometry.GetMaterialIdxByIndex方法的引用，还找到一处 ThreeDUtils.GetFaceByIndex也是传错了参数。把这两处修好后，不再出现PatternDecalGeometry的错误。应用到面料的效果与网页端一致了。
+
+好坑。这个bug找了2天。另外也找到其他一些小bug。
