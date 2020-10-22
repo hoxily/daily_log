@@ -3,3 +3,14 @@
 今天感觉脖子又好了很多。
 
 发现自己用python -m http.server 的方式在本机上开了很多自用的web服务。但是其实可以把那些静态内容放到一个统一的目录下，然后只需要运行一个Server。如果不想移动原始内容，那么可以使用mklink命令创建JUNCTION类型的目录链接。
+
+在build player时发现一个很奇怪的事情。比如继承自MonoBehaviour的DecalMesh，声明了一个“private new Renderer renderer;”的字段。如果不加new关键字，那么会警告: “‘DecalMesh.renderer’隐藏继承的成员‘Component.renderer’。如果是有意隐藏，请使用关键字new。”。
+
+如果按照这个提示，加上了new关键字，那么日常修改C#代码，重新编译时这个警告就消失了。但是遇到Build Player时，CS0109号警告就出来了。具体警告如下：
+Assets/path/to/DecalMesh.cs(22,30): warning CS0109: The member 'DecalMesh.renderer' does not hide an accessible member. The new keyword is not required.
+
+简直神奇！
+
+那么，我去把名字改一下把，避开MonoBehaviour的成员名字。
+
+遇到另一个很奇怪的事情。使用USB线连接iPad和macmini，然后在第一次的解锁以使用配件的确认后，就没反应了。并不在充电，xcode也不能识别到iPad。把线拔下来重新插也没用。重启电脑后成功恢复。但是重启过程中有个小波折。第一次重启失败了。然后接上键盘鼠标和显示器，发现都没反应，但是电源指示灯是亮着的。找全贺菁来看看，他使用了强制重启的办法——长按电源键。
