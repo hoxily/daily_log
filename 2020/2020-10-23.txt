@@ -1,1 +1,3 @@
 2020年10月23日，星期五，杭州
+
+优化了GetDecalState的逻辑，与Decal内部的数据存储分离。提供给ReactNative端的DecalState是加工、过滤过的数据。
