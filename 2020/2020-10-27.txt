@@ -1,0 +1,15 @@
+2020年10月27日，星期二，杭州
+
+尝试给网页端的PatternDecalGeometry优化内存。改了最后的uvs,normals,vertices的组装，使用Float32Array来优化，结果发现内存峰值更高了。还不如之前的Number数组。
+
+使用了DevTools的Performance里的Record功能。发现一个奇怪的bug。执行Record记录后，CPU使用率就会达到300%。估计是web worker里无限忙等了。
+
+----
+
+又研究了一下LtDecalGeometry，感觉沿用底层版片仅用着色器来控制印花的渲染的方案在拥有patterns数据的模型上是不可行的。不做ClipByPatternIndex的话，会造成一些版片id不一样的版片，在不该显示的地方显示了印花。也许可以让color attribute用作版片id，然后在shader里进行剔除。磊哥说可以把挂在LtGeometry上的patterns数组做成一个BufferAttribute，需要调整THREE的Geometry。
+
+其实还有另外一个问题。那就是PatternDecalGeometry生成算法里，每次筛选的是intersectPoint.face.materialIndex。也就是一个SubMesh。如果不对SubMesh做区分，那么也会造成在不该显示的地方显示印花。也就是每个SubMesh对应一个Material。可以给用不上的SubMesh对应的Material设置成强制丢弃片元的材质。或者有更好的版发的话，仅渲染部分SubMesh那就更好。磊哥说THREE里的ShaderMaterial本身就有visible属性，直接设置成不可见即可。
+
+----
+
+淘宝上买的眯眼小狗抱枕送到青青手里了。
