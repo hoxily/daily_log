@@ -1,0 +1,109 @@
+2020年10月29日，星期四，杭州
+
+DecalBillboardFont.shader在简单的FontMesh和MeshFilter的情况下，会因为Unity的Dynamic Batching机制，渲染效果错误。
+
+之所以在Scene里看到文字位置与Game视图的文字位置不同，大概就是因为Scene视图下，没有启用Dynamic Batching吧。通过打开Game视图的Stats小窗，可以看到在将DecalBillboardFont移近相机，并且其中一个DecalBillboardFont移出视野时，Saved by batching计数就会减少1.
+
+类似的还有SetActive(false)其中一个DecalBillboardFont GameObject时，可以观察到另一个DecalBillboardFont物体的位置在Game视图上发生了移动。
+
+而将GameObject.transform.localScale.x 设置成-1，可以破坏Dynamic Batching，所以又正常了。
+
+参见官方手册对Dynamic batching的解释：http://pc.hoxily.com/UnityDocs/Documentation.2018.4/en/Manual/DrawCallBatching.html
+
+所以总的结论就是我写的DecalBillboardFont.shader 不支持Unity的Dynamic Batching。
+
+----
+
+代码的坏味道——重构
+    重构的好处
+        易于理解
+        发现潜在的bug
+    判断需要重构的依据
+        重复代码
+            例子
+                辅料接口、部件接口两个接口含有重复代码。
+        过长的函数
+            做的事情特别多
+            职责不单一
+        过长的参数列表
+            不仅要在调用的地方加，还需要在上层函数传入等等
+            使用对象包裹
+        发散式的变化
+            例子
+                软件激活接口
+            多种多样的理由，来修改某一段代码。
+        霰弹式修改
+            有某个变化时，需要修改很多地方。
+        switch语句
+            多态继承来约束
+        过度耦合的消息链
+        中间人
+        过多的注释
+            需要注释来帮助理解时，说明需要重构代码了。
+        依恋情结
+            某个类过度读取另一个类的数据
+        数据泥团
+            总是一起出现的数据项，可以封装成一个结构或者类
+
+----
+
+一键生成印绣花
+    声明
+        暂时不太成熟
+        对前人成果的收集和整理
+        20篇论文
+        40分钟
+        80张图
+    目录
+        神经网络
+            图像翻译
+                pix2pix
+                    成对的数据集
+            生成对抗网络
+                GAN
+                    生成、判别迭代
+            循环生成对抗网络
+                CycleGAN
+                    原始生成图像分辨率很低
+                        超分辨率处理
+            神经风格迁移
+                NST
+                适用范围
+                    艺术绘画
+                    自然界图片表现比抽象手绘更好
+        非真实感
+            像素化
+            PS插件
+                patch generator lite
+            边缘线
+                算子
+                边缘切线流
+            色彩聚类
+            voronoi图
+                细胞聚合样
+                可以解决傻瓜式随机摆放重叠的问题
+            方砖
+            线
+                长短针
+                平绣
+                边缘
+                常州乱针绣
+        纹理合成
+            面片Patch
+                马赛克拼图
+                基于面片的合成
+            王浩瓷砖
+                wang tile
+            纹理迁移
+            基于面片的合成
+            字体风格迁移
+    分支主题 3
+        手工绣
+            蟒袍
+                3个月到1年
+        机绣
+    分类
+        印花
+            贴图
+        绣花
+            更复杂
