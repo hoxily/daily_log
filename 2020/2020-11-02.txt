@@ -1,0 +1,19 @@
+2020年11月02日，星期一，杭州
+
+全贺菁发现了一个很奇怪的bug。暂时无法确定性地复现。症状是平铺模型详情页加载完成后，模型上有一个紫红色的长方形区块，正好是差不多是第一个印花拖上去的大小。但是长按无法拖动此紫红色物体。
+
+我猜测是我对GameObject物体的管理出现了泄漏。在某种特殊情况下，某个印花物体被创建出来，但是销毁不当，残留下GameObject，然后引用的Material对象被我Destroy掉了。于是在不重启app的情况下，再次加载另一个详情页，会出现残留GameObject混杂在当前详情页里面。又由于此GameObject没有纳入管理，所以也无法拖动它。
+
+也许我需要创建一个GameObjectRoot节点，默认创建出来的对象都放先放进那里面，然后再按需要移动到别的物体下。这样的话，如果出现GameObject泄漏，那么就会在Module Destroy时做一个检测，将这些泄漏的GameObject销毁掉。
+
+还有一个方案是使用SceneManagement，切换场景即可销毁。还是自己主动记录销毁吧。
+
+----
+
+经过排查，发现问题在于PrepareDecal操作非常费时间，要花很久才能完成图片的下载。这里Style3DDecalMaterial迟迟没有创建。而紧接着的DropDecal操作生成DecalMesh时需要用到Style3DDecalMaterial包裹的UnityEngine.Material对象，就发生了NullReferenceException。
+
+当然上面讨论的GameObject泄漏也是一个bug。
+
+还是异步操作的代码写的太不严谨了。
+
+我试过网页端，将Network的速度模拟设置成 Slow 3G，就可以发现其实前端根本没有遵循lib_webgl里的async api约定。PrepareRawDecal都还没结束呢，竟然调用了DropDecal。
