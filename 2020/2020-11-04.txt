@@ -1,2 +1,49 @@
 2020年11月04日，星期三，杭州
 
+照着ShaderLab开发实战详解的DirectX工程源码复制粘贴，编译的时候出现了no_init_all属性错误。参考这个链接的解决方案可以消失编译错误。https://developercommunity.visualstudio.com/content/problem/539919/e1097-unknown-attribute-no-init-all-in-winnth-in-w.html
+
+#if (_MSC_VER >= 1915)
+    #define no_init_all deprecated
+#endif
+
+----
+
+找半天DirectX SDK的下载地址竟然没有找到。只找到一个很老的2010发布的DirectX SDK链接。然后在stackoverflow上终于发现了 DirectX 11 SDK - where can I download it 的问题。里面是一个链接，指向 http://msdn.microsoft.com/en-us/library/windows/desktop/ee663275%28v=vs.85%29.aspx 【Where is the DirectX SDK?】。文章里说，从windows 8开始，DirectX SDK就集成到Windows SDK里面了。
+
+所以编译里出现 LNK2019 无法解析的外部符号 D3D12SerializeRootSignature，该符号在函数……中被引用等找不到外部符号的错误。
+
+既然已经包含在Windows SDK中，那么应该只是没有添加lib的缘故。
+
+----
+
+编译通过了。但是出现了更加奇怪的内存访问异常问题。把unique_ptr<HelloTriangle>改为普通的HelloTriangle*，依然还是报错。
+
+暂时不管它了。工程里的代码量超级大，比书中摘出的代码片段多得多。
+
+----
+
+这个办公室变得让我讨厌了。
+
+黄宁海在钉钉群里发言（13:29）：
+    @所有人  中午可以适当休息，但不要打呼噜，比较影响，请互相督促
+    如果睡觉没办法不打呼噜，可以去会议室关起门来睡，会议室有行军床
+
+苏斌私聊（13:50）：
+    你打呼噜了呀
+我：
+    不知道啊。
+    打呼噜的人自己是不知道的啊。
+苏斌：
+    就是啊，你自己都不知道
+我：
+    所以不知道啊
+    所以说的是互相监督。
+
+Vily+罗元雷（19:56）：
+    对了，今天有人提意见说1点多，你午休有鼾声影响到他们。你看看能不能午休时间再提前一些，这样就能减少一些影响。
+    [握手][握手][握手]
+    [害羞][害羞][害羞]
+我：
+    好的。
+
+一股指桑骂槐的味道。为什么不直接跟我说？
