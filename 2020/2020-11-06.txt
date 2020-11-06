@@ -1,3 +1,5 @@
 2020年11月06日，星期五，杭州
 
 自从上星期从仙居回来，我的感冒好像加重了。每天早上起来，喉咙里都会有严重的积痰。吐出来就发现是混着血丝的红褐色。鼻涕也已经变成绿色。
+
+不够小心，把Accessory.updateMesh函数加了一个boolean参数，但是没有改完用到这个函数的ProductManager和PanoramaScene。比较奇怪是yarn run dev竟然编译成功了。虽然额外报了两个Error，但是我可能看到compile success，并且又能访问测试网页就没管它了。需要小心。
