@@ -29,3 +29,7 @@
         多实际操作和阅读多种引擎的代码
         * 按照主题功能块做分享和讨论
 虽然说的是Render，但是实际上还隐含了Material/Geometry这两个东西。
+
+----
+
+邹静磊遇到一个很奇怪的事情。使用DataTexture构造高光TextureCube时老是出问题。像是指定的PixelFormat等参数不生效的样子。
