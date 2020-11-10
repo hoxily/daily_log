@@ -1,0 +1,7 @@
+2020年11月10日，星期二，杭州
+
+我找到一个CubeTexture的Custom mipmaps的例子：https://github.com/mrdoob/three.js/pull/17072/files/e8078d412d811f17845df00625968abb5b10664d
+
+罗元雷说让我来实现一个分段Segment的co，生成各自独立的BufferGeometry，不再做BufferGeometry的合并。而是在render时，多次调用bindBuffer和bufferSubData方法来实现直接在GPU端生成顶点Buffer和三角形索引Buffer。
+
+尝试查看WebGLAttributes和WebGLRender时，发现缺少输入的geometry的信息。而engine这一层里CoLoader加载出来的LtGeometry长什么样子也难以从静态的代码中分析出来。也许明天需要打上断点，运行起来看看加载出来的LtGeometry的结构。
