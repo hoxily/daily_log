@@ -1,1 +1,9 @@
 2020年11月12日，星期四，杭州
+
+发现一个很神奇的事情。通过let canvas = document.getElementById("canvas");拿到的canvas对象，
+canvas.style.height = window.innerHeight + "px";
+所设置的高度与
+canvas.height = window.innerHeight 是不一样的。
+简单地说，就是 canvas.width 和 canvas.height 是这个画布的像素分辨率。而 canvas.style.width 和 canvas.style.height 是这个画布要拉伸到什么大小来显示。
+
+已成功使用drawArray和drawElements两种方式绘制三角形。
