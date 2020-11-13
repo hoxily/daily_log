@@ -11,3 +11,9 @@
 ----
 
 Style3D除了支持导入sco扩展名的文件，还支持zip格式的obj模型。
+
+----
+
+尝试给WebGLPlayground添加color attribute数据。结果直接黑屏了。经邹静磊提醒，我在调用gl.bufferData时传的dataSource错了。Visual Studio Code也给定义了初始值但是从未使用的colorArray打上了暗灰色。我竟然没有发现。另外，它这个这完全没有报错信息。只能靠自己小心。
+
+要不还是换成typescript吧。可以提供编译错误。刚刚写函数的时候，参数名叫code，我用error来引用，竟然都不报错。直到运行到才报未定义。
