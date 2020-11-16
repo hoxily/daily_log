@@ -1,0 +1,17 @@
+2020年11月16日，星期一，杭州
+
+http://3d.linctex.com:59090/ 使用的lib_webgl库版本为master分支最新版本。
+
+中间隔离层规则：
+
+1. threejs的math直接沿用；
+2. threejs的constants常量直接沿用；
+3. 其他还有哪些可以直接沿用？？？
+3. 直接使用` export * from "three" `的方式做alias别名没有意义，本质上还是依赖threejs；
+4. 直接继承 threejs 的类，比如 `export class Texture extends THREE.Texture { ... }`，也没有意义，本质上还是依赖threejs；
+
+要从代码重构的目标的层级结构来分析现有代码，并做出重构才有意义。那么期望的lib_webgl层级结构是怎样子的？
+
+当前为了高性能加载超大面数的模型而做出修改，导致BUG、联动修改的地方就是需要做抽象的地方。
+
+还有其他线索吗？
