@@ -1,0 +1,41 @@
+2020年11月17日，星期二，杭州
+
+threejs 嵌入 lib_webgl 解决方案
+    1. 移除package.json 里的three依赖项。可以使用 yarn remove three 移除。
+    2. 将 local_modules 下的src和examples分别移到 src/three-src 和 src/three-examples 下。
+    3. 调整 src/three-examples 里的模块的引用路径。
+    4. 调整工程里对 "three" 模块的引用，分三种情况：
+        1. src/engine 下的模块视为 Engine层的模块，可以直接引用 src/three-src 和 src/three-examples;
+        2. src/engine 之外的模块视为 Engine之上的模块，不可以直接引用 src/three-src 和 src/three-examples，需要引用 src/engine/LtEngine.ts 有限导出的模块（暂时是将原来的"three"内容全部导出了，后期需要调整为有限的导出）。
+        3. src 下对three/examples/...的引用理论上应该纳入到Engine层，但是现在暂时没有动它们，比如 src/utils.ts, src/internal/render/PostProcessing.ts, src/internal/render/DepthPeeling.ts, src/internal/render/Canvas3D.ts。
+
+yarn dev 或 yarn build指令报告的奇怪错误修复
+    1. 报 WebGL2RenderingContext 找不到。需要添加 @types/webgl2 依赖项。使用 yarn add @types/webgl2 来添加。
+    2. three/examples/jsm/nodes/misc/TextureCubeUVNode.d.ts 与对应的 .js 文件在构造函数上参数类型和参数名不匹配，导致build报错：“Cannot find module '../bsdfs/BlinnExponentToRoughnessNode'”。可以按照.js文件的构造函数参数类型和参数名来修改。参见 https://github.com/mrdoob/three.js/issues/17409 ，看起来是examples里面有文件没有彻底同步。
+    3. 有一个examples文件的.d.ts 声明文件扩展名写错了，多加了一个点，造成与对应的.js文件没有匹配上，从而造成build报错。
+
+three引用排查方案，借助VSCode的全目录搜索功能（keywords、files to include、files to exclude三个框）
+    "three": 不应该出现，现在已经不在node_modules里；
+    /three-src/Three
+        排除 src\three-examples,src\engine （英文逗号隔开）
+    LtEngine
+        不应该被 src\engine 下的模块import。
+        src\engine 之外的模块可以引用。
+
+----
+
+OKR 评估会议
+
+当前存在的问题
+    不够量化
+    团体性OKR分拆不合理
+    聚焦性不够，目标点过多
+    需要确定难度系数
+
+重构作为OKR时的评判标准
+    提出重构点（打分）
+    解决、实现重构
+
+研究性自我提升的OKR建议
+    1. 研究成果应用到项目中；
+    2. 输出能分享给其他人的PPT；
