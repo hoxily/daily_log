@@ -13,6 +13,7 @@ yarn dev 或 yarn build指令报告的奇怪错误修复
     1. 报 WebGL2RenderingContext 找不到。需要添加 @types/webgl2 依赖项。使用 yarn add @types/webgl2 来添加。
     2. three/examples/jsm/nodes/misc/TextureCubeUVNode.d.ts 与对应的 .js 文件在构造函数上参数类型和参数名不匹配，导致build报错：“Cannot find module '../bsdfs/BlinnExponentToRoughnessNode'”。可以按照.js文件的构造函数参数类型和参数名来修改。参见 https://github.com/mrdoob/three.js/issues/17409 ，看起来是examples里面有文件没有彻底同步。
     3. 有一个examples文件的.d.ts 声明文件扩展名写错了，多加了一个点，造成与对应的.js文件没有匹配上，从而造成build报错。
+    4. three 源码里有一些 .d.ts 的函数缺失返回值类型，需要根据对应的.js文件返回的类型来修复。
 
 three引用排查方案，借助VSCode的全目录搜索功能（keywords、files to include、files to exclude三个框）
     "three": 不应该出现，现在已经不在node_modules里；
