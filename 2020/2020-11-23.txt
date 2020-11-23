@@ -2,4 +2,8 @@
 
 收到两个bug。一个是面料纹理呈现度，图案使用的底层面料法线矩阵变换不对。另一个是智能检测png图是否真的含有透明成分，Vsticher软件导出的png格式贴图不一定含有透明成分，仅仅是使用png这个文件格式而已。
 
+第1个bug是由于fromUserData初始化不完整引起的。Decal.Angle属性仅仅是记录了_angle值，却因为this.material还是null，所以没有设置FabricRotation；既然是延迟初始化this.material，那就在makeMaterial里，创建出this.material时，设置一下FabricRotation即可。
+
+第2个bug经过一系列排查，定位到Obj2scoOperator。由于各家软件对wavefont obj格式的定义不同，导致透明的定义也不一样。这样一来，现有的src/engine/MTLLoader.js里没有正确获到transparent。不过既然已经支持gltf格式，而gltf格式对是否透明有明确的alpha_mode定义，那就推荐他们使用gltf导出格式。
+
 我发现一个大问题。在分支上修复bug后，rebase dev合入最新的改动。然后这个bugfix分支就不能push到远程了。这样的话，长周期重构分支就会时不时地push -f 到远程。反过来说，拉出来的分支一旦rebase dev，就意味着此分支寿命终止。不然就会来回rebase。
