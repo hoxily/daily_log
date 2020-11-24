@@ -1,0 +1,15 @@
+2020年11月24日，星期二，杭州
+
+最近一直在下雨。
+
+lib_webgl项目使用了一个插件来规范代码的缩进。插件的名字叫 prettier，可以在Visual Studio Code的插件商店里找到。
+
+它的使用方式是安装并启用后，设置Visual Studio Code的默认的formatter为此插件。即在settings.json里添加如下配置项：
+
+"editor.defaultFormatter": "esbenp.prettier-vscode"
+
+在lib_webgl项目中新建一个ts或者js文件，使用Format Document指令来调用prettier。这时就会自动应用2格空格缩进等其他格式。状态栏里的Prettier就会打上勾。只要格式化过一遍，并关闭重新打开，Visual Studio Code就会自动识别此文件的缩进。
+
+prettier会根据当前所要格式化的文件所在路径，一步步往上找，找到项目根目录下的prettier.config.js时就会应用那里面配置的格式化方案。
+
+注意：VSCode创建的全新的js或者ts文件，默认是采用的4空格缩进，也就是VSCode的编辑器默认配置。prettier并不能接管这里。所以需要在写若干行代码之后，使用Format Document功能调用prettier。
