@@ -9,3 +9,13 @@ BUG描述里所谓的跨版问题，其实对应于代码里创建DecalGeometry�
 简单过了一遍LtDecalGeometry，将js改写为ts，并添加上帮助理解的中文注释。
 
 将LtDecalGeometry理顺，知晓decalSize里的x，y，z的含义分别是什么，就能扩展成从多个LtMesh构造投影印花的方案了。如此一来也就实现了跨LtCloth的投影印花。
+
+遇到了一个typescript的坑。它不支持简单地在A Class里引用B Class的function，引用的function里面的this指针指向不正确了。所以使用了一个变通的方法，把要调用的函数包装成一个interface，interface里声明了方法原型，让Class A持有这个interface对象即可。
+
+在typescript声明方法原型可以用如下的语法：
+
+interface IExample {
+    getIntersectedClothes: (sphere: Sphere) => LtCloth[];
+}
+
+在这里，IExample接口声明了一个名叫getIntersectedClothes的函数，这个函数接收一个Sphere类型的参数，返回LtCloth数组。
