@@ -1,0 +1,14 @@
+2020年11月27日，星期五，杭州
+
+当javascript的函数要求若干个参数，而实际调用时却不提供时，在函数体内部的代码拿到的参数实际值是undefined。所以调用typescript里的
+
+constructor(decalInfo: DecalInfo, dataId?: ID, getIntersectedLtClothesProvider?: IGetIntersectedLtClothesProvider)
+
+这个函数时，如果不想提供dataId参数，而想要提供getIntersectedLtClothesProvider参数，那么可以在第2个参数位置填undefined，即：
+
+new Decal(decalInfo, undefined, this);
+
+----
+
+平台的印花功能实现，使用了引用sco模型的方式。取了sco模型的materialIndex、faceIndex等模型数据。从而在Style3D软件上一键更新后，存储于UserProduct里的印花丢失了定位信息，或发生错乱。
+
