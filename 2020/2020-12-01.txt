@@ -1,0 +1,18 @@
+2020年12月01日，星期二，杭州
+
+在typescript里，使用
+enum DecalProjectionType {
+    SingleLtCloth = 0,
+    MultipleLtCloth = 1
+}
+这样的方式定义的枚举类型，在编译为javascript后，直接使用console.log(DecalProjectionType)输出，可以看到它成了一个Object对象，正好就是
+{
+    0: "SingleLtCloth",
+    1: "MultipleLtCloth",
+    SingleLtCloth: 0,
+    MultipleLtCloth: 1
+}
+
+----
+
+使用tortoisegit做rebase时，如果确信自己所做的连续提交的改动都是将要应用到某个分支上的。那么即使在弹出的Rebase窗口里，列出了不相干的commit，也需要手动将它们从pick状态改为Skip。直接忽略即可。然后在rebase过程中可能会出现冲突。如果自身的改动量比较少，而base分支改动比较多，那么可以先全盘接受base分支，然后手动将feature分支的改动应用上去。然后点击commit按钮。
