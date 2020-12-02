@@ -43,3 +43,7 @@ http://www.adriancourreges.com/blog/2017/05/09/beware-of-transparent-pixels/  �
 https://github.com/urraka/alpha-bleeding  这个github上的离线Alpha-Bleeding预处理工具。可以将GPU Bilinear Filter会出问题的png图片处理成GPU Bilinear Filter兼容的结果。
 
 不过作者在 issues/4 里提到使用Premultiplied-Alpha方案会更好。
+
+----
+
+2020\2020-01-11.txt 的日志里提到了万园处理明线变暗的bug。差不多正是上面提到的在生成mipmap时的bug。那里面的链接采用了PremultipledAlpha（associated alpha）的方法来做缩放，先乘进去alpha，然后常规缩放，最后除以alpha来还原RGBA颜色。
