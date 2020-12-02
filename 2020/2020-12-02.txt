@@ -1,1 +1,45 @@
 2020年12月02日，星期三，杭州
+
+昨晚周总带我们聚餐。拱苑路121号~123号的活虾堂。
+
+剔除背面的三角面好做。但是会因为它而引起一些问题。
+1. 非平面的表面投影，不做背面剔除之前缝隙并不明显。使用背面剔除之后，缝隙就出来了；
+2. 更加容易在凸起或者凹下的凸起的表面得到一个平行于广大表面的投影体，从而造成大部分三角都被剔除，印花几乎消失了。当然这时用户不松手还是可以继续拖动印花的。但是如果这时松手，那么就会比较难再次点中印花并拖动。
+
+在OpenGL坐标系下，依然是以+y作为向上方向，+z作为向前方向，所以(1, 0, 0)这个方向就变成了向左的方向。
+
+----
+
+OSS在使用x-oss-process=image/resize,m_fixed,h_256,w_256,limit_0 时，对一个不含白边的边界透明的主要颜色是黑灰色的png图作缩放后，缩放结果的png图产生了肉眼可见的白边。
+例子：https://file.style3d.com/website/Company/5e6b4615-2b25-3e24-8eb7-45b07ae08515/resource/product/models/20201125164434_8786_BDM3WD270/IrnBsCYFvseebnC38lQgxipk/textures/125.png
+加上缩放后：https://file.style3d.com/website/Company/5e6b4615-2b25-3e24-8eb7-45b07ae08515/resource/product/models/20201125164434_8786_BDM3WD270/IrnBsCYFvseebnC38lQgxipk/textures/125.png?x-oss-process=image/resize,m_fixed,h_256,w_256,limit_0&t=js2019
+
+对于PNG图的透明像素，虽然alpha分量为0，但是rgb分量依然是有颜色的。也就是白底图片擦成透明还是黑底图片擦成透明的选择。甚至还可能是其他的颜色作为底色，只是alpha分量为0，看不到。
+
+----
+
+使用libunity打开这个图案边缘发白的款式，发现了Unity放大镜的bug。放大镜的3重UIRounded是有问题的。不该发白的明线边缘都发白了。
+
+这里的图案不是真的图案，而是已经转换成普通Mesh的图案。
+
+----
+
+在 ResourceManager.GetTexture 函数传入的回调里，读取了一下TextureScale缩入的256x256大小的125.png，发现是没有白边的。但是显示在Game视图里却有白边。
+
+使用GetPixels32(mipLevel)函数获取从0~Texture2D.mipmapCount的全部mipmap，EncodeToPNG数据存到磁盘上查看，可以发现比256x256小的mipmap图里都是含有白边的。
+
+----
+
+用Google搜了一下网上的已有文章，果然也有人遇到png图白边的问题。
+
+https://forum.unity.com/threads/white-rims-around-transparent-textures-an-analysis.168532/  这篇文章给出了结论：千万不要忽略100%透明的像素的RGB值。不要直接保留新建图层时的白底，或者简单地设置成黑色。这些像素需要设置成边缘像素的扩展颜色。
+
+https://answers.unity.com/questions/10302/messy-alpha-problem-white-around-edges.html?_ga=2.194306733.1468406255.1606914989-509563785.1602559590  这个问答里的Eric5h5的回答，给出两个种（白底+黑色有效图案、黑底+黑色有效图案）png图，在四种filterMode, mipmap组合下的效果。
+
+http://www.adriancourreges.com/blog/2017/05/09/beware-of-transparent-pixels/  这篇文章详细讲解了GPU Bilinear Filter模式下的原理，并使用了透明红十字图片，ALPHA之外的RGB通道分别为绿、蓝、红的Sprite图。一旦Sprite没有跟屏幕的分辨率PixelPerfect，GPU就会直接做双线性插值，从而得到绿边、蓝边的bug。
+
+好吧。原来早就有人研究过这个问题了。并把它取名为Alpha-Bleeding现象。
+
+https://github.com/urraka/alpha-bleeding  这个github上的离线Alpha-Bleeding预处理工具。可以将GPU Bilinear Filter会出问题的png图片处理成GPU Bilinear Filter兼容的结果。
+
+不过作者在 issues/4 里提到使用Premultiplied-Alpha方案会更好。
