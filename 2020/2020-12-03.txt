@@ -7,9 +7,20 @@ Date: 2020/1/11 21:46:25
 Message:
 perf: Process alpha channel specifically when generate image's mipmaps to avoid bad color
 
-----
-Modified: package.json
-Modified: src/engine/LtTextureLoader.ts
-Deleted: types/pica.d.ts
-Modified: yarn.lock
+查看当前的代码可以发现，其实遇到png图的时候，是已经在应用万园的透明png缩放处理了。那么问题出在哪里呢？
 
+将125.png按照原图下载下来，并不使用oss的缩放，而是使用GIMP软件将125.png从314x325缩放为256x256，并且在GIMP里检查没有白边。将这张无白边的图放在项目的public/static/lib/img下，在LtTextureLoader里遇到125.png时截获替换为public/static/lib/img下的这张无白边的图。结果最后渲染出来的结果里还是出现了白边。虽然比使用OSS的缩放白边要弱一些，但是终究是有的。对于LtTextureLoader处理png透明图时，自行生成的mipmap，直接dump这些mipmap，发现确实没有白边。
+
+也就是说，白边不是出现在生成mipmap的过程中，而是GPU在以LinearMipmapLinearFilter方式采样纹理时产生的白边。
+
+对着这张GIMP缩放到256x256的无白边图进行AlphaBleeding处理，效果非常完美。完全看不白边了。我特意将这张256x256的png图，中心加上了4色的叉叉。可以明确地确认，它完全没有白边了。在这种情况下，把mipmap的生成工作交给GPU也没有问题了。不过，既然mipmap0都完整遍历了一遍，只有mipmap0三分之一像素数的其他mipmap再遍历生成一下也耗不了多少时间。
+
+但是问题又来了，那些使用了OSS缩放的图片，默认都带上了白边，AlphaBleeding不起作用。除非图片缩放也是自己处理。
+
+----
+
+磊哥给了另一个例子，差点让我以为AlphaBleeding不起作用。搞半天，原来还是OSS的锅。OSS根据缩放指令把 https://file.style3d.com/website/Company/3ed051ae-52f9-4c3a-8a53-22860bab4e3e/resource/decal/textures/xhr_20200924173122_6832_Among_the_stars_slogan_mystic_halloween_astronomy_girls_type-04/Among_the_stars_slogan_mystic_halloween_astronomy_girls_type-04.png 从2335x1971缩放到了2048x2048于是就带入了PNG图的黑底的颜色。完全是OSS缩放的锅。
+
+----
+
+不过还需要验证一下当初万园为了解决明线变暗问题是不是造AlphaBleeding就能解决。如果不能的话，还是要继续保留自行生成mipmap的步骤的。
