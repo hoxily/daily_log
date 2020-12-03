@@ -1,0 +1,15 @@
+2020年12月03日，星期四，杭州
+
+在lib_webgl的提交历史里找到了万园正确缩放含有透明成分PNG的commit：
+Revision: c85e9ff699a9ac050ff91ffd8f73632a1b5f7bcb
+Author: langlangking <shawn1997@qq.com>
+Date: 2020/1/11 21:46:25
+Message:
+perf: Process alpha channel specifically when generate image's mipmaps to avoid bad color
+
+----
+Modified: package.json
+Modified: src/engine/LtTextureLoader.ts
+Deleted: types/pica.d.ts
+Modified: yarn.lock
+
