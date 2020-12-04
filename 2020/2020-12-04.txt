@@ -1,0 +1,40 @@
+2020年12月04日，星期五，杭州
+
+遇到很奇怪的事。AlphaBleeding函数不起作用了。也许是我的dumpDataTexture的问题。它是把ImageData绘制到Canvas上再得到URLData数据的。如果toUrlData("image/png")自动将透明像素的颜色置为黑色，那么AlphaBleeding出来的颜色确实会丢失。
+
+直接查看AlphaBleeding过后的Uint8Clamped数据，里面的(0, 0)处的像素颜色确实是粉色的全透明。而resizeImage过后的数据dump出来，AlphaBleeding的处理结果又丢失了。
+
+所以还得自己实现resize算法。
+
+----
+
+尝试下载GIMP 2.10.14 的源代码。从scale-dialog.c一路搜索下去，最后跟踪到了它引用的gegl:scale-ratio。然后看不懂gegl的代码。
+
+然后又尝试去看opencv的cvResize，resize.cpp以及其它相关的resize源代码一大片，3000多行的代码，还是看不懂。即使跟着INTER_LINEAR等插值方式，还是看不懂。
+
+最后又把主意打到了python PIL库。Image.py边上好多不同格式的图片文件加载、保存模块。而Image.py本身又是老长老长的。跟踪到resize那里，只见它调了self.im.resize(size, resample, box)，然而我没有找到self.im.resize在哪里。
+
+直接尝试在python repl环境里把那张测试的png图，
+im = Image.open("origin.png");
+im2 = im.resize((2048,2048));
+im2.save("resize.png", "png");
+
+这样子得到的图片，在GIMP里打开发现混入了白、红、紫等各种杂色，分布在原本干净的图案周围。
+
+再试着在GIMP对原始图像执行Cubic缩放，竟然连GIMP也出现了杂色。
+
+----
+
+要不还是使用Point过滤吧。因为是取的NearestPOT，所以最近点采样也不会造成非常严重的走样。
+
+偶然发现先AlphaBleeding再BilinearScale也是OK的。
+当然先AlphaBleeding再NearestScale也是OK的，但是相比上一种方式，拉近看会发现走样的厉害。
+
+去除之前模仿downScaleWithAlpha将alpha乘进rgb的处理。结果竟然OK了。
+
+所以一共有三种排列方式是无边缘杂色的：
+1. AlphaBleeding -> BilinearScale，最优，因为相比NearestScale，没有明显的锯齿；
+2. AlphaBleeding -> NearestScale，有锯齿；
+3. NearestScale -> AlphaBleeding，有锯齿；
+
+而 BilinearScale -> AlphaBleeding 的排列方式，AlphaBleeding拿到的已经是错误的边缘数据了，所以无法解决边缘杂色问题。
