@@ -1,1 +1,7 @@
 2020年12月06日，星期日，杭州
+
+AlphaBleeding -> BilinearScale -> GPU GenMipmaps的方式，无法解决明线明显变暗的bug。老bug又重新OPEN了。
+
+也许可以试试在BilinearScale之后自行生成mipmaps？
+
+还是得使用原先的自行生成mipmaps的方式。效果一致了。
