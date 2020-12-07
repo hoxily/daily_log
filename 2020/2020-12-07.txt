@@ -17,3 +17,9 @@
 ----
 
 B哥，原名翁晓翔，钉钉昵称碧落，职位产品经理。B哥的嗓门特别大，正常的对话都感觉得是在吼。直到有一天，某个同事告诉我，B哥的耳朵听力不好。每一个异常现象的背后，都有它的原理。
+
+----
+
+使用Qt官网的open source版本安装器，qt-unified-windows-x86-4.0.1-online.exe，安装默认的组件，这样子的情况下是没有源代码的。只有include头文件和.dll .a文件。编译examples里的工程也没有问题。但是看不到Qt库的源代码。
+
+按照 https://www.cnblogs.com/Braveliu/p/7423629.html 的步骤，需要在自定义组件那里勾选Source Components。
