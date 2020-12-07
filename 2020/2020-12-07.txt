@@ -1,0 +1,11 @@
+2020年12月07日，星期一，杭州
+
+郭亮说style3d软件使用了QImage::scaled方法来做mipmaps的计算。每一层级mipmap都是以上级mipmap做scaled，而不是总是直接从原始大小scaled下来。
+
+在 https://github.com/qt/qtbase/blob/dev/src/gui/image/qimage.cpp 里搜索 QImage::scaled( 和 QImage::transformed( 可以找到相关的代码。
+
+我在现在的FixAlphaBleeding分支上，使用双线性过滤来取代原先的downScaleWithAlpha，发现白边还是有的，而且明线变暗的bug又出来了。也许跟我的先一步的AlphaBleeding处理有关系？实测验证得知，不做AlphaBleeding，白边更明显了。那么很显然，QImage::scaled里面肯定不是我现在的双线性过滤方式。
+
+----
+
+我以为从api改为传json object的改动工作量会很大，结果发现并不是很大。相关的自测消息类都改完了也没有多少改动量。这样的话，周末全贺菁和我来加班的话，应该一天就可以完成吧。
