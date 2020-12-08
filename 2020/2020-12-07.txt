@@ -22,4 +22,4 @@ B哥，原名翁晓翔，钉钉昵称碧落，职位产品经理。B哥的嗓门
 
 使用Qt官网的open source版本安装器，qt-unified-windows-x86-4.0.1-online.exe，安装默认的组件，这样子的情况下是没有源代码的。只有include头文件和.dll .a文件。编译examples里的工程也没有问题。但是看不到Qt库的源代码。
 
-按照 https://www.cnblogs.com/Braveliu/p/7423629.html 的步骤，需要在自定义组件那里勾选Source Components。
+按照 https://www.cnblogs.com/Braveliu/p/7423629.html 的步骤，需要在自定义组件那里勾选Source Components。新版本安装引导的界面与文章中有一些不同，仔细找找会在Qt5.x.x这样的特定Qt版本之下找到Sources组件，勾上就有源代码了。
