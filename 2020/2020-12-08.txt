@@ -1,0 +1,3 @@
+2020年12月08日，星期二，杭州
+
+其实装错了组件，可以不用Qt Setup完全重新安装的。只需使用安装目录下的MaintenanceTool.exe，即可更新、添加、删除组件。参见：https://doc.qt.io/qtinstallerframework/ifw-use-cases-update.html
