@@ -1,3 +1,22 @@
 2020年12月08日，星期二，杭州
 
 其实装错了组件，可以不用Qt Setup完全重新安装的。只需使用安装目录下的MaintenanceTool.exe，即可更新、添加、删除组件。参见：https://doc.qt.io/qtinstallerframework/ifw-use-cases-update.html
+
+光有源代码还不够。还需要安装Qt Debug Information Files组件。参见：https://www.cnblogs.com/dizf/p/12650533.html
+
+即使是把Qt Debug Information Files安装上，Qt Creator在断点调试时也不会进入Qt系统库的源代码里面。要不试试Visual Studio吧。
+
+Visual Studio的扩展商城里，Qt Visual Studio Tools扩展下载没有进度。是否可以离线下载完全后手动安装？
+
+点击详情，调转到了 https://marketplace.visualstudio.com/items?itemName=TheQtCompany.QtVisualStudioTools2019 页面。使用浏览器下载也是很慢的。试试迅雷加速。妙，十几秒就下载完成了。浏览器已提示无法下载，网络问题。
+
+Visual Studio 2019 + Qt Visual Studio Tools2019 + Qt库的方式已成功运行并且可以源码调试。比QtCreator顺利得多。
+
+总结一下，就是如下的要点：
+1. 使用Qt Setup或者安装后的根目录下的MaintenanceTools.exe来添加特定Qt版本的Sources组件以及Qt Debug Information Files组件。（建议先安装Qt特定版本的MSVC 2019 64-bit或者一起安装，否则可能Qt Debug Information Files会因为MSVC 2019编译库不存在，而忽略对应的库的pdb调试文件。）；
+2. 下载安装Visual Studio的扩展商城里的Qt Visual Studio Tools扩展。如果直接安装，卡在下载进度上。那么可以点击该插件的详情网页，使用迅雷下载该插件的vsix包，使用离线的vsix包直接安装扩展。
+3. 安装好Qt VS Tools插件后，可以在Visual Studio的菜单栏 扩展-> Qt VS Tools看到它。第二级菜单里有“Qt Options”，还有“Open Qt Project File(.pro)...”菜单。
+4. 使用Qt VS Tools菜单里的Qt Options，进入Qt路径配置界面，将第1步安装的MSVC库的路径添加到Qt Versions标签页下。路径例如：D:\Programs\Qt\5.15.2\msvc2019_64，Name会自动显示成msvc2019_64，Compiler会显示成msvc。由于是添加的第一个Qt编译环境，所以这个msvc2019_64也会成为Default选中的环境。
+5. 使用Qt VS Tools菜单里的“Open Qt Project File(.pro)...”项，打开Qt的Examples里的测试工程。插件将会自动将Qt的工程转换成Visual Studio的工程，可以在解决方案管理器里看到转换的结果。
+6. 在解决方案管理器里右键点击此解决方案，在弹出的菜单里选择“属性”，将会打开此解决方案的属性页，定位到通用属性里的调试源文件，添加一项“包含源代码的目录”，将前面安装的Qt版本的源代码路径加上，例如：D:\Programs\Qt\5.15.2\Src。
+7. 在示例项目里设置断点，启动本地Windows调试器，程序就暂停在断点处了，这时单步跟踪（Step into）就自动跳转到Qt的源代码了。
