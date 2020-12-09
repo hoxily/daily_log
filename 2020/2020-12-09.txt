@@ -1,0 +1,35 @@
+2020年12月09日，星期三，杭州
+
+我用简单的代码实现的预乘Alpha的结果竟然跟QImage的convertFormat不一致。从GIMP图上看，QImage的预乘Alpha精度更高一些。
+
+有两种normalize策略。一种是我用的，把 a / 255.0 .另一种则是cococs的策略， (a + 1) / 256。但是这两种跟QImage里的convertFormat还是不一样。
+
+耐着性子，在干巴巴的VSCode里搜索C++文本，发现qPixelLayout数组的构造处，看到storeARGB32_Premultiplied的setter函数，里面使用了qPremultiply函数。附近还有qUnpremultiply函数。
+
+也就是说，Qt已经将单个像素如何预乘Alpha的函数提取出来了。可以直接调用这个函数来验证。后面可以改写成ts。
+
+由于qPremultiply与qUnpremultiply里面使用了许多位运算，在C/C++下还行，但是移植到ts可能有一些难度。
+
+----
+
+假设已解决convertFormat，剩下的代码就是如下面所示的调用栈结构了。在transformed函数里计算出了目标宽高，然后调用smoothScaled。
+
+Qt5Guid.dll!qt_qimageScaleAARGBA_up_xy::__l2::<lambda>(int yStart, int yEnd) 行 359 C++
+Qt5Guid.dll!multithread_pixels_function<void <lambda>(int, int)>(QImageScale::QImageScaleInfo * isi, int dh, const qt_qimageScaleAARGBA_up_xy::__l2::void <lambda>(int, int) & scaleSection) 行 327 C++
+Qt5Guid.dll!qt_qimageScaleAARGBA_up_xy(QImageScale::QImageScaleInfo * isi, unsigned int * dest, int dw, int dh, int dow, int sow) 行 368 C++
+Qt5Guid.dll!qt_qimageScaleAARGBA(QImageScale::QImageScaleInfo * isi, unsigned int * dest, int dw, int dh, int dow, int sow) 行 377 C++
+Qt5Guid.dll!qSmoothScaleImage(const QImage & src, int dw, int dh) 行 1022 C++
+Qt5Guid.dll!QImage::smoothScaled(int w, int h) 行 4680 C++
+Qt5Guid.dll!QImage::transformed(const QTransform & matrix, Qt::TransformationMode mode) 行 4835 C++
+Qt5Guid.dll!QImage::scaled(const QSize & s, Qt::AspectRatioMode aspectMode, Qt::TransformationMode mode) 行 2833 C++
+QtQImageAnalyse.exe!GenerateMipmaps(QImage * image, QString directory, QString namePrefix) 行 87 C++
+QtQImageAnalyse.exe!TestGenerateMipmaps() 行 104 C++
+QtQImageAnalyse.exe!main(int argc, char * * argv) 行 192 C++
+[外部代码]
+
+int dstWidth = int(scaleX * srcWidth + 0.9999);
+int dstHeight = int(scaleY * srcHeight + 0.9999);
+
+而scaleX、scaleY来自于
+qreal scaleX = (qreal)newSize.width / srcWidth;
+qreal scaleY = (qreal)newSize.height / srcHeight;
