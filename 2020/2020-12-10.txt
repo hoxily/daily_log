@@ -1,0 +1,36 @@
+2020年12月10日，星期四，杭州
+
+阅读Qt代码的过程中就对位运算有顾虑。从 https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Bitwise_AND 上看，Javascript的位运算精度只有32位。而当前调试使用的是64bit的dll，很多地方都走的64bit版本的函数。从方便移植的角度看，我应该使用32bit的库来调试。
+
+另外，c++里面整型有signed与unsigned差异，这个会影响到右移的运算。感觉没有信心能保证，直接复制的运算式子，在javascript中还是一样的运算逻辑。得有一种办法，严格验证移植到c++的位运算与c++是一致的。这样一来，移植过程中的心理负担就会少了很多，专注于其他的地方。
+
+昨天提到的调用栈顶部scale_up_xy，里面其实是构造了一个c++昵名函数，然后提交给多线程加速处理函数进行任务切分：multithread_pixels_function。如果为了简单化，可以参照里面的条件编译和if条件，忽略任务切分的部分，直接调用
+scaleSection(0, dh);//从0到dh一次性干完。
+
+另外还有一个复杂的地方，就是它为了方便任务切分，把缩放任务需要操作的数据首地址进行了整理，做成了一个名为QImageScaleInfo的结构。如果确认不做任务切分，其实这里可以简化掉。但是得首先理解它所做的QImageScaleInfo构造在干什么先。
+
+----
+
+直接抄 QRgb qPremultiply(QRgb x) {
+    const uint a = qAlpha(x);   
+    uint t = (x & 0xff00ff) * a;
+    t = (t + ((t >> 8) & 0xff00ff) + 0x800080) >> 8;
+    t &= 0xff00ff;
+
+    x = ((x >> 8) & 0xff) * a;
+    x = (x + ((x >> 8) & 0xff) + 0x80);
+    x &= 0xff00;
+    return x | t | (a << 24);
+} 函数其实很不方便。
+
+由于在js里rgba各个分量是分离的。还得先拼成QRgb（unsigned int)，然后调用qPremultiply。但是从原则上来说，预乘这个操作对于r、g、b三个分量是统一的，而a分量保持不变。所以可以只分析qPremultiply函数的下面一段，而不用管上面这一段的同时操作r、b分量。另外，rgb中的任何一个通道预乘的结果也不应该影响到其他的两个分量，所以可以放心截断。
+
+----
+
+使用输出png图片的方式，简单地验证了一下移植到Typescript的convertToPremultiply和convertToUnpremultiply的正确性。从而得知QImage在保存ARGB32_Premultiplied格式时，会先转换成ARGB32再保存PNG图。
+
+convert: 原图
+pma: 原图经过alpha预乘处理，但是假装自己是ARGB32直接保存PNG图
+pma-back: pma图经过Unpremultiply颜色换算后的结果。
+
+这三种图在cpp和ts两种语言下生成的结果，经GIMP打开肉眼比对无误。
