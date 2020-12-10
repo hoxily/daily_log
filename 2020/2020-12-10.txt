@@ -34,3 +34,7 @@ pma: 原图经过alpha预乘处理，但是假装自己是ARGB32直接保存PNG�
 pma-back: pma图经过Unpremultiply颜色换算后的结果。
 
 这三种图在cpp和ts两种语言下生成的结果，经GIMP打开肉眼比对无误。
+
+----
+
+遇到很奇怪的事情。MS Edge打开钉钉网页版会特别慢。一直加载不出来。但是换成Google Chrome却又不是正常加载速度。
