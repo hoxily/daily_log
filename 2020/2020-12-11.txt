@@ -1,1 +1,25 @@
 2020年12月11日，星期五，杭州
+
+nodejs可以借助chrome浏览器的devtols来调试。
+tsc编译完成后，执行如下的指令：
+node --inspect-brk build\index.js
+即可从index.js启动程序，并且自动暂停在第一行代码。并且程序输出了如下的提示：
+Debugger listening on ws://127.0.0.1:9229/df44135c-e5ed-44a6-9386-b683daa92b67
+For help, see: https://nodejs.org/en/docs/inspector
+接下来使用F12打开chrome任意tab页的DevTools窗口，在顶部找到Open dedicated DevTools for Node.js按钮，点击弹出待调试列表，即可开始调试。
+
+----
+
+遇到在up_xy缩放下，输出的png全黑的bug。因为storeColor函数里在存储a分量时，只是写成
+buffer[ptr + 3];
+而不是
+buffer[ptr + 3] = a;
+typescript编译完全没有报错。如果是在c#里的话，会提示buffer[ptr + 3] 访问变量没有保存。
+编写ts时需要小心。
+修了存储的问题，但是发现输出的结果还是全黑的png。
+
+也许256x256放大到1024x1024的数据量太大了。可以搞一个小一点的数据集，一步步跟踪调试。
+
+也许还需要检查一下对TypedArray的内容访问是否越界了。默认情况下，TypedArray越界访问只是返回undefined，而越界写入也没有任何效果。
+
+在loadColor与storeColor函数里加上越界检查，但是执行过程中并没有发生越界。还可能会是其他什么原因呢？
