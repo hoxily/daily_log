@@ -1,1 +1,6 @@
 2020年12月13日，星期日，杭州
+
+终于TextureScale还是栽在了girls_type-04.png上。可怕的黑边出现了。
+经过检测发现，使用QImage的缩放，将原图从2335x1971缩放到2048x2048时，图案的边缘是非常平滑的。而移植的TextureScale.ts结果则是在图案边缘处有明显的段落感。
+
+怀疑是计算calcAPoints时，里面的uint64溢出了，计算出来的xapoints和yapoints在某种情况下不对。
