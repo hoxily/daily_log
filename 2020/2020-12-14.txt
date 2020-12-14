@@ -1,0 +1,19 @@
+2020年12月14日，星期一，杭州
+
+费力把 https://github.com/dcodeIO/IntN.js/blob/master/src/lib.js 的javascript转成typescript，暂时没有用上。
+
+然后单独提取calcAPoints函数，将c++计算结果放到ts里，直接比对，发现两者是完全匹配的。说明问题并不是如我猜测的那样出在apoints的计算值上。
+
+那就只能先把 xpoints 和 ypoints 比对一下了。
+
+----
+
+转写IntN.js的过程中，遇到一个javascript特有的类型问题。从表面上看，跟泛型很像，但是实际上它并不符合泛型的使用条件。
+
+makeIntN函数返回的是一个可以new的function。相当于在函数里返回了一个新的类型。从而可以做到如下的用法：
+const Int32 = makeIntN(32);
+let i32 = new Int32([0], false);
+const Int64 = makeIntN(64);
+let i64 = new Int64([0], false);
+
+然而其中的Int32与Int64的差别，从内部数据来看只有数组长度的差别，无法套用泛型里面的类型变化的概念。并没有类型的变化，变得是其中的长度。从makeIntN到newInt32，虽然可以压缩到一个构造函数里，但是却会缺失makeIntN函数创建的中间类型。
