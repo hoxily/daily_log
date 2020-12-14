@@ -17,3 +17,11 @@ const Int64 = makeIntN(64);
 let i64 = new Int64([0], false);
 
 然而其中的Int32与Int64的差别，从内部数据来看只有数组长度的差别，无法套用泛型里面的类型变化的概念。并没有类型的变化，变得是其中的长度。从makeIntN到newInt32，虽然可以压缩到一个构造函数里，但是却会缺失makeIntN函数创建的中间类型。
+
+----
+
+经过检查，发现xpoints,ypoints,xapoints,yapoints的计算都是OK的。最终问题定位到scaleAARGBA_down_x_up_y函数，里的一个0xffff常量写成了0xff，改过来之后，那张girls_type-04.png图的缩放到2048x2048的效果就跟QImage的缩放效果一致了。
+
+----
+
+遇到一个奇怪的兼容性问题。TextureScale结合AlphaBleeding处理的图案黑边问题，在手机上效果已经接近完美了。在我的iPhone X上正常显示。然而在雷哥的android机和磊哥的iphone上会直接显示成黑块。连接Safari远程调试，可以发现报了webgl的错误，说是texImage2D函数要求的是TypeUint8.可能是我代码里创建的Uint8ClampedArray不支持？
