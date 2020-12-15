@@ -1,0 +1,10 @@
+2020年12月15日，星期二，杭州
+
+图案黑块的问题找到了。
+根据 https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/texImage2D 文档上的说法，当pixels参数传入的是一个ArrayBufferView时，如果type参数给的是gl.UNSIGNED_BYTE，那么pixels必须是Uint8Array。iphone x兼容Uint8ClampedArray，但是雷哥和磊哥的手机不兼容Uint8ClampedArray，所以就显示成黑块了。
+
+另外还发现一个坑的地方。threejs的DataTexture类型从本质上是以TypedArray方式上传数据的。跟ImageData类型完全没有关系，仅仅是借用了ImageData的三个字段：data,width,height。我却因为DataTexture.d.ts定义里的ImageData以及LtTextureLoader里创建mipmaps时使用ImageData，误以为DataTexture需要的是ImageData对象。而ImageData按照VSCode interface提示，其data字段是Uint8ClampedArray。从而造成一直以来的误解。
+
+另外，在使用DataTexture应该先看看它的文档，https://threejs.org/docs/index.html#api/en/textures/DataTexture 以及其 js 源代码。避免坑点。
+
+从 three-src\renderers\webgl\WebGLTextures.js 里看，uploadTexture时，遇到isDataTexture标记的Texture时，里面也根据不会去管mipmaps的每个元素对象本身，而是只取了这些元素对象的data字段。果然只是套了个ImageData的壳而已。
