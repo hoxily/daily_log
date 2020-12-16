@@ -1,0 +1,13 @@
+2020年12月16日，星期三，杭州
+
+最近气温降到零度上下。冷得很。早上起不来了。最近游泳馆的套餐也到期了。大早上太冷，懒得去早场。运动量不足。感觉身体容易累。需要找出一个替代游泳的健身办法来。
+
+做梦梦中好像找到了LtTextureLoader.makeTexture里乱糟糟的代码的整理之法。
+
+尝试了一下仅给baseColor的纹理处理成PMA，然后在shader里将采样出来的color换算回非PMA颜色。结果那个图案黑边的测试用例出现了白边。我以为出问题的地方只是纹理采样过程中Linear Filter造成了颜色溢出。结果除以alpha还原回去的时候，出现了白边。相当于除以一个很小的但非零的值造成的。
+
+采样后立即还原RGB分量是行不通的。那就只能从Blend上改。但是目前代码里有很多颜色加、乘的操作，不知道转成预乘Alpha后还对不对。
+
+主要的问题在于，PMA颜色不单单是直接绘制到底层Buffer上去，而是还要经过一个光照计算的过程。对于Unlit的shader，使用PMA倒是挺合适的。
+
+一开始我怀疑是计算unpremultiply算得不对。抄了Google filament的shader里的unpremultiply转换函数，还是有白边。https://github.com/google/filament/blob/132e94b3bbd5834afd6f52ad6a10d80613e6b69a/shaders/src/common_graphics.fs#L23
