@@ -7,4 +7,4 @@
 
 另外，在使用DataTexture应该先看看它的文档，https://threejs.org/docs/index.html#api/en/textures/DataTexture 以及其 js 源代码。避免坑点。
 
-从 three-src\renderers\webgl\WebGLTextures.js 里看，uploadTexture时，遇到isDataTexture标记的Texture时，里面也根据不会去管mipmaps的每个元素对象本身，而是只取了这些元素对象的data字段。果然只是套了个ImageData的壳而已。
+从 three-src\renderers\webgl\WebGLTextures.js 里看，uploadTexture时，遇到isDataTexture标记的Texture时，里面也根本不会去管mipmaps的每个元素对象本身，而是只取了这些元素对象的data字段。果然只是套了个ImageData的壳而已。
