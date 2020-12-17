@@ -21,3 +21,26 @@ bool, bvec2, bvec3, bvec4 统一用 genBType 代替；
 double, dvec2, dvec3, dvec4 统一用 genDType 代替；
 
 另外，mat 对应于任意维度的单精度矩阵；dmat 对应于任意维度双精度矩阵。
+
+----
+
+折腾了一下在现有的lib_webgl项目上，针对baseColor类型的纹理，遇到png时仅变换到预乘alpha状态，而不还原回非预乘alpha状态，直接在shader里处理。
+
+昨天已经试过了除以alpha分量来还原rgb分量，但是会出现神奇的白边。从原理上证明了，若想要进行PBR光照计算，只能将预乘alpha的纹理颜色还原回非预乘状态。
+
+今天抛开还原的问题。仅针对找到的PMA介绍文章里的Blend公式做验证。也就是正常的
+color = Src_rgb * Src_a + Dst_rgb * (1 - Src_a)
+模式，因为纹理已经乘上了Src_a，所以Blend公式变成如下所示的计算过程：
+color = Src_rgb + Dst_rgb * (1 - Src_a)
+
+只需修改Style3DDecalMaterial构造函数，添加如下参数：
+blendDst: THREE.OneMinusSrcAlphaFactor,
+blendSrc: THREE.OneFactor,
+blending: THREE.CustomBlending // 必需要设置blending为CustomBlending，才能使上面的这两项生效。
+
+测试结果很奇怪依然有白边。找到很久，发现canvas画出的framebuffer变得透明了，透出来了canvas所在的div的background-color（也就是白色）。
+于是又添加了两个控制Alpha的Blend系数：
+blendDstAlpha: THREE.OneFactor,
+blendSrcAlpha: THREE.ZeroFactor，
+这两个系数的意图是让印花底下的面料写入的alpha保持为原先的1.0，然后印花片元输出的alpha乘上0相当于忽略掉。
+但是结果还是很奇怪，出现了白边。还有更加神奇的地方。当把这个叠在面料上会出现白边的印花，拖到另一个印花上时，会发现边缘的白边接近消失。就像是已经画过一遍印花的地方，不会再透出白色来一样。
