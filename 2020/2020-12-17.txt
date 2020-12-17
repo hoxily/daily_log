@@ -1,0 +1,23 @@
+2020年12月17日，星期四，杭州
+
+在百度首页打开DevTools，可以在Console里看到它们的招聘广告。里面的宣传文字好像更新了，成了现在这段：
+“
+每一个星球都有一个驱动核心，
+每一种思想都有影响力的种子。
+感受世界的温度，
+年轻的你也能成为改变世界的动力，
+百度珍惜你所有的潜力。
+你的潜力，是改变世界的动力！
+”
+
+查看GLSL函数手册，比如 https://www.khronos.org/registry/OpenGL-Refpages/gl4/html/clamp.xhtml 这里的clamp函数，总是会遇到奇奇怪怪的参数类型：genType, genIType, genUType, genDType。
+
+其实在GLSLangSpec 4.40里的第8章 Built-in Functions有解释。
+
+float, vec2, vec3, vec4 统一用 genType 代替；
+int, ivec2, ivec3, ivec4 统一用 genIType 代替；
+uint, uvec2, uvec3, uvec4 统一用 genUType 代替；
+bool, bvec2, bvec3, bvec4 统一用 genBType 代替；
+double, dvec2, dvec3, dvec4 统一用 genDType 代替；
+
+另外，mat 对应于任意维度的单精度矩阵；dmat 对应于任意维度双精度矩阵。
