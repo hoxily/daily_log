@@ -1,0 +1,15 @@
+2020年12月21日，星期一，杭州
+
+用整型表达有理数的Q数值格式：https://en.wikipedia.org/wiki/Q_(number_format) 。
+
+定点数数学库：https://en.wikipedia.org/wiki/Libfixmath ，平台独立的定点数数学库，致力于帮助开发者在不含FPU或者FPU性能低下的平台执行高速的非整数数学计算。它提供了跟标准的 math.h 库相似的函数接口，可用于 Q16.16 定点数数值上。它只依赖以下两项：stdint.h以及一个支持64位整数运算的编译器（例如GCC）。
+
+我本以为可以在QImage缩放代码的注释里提到的参考库imlib2里能看到缩放代码的注释和原理说明。但是并没有。Github上有一个imlib2的fork， https://github.com/kkoudev/imlib2 。
+
+从 https://zhuanlan.zhihu.com/p/38493205 里对 cvResize INTER_AREA 的分析，其中1.1.3中有两张解释的图。一张是二维的像素格子图，缩小的倍数是整数倍时，正好就是目标图像的一个像素对应于原始图像中的一块区域里的像素值的平均值。另一张是解释缩小比例不是整数倍时，图里展示了1维的情况下，目标图像格子占据分数个原始图像格子的情况下。
+
+https://renderpool.net/blog/image-scaling/ 里提到了一下Box Sampling的原理，只有简单的几句话：This method takes the target pixel of a box on the original image, and samples every pixel within the box, ensuring that all input pixels contribute to the output.翻译过来就是：该方法在原始图像上每次确定一框像素，然后对方框范围内的所有像素做采样，确保所有的输入像素都对输出像素有贡献。
+
+结合上面两篇文章的说法，所谓的Area Sampling（Box Sampling），在处理4x4的原图缩放到3x3的目标图像时，反过来想象3x3的目标图像在左下角原点对齐后，拉伸至跟原图一样的大小。这时，3x3的目标图像格子纹路就会将原始图进行方框状的切分。即 dest[0, 0] = (1 * src[0, 0] + 1.0 / 3.0 * src[0, 1] + 1.0 / 3.0 * src[1, 0] + 1.0 / 9.0 * src[1, 1]) / 4;
+
+结合草稿纸上的划分示意图，这样子的加权平均Area Sampling看起来还是挺简单的。但是回头去看移植的代码，会发现看不懂。
