@@ -1,0 +1,62 @@
+2020年12月23日，星期三，杭州
+
+虽然我知道有骨骼动画这个东西，也知道在Unity3D如何使用。但是对于lib_webgl项目来说，却远远不止于此。
+性能问题
+    骨骼数量？
+    顶点数量受到模型精度限制，必然是很大的量级。
+通用性问题
+    是否都使用同一套骨骼？
+    如果都使用同一套骨骼，那么每一件款式模型的骨骼绑定操作由人工做还是能自动做？
+展示效果问题
+    部件款如何绑骨骼，如何使得部件与部件之间的接缝无缝衔接？
+    当人模与款式模型受同一套骨骼驱动时，如何确保人模与款式模式之间不穿模？
+
+----
+
+雷哥的意思是让FixAlphaBleeding里的算法和PNGJS都改写成wasm，并结合web workers才行。
+
+----
+
+emscripten 基础 https://emscripten.org/docs/getting_started/downloads.html
+
+选择在macmini打包专用机上做emscripten库的开发工作。虽然是远程，但是组内所有人员都可以用远程连接的方式连上去做开发。
+
+雷哥想要一个更优的PNG解析方案。
+需要确认一下当前的PNGJS库是否已经使用了webassembly。如果已经使用了webassembly，还这么慢。那么自己做也不见得能快多少。
+从node_modules下的pngjs目录下的js文件来看，并没有使用webassembly。并且依赖了nodejs的zlib模块。通过使用browserify包，将nodejs的库转换成浏览器上可以运行的js。看到的browser.js貌似就是浏览器化后的结果了。
+
+./emsdk install latest 命令需要从远程下载各种依赖数据。会非常得慢。
+emscripten还提供了docker的方案。也许docker的方案会更快一些？但是第三方依赖的c/c++库还能自定义吗？
+
+使用迅雷将emsdk install latest执行过程中提示的文件下载到了本地。但是直接丢到zips目录并没有用。
+所以尝试修改emsdk.py里出现的 https://storage.googleapis.com/ 链接，改成了本地的镜像站。发现还是不行。经过检查，原来emsdk_manifest.json 里还有 https://storage.googleapis.com/ ，也换成本地镜像站就OK了。
+
+我试着改一下emsdk.py，让它能支持镜像站点模式。
+
+它下载文件的时候都用了urlopen(url)，所以只要把这里出现的两处urlopen替换成镜像拦截版，就能将下载不下来的资源替换成本地的镜像链接。
+
+----
+
+由于emsdk默认下载的资源站点 https://storage.googleapis.com/ 非常缓慢，并且常常出现下载到一半直接断开的情况。
+所以此分支劫持了urlopen函数，将原emsdk.py里出现了两处urlopen调用替换成了支持镜像站功能的urlopen_mirror函数。
+
+在使用 ./emsdk 命令时，设置环境变量 EMSDK_MIRROR_URL 为有效的镜像站URL地址，那么所有的文件下载操作都会从镜像站下载。当然首先要求镜像站里已经有这些目标文件。
+
+下面以windows下安装 2.0.11 版本为例进行说明。
+
+1. git clone 此仓库，切换到mirror-url分支；
+2. 参考此文档，https://emscripten.org/docs/getting_started/downloads.html#platform-specific-notes ，安装必要的依赖；
+3. 添加EMSDK_MIRROR_URL环境变量，set EMSDK_MIRROR_URL=http://pc.hoxily.com/mirrors/ ；
+4. 执行 emsdk install 2.0.11 命令；
+5. 当出现文件下载时，控制台将会输出当前正要下载的文件URL地址，如果镜像站上暂时还没有此文件就会失败，否则会一路执行下去；
+6. 当某个文件因为镜像站暂无而导致下载失败时，将此文件地址复制到迅雷等第三方下载工具中进行下载；
+7. 将第三方工具中下载完成的文件放到本地镜像站对应的路径下，具体路径与EMSDK_MIRROR_URL环境变量中填写的地址相关；
+7.1. 例如EMSDK_MIRROR_URL设置为 http://pc.hoxily.com/mirrors/ ，下载的文件原始链接为 https://storage.googleapis.com/webassembly/emscripten-releases-builds/mac/4764c5c323a474f7ba28ae991b0c9024fccca43c/wasm-binaries.tbz2 ，那么下载下来的 wasm-binaries.tbz2 文件就需要放置到镜像站的 $WEB_ROOT/mirrors/storage.googleapis.com/webassembly/emscripten-releases-builds/mac/4764c5c323a474f7ba28ae991b0c9024fccca43c/ 目录下。
+8. 重新执行 emsdk install 2.0.11 命令；
+9. 重复4、5、6、7、8步骤，直到本次emsdk install 2.0.11所需的文件都已成功下载并安装；
+
+当你将所的文件都放到镜像站上，并成功安装时。另一位开发人员设置同样的镜像站，安装相同的版本时，将会一路顺畅地执行下去。不再需要第三方下载工具辅助了。
+
+----
+
+成功运行hello-world.c。
