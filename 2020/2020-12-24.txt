@@ -1,1 +1,12 @@
 2020年12月24日，星期四，杭州
+
+阳台的栏杆刷上了新的油漆。所以昨天晚上回家后，立即闻到了一股油漆味。很浓很浓。向房东阿姨请教一下，她说用关好门窗，用油烟机抽。但是我昨晚抽了一夜，早上起床还是浓浓的油漆味。
+
+将emscripten的基本教程和FAQ看了一遍。基本上需要如下几个步骤来使用wasm里的函数。
+emcc <c/c++源代码> -s MODULARIZE=1 -s EXPORT_NAME=YourModuleName -O2 --closure 1
+其中 --closure 1 需要配合 -O2使用。它的效果就是生成的wrapper js会非常精简。
+可以将这个wrapper js里的Module对象理解为调用函数的入口。如果没有wrapper js的Module对象，那么就需要手动操作WebAssembly对象，比较繁琐。
+另外这个Module并没有包办web workers的东西，二者并不相干。
+c++里的类和成员函数想要导出需要使用 emscripten.h 提供的导出专用指令并配合--bind编译指令参数，参见 https://emscripten.org/docs/porting/connecting_cpp_and_javascript/embind.html 。
+还有另一种WebIDL的导出方式。看起来更麻烦一些。
+c的函数想要导出，会比c++的要方便一些，参见 ccall 和 cwrap，https://emscripten.org/docs/porting/connecting_cpp_and_javascript/Interacting-with-code.html#interacting-with-code-ccall-cwrap
