@@ -1,0 +1,5 @@
+2020年12月25日，星期五，杭州
+
+我错了。按照ccall和cwrap的方式进行javascript与c代码的交互会更麻烦一些。因为相当于在裸着操作内存，也就是EmscriptenModule的HEAP8等内存块。
+
+使用embind的方式会更加方便一些。不用再去管-s EXPORTED_FUNCTIONS。而是应用EMSCRIPTEN_BINDINGS宏定义直接在c++源代码里导出。emcc编译时添加--bind参数即可。参见：https://emscripten.org/docs/porting/connecting_cpp_and_javascript/embind.html
