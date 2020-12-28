@@ -1,1 +1,13 @@
 2020年12月28日，星期一，杭州
+
+https://nodejs.org/docs/latest-v12.x/api/child_process.html#child_process_spawning_bat_and_cmd_files_on_windows  windows下bat和cmd文件还不是可执行文件。那么显然py也不是可执行文件了。
+
+没必要花时间在跨平台这个破事上。去干正事。
+
+在iPhone手机端上运行lib_webgl时，yarn dev的自动刷新功能并没有用。需要手动关闭标签页，重新打开，最新的代码才能生效。
+
+排查这个问题，http://192.168.31.3:8080/projects/TYYH/issues/TYYH-416?filter=myopenissues ， 的时候，在我的手机上是mipmap 0,1,2,3,4,5,6,7 中的mipmap 6给出了ArrayBufferView not big enough for request。而不是磊哥评论里发的最后一张mipmap。
+
+https://stackoverflow.com/questions/51582282/error-when-creating-textures-in-webgl-with-the-rgb-format stackoverflow上有人遇到类似的问题。大约是字节对齐的缘故。但是他是1x4像素时。而我这边是2x2像素时。
+
+最神奇的是，在windows 10 的 google chrome上是正常的。磊哥的mac os上也是正常。
