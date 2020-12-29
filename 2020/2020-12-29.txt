@@ -1,0 +1,21 @@
+2020年12月29日，星期二，杭州
+
+threejs的bug引起了CubeTexture在使用DataTexture RGB颜色格式时，2x2大小mipmap纹理上传失败的bug。
+
+原因：http://3d.linctex.com:58090/pages/viewpage.action?pageId=34081017
+
+WebGL: INVALID_OPERATION: texImage2D: ArrayBufferView not big enough for request.
+
+出现这个BUG原因是threejs在上传CubeTexture时，没有遵守CubeTexture六个面的纹理的数据对齐指令。DataTexture.unpackAlignment默认为1，而普通纹理的unpackAlignment为4.如果上传完普通纹理之后，GL状态保持每行像素4字节对齐的状态。这时上传每行像素1字节对齐的纹理数据就可能会出错。
+
+更具体一点就是：
+
+BUG中只有6个INVALID_OPERATION。都出现在mipmap 6处。这是因为我们要上传的是128x128大小的CubeTexture，RGB颜色格式，每个像素占用3字节。
+
+当大小处于 128x128, 64x64, 32x32, 16x16, 8x8, 4x4 时，每一行像素占用的字节数都是4的倍数。
+
+但是一旦大小缩小到2x2时，每一行像素占用的字节数就成了6个字节，由于当前GL状态要求4字节对齐，所以texImage2D接口要求每一行后面补充2个字节作为填充数据，一共就是16个字节，实际上传的ArrayBufferView却只有2*2*3 = 12 个字节。从而报了 ArrayBufferView not big enough for request 错误。
+
+----
+
+昨天中午和今天中午，5楼的自选快餐店都没有开门。听说5楼装修，回家过年去了。
