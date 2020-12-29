@@ -11,3 +11,35 @@ https://nodejs.org/docs/latest-v12.x/api/child_process.html#child_process_spawni
 https://stackoverflow.com/questions/51582282/error-when-creating-textures-in-webgl-with-the-rgb-format stackoverflow上有人遇到类似的问题。大约是字节对齐的缘故。但是他是1x4像素时。而我这边是2x2像素时。
 
 最神奇的是，在windows 10 的 google chrome上是正常的。磊哥的mac os上也是正常。
+
+----
+
+2020-12-28小组会议
+    晨会建议
+        黄宁海
+            要
+        罗元雷
+            不要。改为有需要时即沟通
+    任务分配问题
+        邹静磊的工作时间太过饱合，没有时间研究3D底层。
+    业务块
+        云渲染
+            scr数据组装
+            decal生成
+                与web端不一样，不支持专用shader渲染decal
+        全景
+        实时场景控制
+            实时阴影
+            envMap与软件同步
+        印花
+        面料
+        辅料
+        部件
+        通用格式解析变换
+    WebAssembly指导方向
+        单Module化
+            DracoModule合入Lt3DCoreModule，或者反过来
+            为了节省内存
+        编译脚本CMake化
+            方便控制输出到不同的平台。未来可能需要输出到PC服务器端
+            方便整合开源的项目。它们通常都有CMake脚本。
