@@ -5,3 +5,11 @@
 从目的论上来说，做的每一件事都是出于某种目的。也许我只是对吃喝玩乐的表面现象反感。却无法感受到深层的东西。
 
 反过来说，我觉得有意义的事情，在别人看来也只是流于形式的作秀，学不到什么东西。所以在做集体活动之前，还要先统一大家的认识？
+
+----
+
+typescript-eslint 安装指导文档：https://github.com/typescript-eslint/typescript-eslint/blob/master/docs/getting-started/linting/README.md
+
+typescript-eslint 的命名规范自定义方式：https://github.com/typescript-eslint/typescript-eslint/blob/v4.11.1/packages/eslint-plugin/docs/rules/naming-convention.md
+
+我发现eslint和typescript-eslint本身的每条lint说明对于深入理解javascript的特性有一些帮助。
