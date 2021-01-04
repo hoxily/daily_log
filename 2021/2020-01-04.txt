@@ -1,0 +1,28 @@
+2021年01月04日，星期一，杭州
+
+罗元雷给的minimal-cmake-emscripten-project参考工程（ https://github.com/adevaykin/minimal-cmake-emscripten-project ），按照readme上的说明进行编译通不过。报了如下的错误：
+
+[100%] Linking CXX executable ..\build.emscripten\client.js
+C:\Users\hoxil\workspace\emsdk\upstream\emscripten\em++.bat -s DEMANGLE_SUPPORT=1 --preload-file C:/Users/hoxil/workspace/minimal-cmake-emscripten-project/assets --bind @CMakeFiles\client.dir\objects1.rsp -o ..\build.emscripten\client.js @CMakeFiles\client.dir\linklibs.rsp
+wasm-ld: error: C:/Users/hoxil/workspace/minimal-cmake-emscripten-project/lib/assimp/lib-js\libassimp.so: machine type must be wasm32 or wasm64
+
+配合emscripten的faq（ https://emscripten.org/docs/getting_started/FAQ.html#why-do-i-get-machine-type-must-be-wasm32-or-is-not-a-valid-input-file-during-linking ），可以知道问题就出在这个github工程包含的预编译的libassimp.so文件。我现在使用的是emscripten 2.0.11版本。而minimal-cmake-emscripten-project工程已经是2016年的老工程。emscripten 1.39.0 之前的工程与之后的工程不再兼容。预编译的第三方库需要重新编译。
+
+一开始我以为这个so文件是linux平台的ELF文件。结果使用file 命令，它给出了如下的文件类型描述：
+
+$ file libassimp.so
+libassimp.so: LLVM IR bitcode
+
+而使用hexdump来查看文件头几个字节，内容如下：
+
+$ hexdump -C -n 32 libassimp.so
+00000000  42 43 c0 de 21 0c 00 00  20 b3 0e 00 0b 82 20 00  |BC..!... ..... .|
+00000010  02 00 00 00 13 00 00 00  07 81 23 91 41 c8 04 49  |..........#.A..I|
+
+由于我在windows环境下，所以使用了如下的命令：
+mkdir build
+cd build
+cmake -DCMAKE_TOOLCHAIN_FILE=..\..\emsdk\upstream\emscripten\cmake\Modules\Platform\Emscripten.cmake -G "NMake Makefiles" ..
+nmake
+
+虽然并不能通过编译。但是它提示了一个很重要的文件，emscripten\cmake\Modules\Platform\Emscripten.cmake
