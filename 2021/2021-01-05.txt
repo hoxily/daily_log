@@ -1,1 +1,14 @@
 2021年01月05日，星期二，杭州
+
+为了验证编译成jslib，最后在lt3dcore里集成的可行性。需要自己去编译assimp。
+看起来，将C/C++编译成wasm和编译成jslib是不一样的。前者已经是一个独立的WebAssembly模块了，使用时必然占用独立的内存块。而后者可以进一步整合。
+
+https://github.com/assimp/assimp  assimp的项目源码地址。这是他们的build说明，https://github.com/assimp/assimp/blob/master/Build.md
+
+minimal-cmake-emscripten-project 编译成功了。
+
+交叉编译第三方库为jslib的方案是可行的。
+
+而draco库的CMakeLists.txt针对EMSCRIPTEN环境做了特殊处理，大概不符合当前的需求。需要修改。
+
+交叉编译到emscripten环境的关键文件就是 emscripten\cmake\Modules\Platform\Emscripten.cmake 。
