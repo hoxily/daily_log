@@ -3,3 +3,23 @@
 我本以为draco跟zlib和lingpng一样，只要做成静态库，在lt3dcore主工程里使用embind导出就完事儿了。但是其实比这复杂得多。将webidl翻译成embind本身就要求对webidl很熟悉。还有现有代码兼容性问题。embind绑定的东西，用法可能与webidl有一些差异。
 
 另外，draco把decoder、encoder、animation encoder、animation decoder都做了区分。相当于每一个都可以独立成为一个WebAssembly。暂时先只考虑decoder吧。
+
+一旦按照draco readme上的要求，设置EMSCRIPTEN环境变量指向emscripten/tools的父目录，并指定CMAKE_TOOLCHAIN_FILE为Emscripten.cmake，那么这个时候生成的Makefile在make时将会一步到位生成wasm和wrapper js。显然这不是我们想要的。
+
+----
+
+模仿一步到位分支的生成方式，调整成生成静态库。
+然后又发现draco的头文件需要一个个列出来。太过繁琐。仔细找了找非EMSCRIPTEN情况下，它使用了file GLOB_RECURSE 的方式批量获取src下与.cc混合在一起的.h文件。然后制作成 install 目标。真是妙啊。
+
+----
+
+发现了一个奇怪的问题。nmake install 命令执行后，会将 build/draco_version.h 也复制到安装目录。但是明明CMakeLists.txt里描述的install规则，并不包含 build 目录下的文件。而是搜索的 src/draco 下的所有头文件。如下所示：
+
+file(GLOB_RECURSE draco_headers RELATIVE ${draco_root}/src/draco "*.h")
+foreach (filename ${draco_headers})
+    get_filename_component(file_directory ${filename} DIRECTORY)
+    install(FILES src/draco/${filename} DESTINATION
+        "${CMAKE_INSTALL_PREFIX}/include/draco/${file_directory}")
+endforeach()
+
+draco_version.h 是以 ../../build/draco_version.h 的 filename 呈现的。所以draco_version.h 被安装到了与include、lib平级的build目录下。
