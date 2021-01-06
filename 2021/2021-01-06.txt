@@ -1,0 +1,5 @@
+2021年01月06日，星期三，杭州
+
+我本以为draco跟zlib和lingpng一样，只要做成静态库，在lt3dcore主工程里使用embind导出就完事儿了。但是其实比这复杂得多。将webidl翻译成embind本身就要求对webidl很熟悉。还有现有代码兼容性问题。embind绑定的东西，用法可能与webidl有一些差异。
+
+另外，draco把decoder、encoder、animation encoder、animation decoder都做了区分。相当于每一个都可以独立成为一个WebAssembly。暂时先只考虑decoder吧。
