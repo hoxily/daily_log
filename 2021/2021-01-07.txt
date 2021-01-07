@@ -1,0 +1,14 @@
+2021年01月07日，星期四，杭州
+
+发现一件很奇怪的事情。
+我使用了draco的CMakeLists里设置CMAKE_C_FLAGS 和 CMAKE_CXX_FLAGS的方式来传递参数给emscripten。但是很明显--bind参数并没有生效。
+而draco的CMakeLists里还使用了set_target_properties(target PROPERTIES LINK_FLAGS flags)的方式来设置-s EXPORT_NAME
+
+问题是，我怎么知道哪些是comiple flags，哪些是link flags？
+只能是一个一个尝试了。
+
+----
+
+使用embind的方式无法满足当前的工程组织方式。理由如下：
+1. 当前draco、png、zlib等库是作为静态库的方式先编译，然后再编译主工程的代码和embind导出。尽量做到不改动第三方库的源代码，仅通过CMake配置来调整输出。embind如果想要导出DecoderBuffer类，Init函数不支持const char* 这样的 raw pointer，只能通过val的方式对接javascript，也就意味着需要改写draco的源代码。
+2. 即使EMSCRIPTEN_BINDS不是对draco原始类型直接导出，而是对新建的DecoderBufferWrapper类进行导出。但是那些需要传入draco DecoderBuffer对象的函数又是需要改写的，因为它们真正需要的是Wrapper类里面的DecoderBuffer对象。这样的连锁反应之下，还不如直接去修改draco源代码，嵌入embind兼容的代码。
