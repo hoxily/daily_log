@@ -1,0 +1,40 @@
+2021年01月08日，星期五，杭州
+
+IDL文件使用方式： https://emscripten.org/docs/porting/connecting_cpp_and_javascript/WebIDL-Binder.html#generating-the-bindings-glue-code
+
+`emscripten/tools/webidl_binder.py xxx.idl glue_name` 命令会生成glue_name.cpp 和 glue_name.js 两个文件。
+其中的 glue_name.cpp 因为是从 xxx.idl 得到，所以并不知道头文件的名字。需要再加一个glue_wrapper.cpp 文件，添加 glue_name.cpp 所需要的头文件，并在末尾添加 #include "glue_name.cpp"。这样就构成了一个完整的CPP文件。
+
+而其中的glue_name.js 需要使用 emcc 的 --post-js glue_name.js 参数来将它追加到编译输出的末尾。但是每个idl文件都会生成重复的Bindings utilities函数。摘取前两个函数如下：
+// Bindings utilities
+
+/** @suppress {duplicate} (TODO: avoid emitting this multiple times, it is redundant) */
+function WrapperObject() {
+}
+WrapperObject.prototype = Object.create(WrapperObject.prototype);
+WrapperObject.prototype.constructor = WrapperObject;
+WrapperObject.prototype.__class__ = WrapperObject;
+WrapperObject.__cache__ = {};
+Module['WrapperObject'] = WrapperObject;
+
+/** @suppress {duplicate} (TODO: avoid emitting this multiple times, it is redundant)
+    @param {*=} __class__ */
+function getCache(__class__) {
+  return (__class__ || WrapperObject).__cache__;
+}
+Module['getCache'] = getCache;
+
+所以这就要求主工程里最好只有一个idl文件来描述导出函数。
+
+----
+
+当前emcc编译出来的wrapper js会自动加载对应的.wasm文件。如果想手动加载这个.wasm文件，那么可以给这个moduleOverrides对象添加一个 wasmBinary 字段，对应的值就是 .wasm 的 ArrayBuffer。这样一来，就不会去加载wrapper js里的 .wasm文件，而是使用给定的 ArrayBuffer 数据来初始化。
+
+----
+
+draco 的 readme.md 上描述了如何对生成的webassembly wrapper js做closure编译。可以使用这个工具：https://www.npmjs.com/package/google-closure-compiler
+它编译完成后的特征很明显，如下就是官方的draco_wasm_wrapper.js的第一行：
+
+var $jscomp=$jscomp||{};$jscomp.scope={};$jscomp.ASSUME_ES5=!1;$jscomp.ASSUME_NO_NATIVE_MAP=!1;$jscomp.ASSUME_NO_NATIVE_SET=!1;$jscomp.defineProperty=$jscomp.ASSUME_ES5||"function"==typeof Object.defineProperties?Object.defineProperty:function(c,f,n){c!=Array.prototype&&c!=Object.prototype&&(c[f]=n.value)};$jscomp.getGlobal=function(c){return"undefined"!=typeof window&&window===c?c:"undefined"!=typeof global&&null!=global?global:c};$jscomp.global=$jscomp.getGlobal(this);
+
+即在文件头处出现一大堆的$jscomp引用。
