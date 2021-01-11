@@ -73,3 +73,34 @@ all in，全情投入额外的精力与时间思考工作，不遗余力的去�
 带动团队其他成员主动学习，营造团队学习氛围，使学习成为团队的一种习惯；以身作则，经验传承，倾囊相授,实现共同成长。
 榜样（Idol）
 共同成长3
+
+----
+
+cmake提供了一个add_subdirectory的命令，用于描述主工程所依赖的子工程关系。但是我这边的需求是还需要给每个子工程传递额外参数，暂时没找到相关的例子或者说明。
+也许他们直接把子工程的额外参数写死在CMakeLists.txt里面了。
+
+使用python改写了原来的batch脚本。可以支持macos系统了。
+
+----
+
+磊哥上次遇到的CMakeLists里FindPythonInterp 没有使用emscripten安装的python3，而使用macos系统已经标记废弃的python2. 在 cmake 安装目录找到解决方案了。
+
+D:\Programs\cmake-3.19.2-win64-x64\share\cmake-3.19\Modules\FindPythonInterp.cmake
+
+该文件开头指示 cmake 3.12 版本废弃了 FindPythonInterp，建议改为使用 FindPython3 或 FindPython2 或 FindPython。
+
+可行的示例代码如下：
+
+include(FindPython3)
+if (NOT Python3_FOUND)
+    message(FATAL_ERROR "Python3 required for builds, but cmake cannot find it.")
+endif ()
+
+execute_process(
+    COMMAND ${Python3_EXECUTABLE}
+    $ENV{EMSDK}/upstream/emscripten/tools/webidl_binder.py
+    ${lt3d_core_idl}
+    ${CMAKE_BINARY_DIR}/glue
+)
+
+在 FindPython3.cmake 里有说明如果找到的话，会设置哪些变量。
