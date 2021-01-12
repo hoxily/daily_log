@@ -3,3 +3,9 @@
 我发现了新的问题。使用python改写的build脚本，在package.json 的scripts里启动时必然是需要指定解释器的。而在windows下，python3依然称之为python。但是在macos下，python3称之为python3.真是讨厌。虽然windows版的python提供了版本选择工具py.exe，但是在macos下却没有这个东西。
 
 还有一种解决方案是编写python脚本时注意兼容性，同时兼容python2与python3.那就更麻烦了。不如干脆改成使用nodejs来编写脚本。
+
+虽然暂时在python脚本里使用到的功能是兼容python2和python3的，但是未来有可能在脚本里面添加不兼容的代码，有风险。
+
+换句话说，理应使用一个受控的脚本语言。但问题是，emsdk里面已经自带了python3.麻烦的是调用的命令名字却跟windows下不一样。
+
+算了，暂时就写兼容的脚本吧。未来python2终究是会被废弃的。
