@@ -1,0 +1,5 @@
+2021年01月12日，星期二，杭州
+
+我发现了新的问题。使用python改写的build脚本，在package.json 的scripts里启动时必然是需要指定解释器的。而在windows下，python3依然称之为python。但是在macos下，python3称之为python3.真是讨厌。虽然windows版的python提供了版本选择工具py.exe，但是在macos下却没有这个东西。
+
+还有一种解决方案是编写python脚本时注意兼容性，同时兼容python2与python3.那就更麻烦了。不如干脆改成使用nodejs来编写脚本。
