@@ -1,0 +1,22 @@
+2021年01月13日，星期三，杭州
+
+在配置VSCode C/C++扩展做Emscripten交叉编译时，遇到一些奇怪的事。
+
+1. intellisense提示找不到 bits/alltypes.h 头文件。
+但是我已经添加了 $EMSDK/upstream/emscripten/system/include 目录到C/C++扩展配置的includePath列表里。通过Google搜索才发现，原来 bits/alltypes.h 位于 $EMSDK/upstream/emscripten/system/lib/libc/musl/arch/emscripten 下。
+
+很意外。竟然是在lib下。
+
+2. intellisense提示Availability.h 找不到。
+
+这是在 Windows 10 上已经OK的情况，同样的配置换到macos上出现了这个问题。Google到的结果是说当前的VSCode C/C++插件对交叉编译环境控制不够彻底，从而导致在macos系统下，默认启用了 __APPLE__ 宏，导致找不到macos系统专属的Availability.h 头文件。
+
+github issues ( https://github.com/microsoft/vscode-cpptools/issues/1083 )问题讨论给了一个暂时的解决方案，就是利用C/C++扩展的 forcedInclude 配置项，添加一个vscode-fake.h 头文件，在此头文件里面将引起错误的宏定义去除掉。forcedInclude 的头文件会在处理任何C/C++文件之前被添加进去。vscode-fake.h 文件内容如下：
+
+#ifndef VSCODE_FAKE_H__
+#define VSCODE_FAKE_H__
+
+#undef __APPLE__
+// 你可以在这里添加其他引起错误的宏定义。
+
+#endif // VSCODE_FAKE_H__
