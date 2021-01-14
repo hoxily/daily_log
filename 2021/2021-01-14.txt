@@ -1,0 +1,10 @@
+2021年01月14日，星期四，杭州
+
+好像 webidl 导出的类型和常量都暴露在 Module 对象的第一层。即使在C++里，导出一个位于某个命名空间下的类型，会写成
+
+[Prefix="MyNameSpace::"]
+interface InnerClassName {
+    ...
+};
+
+这样子写是指示binder工具生成的cpp胶水代码去寻找MyNameSpace下的InnerClassName。对于Module本身来说，InnerClassName只会出现在顶层。
