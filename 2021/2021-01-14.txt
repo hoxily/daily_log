@@ -8,3 +8,7 @@ interface InnerClassName {
 };
 
 这样子写是指示binder工具生成的cpp胶水代码去寻找MyNameSpace下的InnerClassName。对于Module本身来说，InnerClassName只会出现在顶层。
+
+----
+
+将 google/draco 项目从 tag 1.3.4 版本开始，跟lib_webgl项目当前的draco_decoder.wasm做sha1sum hash值比对，发现lib_webgl项目以及style3d.com 线上使用的draco 版本真的是 1.2.4 版本，也就是 public/static/draco1240 文件夹所描述的版本号。
