@@ -1,1 +1,59 @@
 2021年01月15日，星期五，杭州
+
+emscripten针对webidl里面某个类型的静态函数生成的glue.cpp让我惊讶。
+
+// IDL描述
+interface Lt3DCoreVersionTracker {
+  [Const] static DOMString getDracoVersion();
+};
+
+// C++代码
+/**
+ * Lt3DCore 静态库版本跟踪器。
+ * */
+class Lt3DCoreVersionTracker
+{
+public:
+    /**
+     * 获取 draco 库的版本号。
+     * */
+    static const char* getDracoVersion();
+};
+
+像这样子的一个提供静态函数的类型，生成的 glue.cpp 代码长下面这个样子：
+
+const char* EMSCRIPTEN_KEEPALIVE emscripten_bind_Lt3DCoreVersionTracker_getDracoVersion_0(Lt3DCoreVersionTracker* self) {
+  return self->getDracoVersion();
+}
+
+由于是静态函数，emscripten要求在javascript端以下面这种方式访问：
+
+let v = Module.Lt3DCoreVersionTracker.prototype.getDracoVersion();
+console.log(v);
+
+这样一来就会出现 emscripten_bind_Lt3DCoreVersionTracker_getDracoVersion_0 函数传入的self指针其实是NULL。而self->getDracoVersion()语句并不会真的去对self指针解引用，从而引发异常。
+
+所以，这种奇怪的c++代码写法仅仅是奇怪的静态函数访问方式。总的来说，下面三种方式都可以正常访问到C++的类型的静态函数：
+
+void CallStaticClassFuncWithNullPtr()
+{
+    Lt3DCoreVersionTracker* ptr = nullptr;
+    // 这个 ptr 虽然是 nullptr， 但是并不会发生异常。
+    // 相当于根本没有对ptr解引用。
+    const char* v = ptr->getDracoVersion();
+    std::cout << v << std::endl;
+}
+
+void CallStaticClassFuncWithNonNullPtr()
+{
+    Lt3DCoreVersionTracker* ptr = new Lt3DCoreVersionTracker();
+    const char* v = ptr->getDracoVersion();
+    std::cout << v << std::endl;
+    delete ptr;
+}
+
+void CallStaticClassFuncWithClassNamePrefix()
+{
+    const char* v = Lt3DCoreVersionTracker::getDracoVersion();
+    std::cout << v << std::endl;
+}
