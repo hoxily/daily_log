@@ -57,3 +57,12 @@ void CallStaticClassFuncWithClassNamePrefix()
     const char* v = Lt3DCoreVersionTracker::getDracoVersion();
     std::cout << v << std::endl;
 }
+
+----
+
+libpng是C函数库。默认是使用fread、fwrite接口读取png图片。但是我们可以使用它提供的png_set_read_fn，使用自定义的数据读取函数。再使用C++类包装一下应该就差不多了。
+
+packages/libpng/libpng-manual.txt 是它的参考手册文档；
+packages/libpng/example.c 则是它的示例代码。
+
+应该不难。
