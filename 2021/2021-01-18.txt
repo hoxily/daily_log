@@ -1,1 +1,13 @@
 2021年01月18日，星期一，杭州
+
+draco decoder为了避免 DecodeBufferToMesh 函数直接返回 draco::Status ，在 wrapper 里里面改成了私有字段里含有一个 last_status_ 对象，然后调用完原始的 DecodeBufferToMesh 函数后，将得到的 last_status_ 对象取引用并返回。如此一来就变成返回 draco::Status* 指针了。
+
+相应的，虽然在javascript端拿到了Status包装对象，但是并不需要destroy它。
+
+经过对idl生成的glue.cpp和glue.js的分析，可以得知webidl中的交互数据类型主要就是3种：
+
+1. 基础数据类型；
+2. 对象指针、引用类型；
+3. 内存数据块；
+
+后面两种数据类型本质上还是借助基础数据类型来传递的。
