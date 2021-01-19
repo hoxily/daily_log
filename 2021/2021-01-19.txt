@@ -1,0 +1,22 @@
+2021年01月19日，星期二，杭州
+
+昨天在编写readPngDataFromMemory时遇到了不允许访问png_structp结构体指针里的io_ptr字段的问题。说是"不允许指针指向不完整的类类型"。使用F12快捷键跳转io_ptr字段会发现，转到了packages/libpng/pngstruct.h文件里面。但是之前预想的是libpng提前编译成静态库，不再依赖源码工程了才是。不免怀疑是不是单单把png.h pngconf.h pnglibconf.h 三个文件复制到 packages/include 里不够。还需要复制更多头文件。
+
+但是实际上并不是漏了头文件。而是我的用法错了。png.h 里面已经定义了如何获取 png_structp 结构体指针的io_ptr的方法。也就是说，我并不需要知道 png_structp 结构的细节，里面的各个字段是如何排布的。我只需要使用 png.h 里暴露出来的 png_get_io_ptr(png_structp) 函数就能获取到 io_ptr 字段。从而实现了对私有实现的封装。
+
+查看 archlinux 打包的libpng包（ https://archlinux.org/packages/extra/x86_64/libpng/ ），点击Package Contents展开文件列表，可以发现除了版本号后缀16，在include目录下确实只有 png.h pngconf.h pnglibconf.h 。
+
+----
+
+翻看 png.h 头文件，查找调用 png_read_png 之后该怎么取出图像数据的时候，看到了 Section 5: Simplified API。允许我们使用更加简单的API去读取PNG图片。就是它了。
+
+即使是使用复杂版本的png api，也是有一个不同的format转换成RGBA的过程。既然png_image_xxx 的api已经实现了，那当然是最方便了。
+
+----
+
+可以成功解出2x2.png图片，数据也无误。
+但是发现了一个奇怪的WrapperJS错误。那就是在Release模式下，glue.js经过 -O3 和 --closure 1 的编译后，WrapperObject的ptr字段被改名了。看起来应该使用Module.getPointer 来获取一个WrapperObject的指针。但是google/draco的DracoLoader并没有使用Module.getPointer，而是直接使用了WrapperObject.ptr字段。
+
+又因为 undefined == 0 为 false，所以恰好判定为非NULL指针。但是一旦真的在C++端返回NULL，这里依然还是 undefined == 0 为 false。
+
+如果为了兼容性，最好还是使用draco的closure compiler来生成。
