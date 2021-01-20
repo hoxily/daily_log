@@ -1,0 +1,11 @@
+2021年01月20日，星期三，杭州
+
+让py脚本同时兼容python2和python3不是一个好主意。还是参照macos的python命名规则，复制windows下python 3的安装目录下的python.exe，多一个 python3.exe 。这样就可以在package.json 和 说明文档里保持一致了。
+
+----
+
+写了一个对比pngjs和wasm读取png图的测试代码。运行在nodejs环境。结果发现wasm的耗时大约是pngjs的耗时的50%到70%左右。结果让我很惊讶。pngjs的效率并不低啊。
+
+但是为什么lib_webgl项目里使用pngjs解析那张40MiB的png图片的时候，要花费30秒左右呢？nodejs环境运行pngjs只需要1秒左右啊？
+
+一开始怀疑是用了pngjs的async接口的缘故。但是测试async版本的读取接口，耗时虽然比sync版本读取接口要多，但是依然是合理的范围。不存在30倍差距这样的问题。那么问题只能出在运行环境上了。pngjs使用了browserify工具让其能同时运行在nodejs环境和浏览器环境。
