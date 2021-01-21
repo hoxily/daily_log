@@ -37,3 +37,15 @@ let i8Array = new Int8Array(buffer.buffer);
 例如使用fs.readFileSync读取了一个81字节的png图片，但是上面的buffer.buffer是一个字节数为8192字节的ArrayBuffer，buffer.offset为7584.从而造成构造出来的Int8Array根本不是想要的。
 
 要使用 new Int8Array(raw.buffer, raw.byteOffset, raw.length) 来构造。
+
+----
+
+最近两天，磊哥的胃口不太好。昨天还捂着腰，说是腰疼。
+
+----
+
+使用 -Werror 将警告当错误处理后，编译器遇到警告就会当成错误报告，编译直接通不过。你可以采用白名单的方式，给特定的警告类型取消错误，即 -Wno-xxx 格式。
+
+比如em++报告 error: nested namespace definition is a C++17 extension; define each namespace separately [-Werror,-Wc++17-extensions]
+
+这时如果觉得这个警告是允许的，那么可以使用 -Wno-c++17-extension 参数，屏蔽这个错误。这在引用的头文件含有奇怪的错误，又不方便修改的情况下很有用。
