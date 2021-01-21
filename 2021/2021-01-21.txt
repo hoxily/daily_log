@@ -1,0 +1,39 @@
+2021年01月21日，星期四，杭州
+
+在lib_webgl项目的LtTextureLoader里添加计时器代码，直接跟踪每一个png图片使用pngjs async接口解码的效率。发现小图片的耗时还是很短的，只有0.5秒左右。而那张40.1MiB的png图片则是暴增到28秒多。
+
+使用DevTools的performance逐帧记录可以发现，它就是把nodejs的process模块等东西在浏览器上进行了模拟。
+
+进一步测试PNG.sync.read接口，直接报了 webpack:///./node_modules/pngjs/lib/parser-sync.js 里的
+if (metaData.interlace) 
+这行代码一个 “Uncaught TypeError: Cannot read property 'interlace' of undefined”。见了鬼，这个sync api在浏览器上竟然有bug。
+
+我以为是yarn dev打包的问题。关掉yarn dev，重新启动了yarn dev，但是还是报了这个错误。
+
+进一步跟踪发现，我在lt3d-core项目里使用的pngjs已经达到了6.0.0版本，而lib_webgl的pngjs是非常老的 3.4.0。也许6.0.0已经修复了sync api错误，甚至async api的性能问题也说不定。
+
+----
+
+使用 https://blog.csdn.net/qq_37939251/article/details/107832805 上描述的后面两种方法来更新依赖包，发现都没有效果。yarn upgrade-interactive --latest 根本没有列出pngjs。而yarn upgrade pngjs@6.0.0 则没有效果，版本还是锁定在 ^3.4.0。
+
+使用 yarn remove pngjs 再使用 yarn add pngjs 就可以升级到最新。
+这样子处理后使用yarn dev出现了黄色的警告。试试删除node_modules，重新安装一遍node_modules。
+试过了6.0.0的pngjs的sync接口，浏览器DevTools报了如下的错误：
+webpack:///./node_modules/pngjs/lib/sync-reader.js
+
+if (this._reads.length > 0) {
+    throw new Error("There are some read requests waitng on finished stream");
+}
+
+看起来根本就没有在浏览器上支持sync api呀。切换成6.0.0版本的async api，耗时跟3.4.0版本差不多。
+
+----
+
+小心，不要使用下面的方式来初始化Int8Array。因为Buffer.buffer 有可能比Buffer实际区块要大。
+
+let buffer: Buffer = fs.readFileSync("path");
+let i8Array = new Int8Array(buffer.buffer);
+
+例如使用fs.readFileSync读取了一个81字节的png图片，但是上面的buffer.buffer是一个字节数为8192字节的ArrayBuffer，buffer.offset为7584.从而造成构造出来的Int8Array根本不是想要的。
+
+要使用 new Int8Array(raw.buffer, raw.byteOffset, raw.length) 来构造。
