@@ -3,3 +3,23 @@
 对照着Qt源代码和TextureScale.ts，移植代码的时候突然感觉一阵厌烦。
 
 试了一下在archlinux上编译lt3d-core。由于没有使用emsdk仓库，直接使用了arch官方仓库里的emscripten包，所以建了个emsdk的目录，里面建了个名叫upstream的符号链接，指向/usr/lib ，并 export EMSDK=/home/hoxily/emsdk。然后就可以编译出wasm了。其他依赖的cmake、make、java等都可以使用arch官方的仓库里的包。真是方便。不过一旦执行 pacman -Syu 升级系统的时候就尴尬了。
+
+----
+
+遇到个问题。到底是从ts版开始写wasm的c++，还是从Qt源码写wasm的c++。直接复制Qt源码是不适用的。它的存取格式是BGRA，而ts的数据存取是RGBA。
+
+----
+
+在移植TextureScale.ts到lt3d-core的时候，还要同时参考Qt的对应源码，把之前为了适应Javascript所改动的东西还原回去。
+
+Typescript里存储的数据是Uint8Array，相当于C++里的unsigned char*指针指向的内存块。而Qt里对图像buffer数据是按照unsigned int*指针指向来解析的。之前看到过Emscripten对内存对齐要求的描述。比如一个 int32_t 要求对齐到4字节。一直担心自己强制将unsigned char* 转换成unsigned int*会出现问题。
+
+使用百度搜索了下 “malloc 内存对齐”，竟然是C的API明确要求返回的内存首地址是已经对齐的，可以适用于任何C语言基本类型。
+
+比如 man malloc 手册里描述如下：
+
+The malloc(), calloc(), valloc(), realloc(), and reallocf() functions allocate memory.  The allocated memory is aligned such that it can be used for any data type, including AltiVec- and SSE-related types.
+
+所以对于ImageData.m_data指针来说，将它从 void* 转换成 int*并进行数据访问是没有问题的。只需要注意一下BGRA和RGBA的差别即可。
+
+也就是说大部分代码可以采用Qt的图像缩放代码。
