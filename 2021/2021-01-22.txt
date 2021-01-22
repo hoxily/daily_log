@@ -1,1 +1,5 @@
 2021年01月22日，星期五，杭州
+
+对照着Qt源代码和TextureScale.ts，移植代码的时候突然感觉一阵厌烦。
+
+试了一下在archlinux上编译lt3d-core。由于没有使用emsdk仓库，直接使用了arch官方仓库里的emscripten包，所以建了个emsdk的目录，里面建了个名叫upstream的符号链接，指向/usr/lib ，并 export EMSDK=/home/hoxily/emsdk。然后就可以编译出wasm了。其他依赖的cmake、make、java等都可以使用arch官方的仓库里的包。真是方便。不过一旦执行 pacman -Syu 升级系统的时候就尴尬了。
