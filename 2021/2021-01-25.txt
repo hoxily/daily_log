@@ -1,0 +1,19 @@
+2021年01月25日，星期一，杭州
+
+C++ inline 的函数实现需要放在头文件里。否则被另一个cpp文件引用时，将会发生编译错误。error: inline function 'lt3d::core::MathUtil::Max' is not defined [-Werror,-Wundefined-inline]
+
+Uint8Array.slice(begin, end) 可以产生新的ArrayBuffer；而Uint8Array.subarray(begin, end)引用旧的ArrayBuffer对象。
+
+----
+
+坑爹。我还以为C++里的unsigned char 对应于webidl里的unsigned byte。结果名字叫 octet 。
+
+WebIDL.WebIDLError: error: invalid syntax, <unknown> line 225:29
+  void init([Const] unsigned byte[] data, unsigned long dataSize);
+                             ^
+CMake Error at CMakeLists.txt:43 (message):
+  Glue generation failed.
+
+----
+
+Qt的缩放算法移植到WebAssembly工作量很小。基本上调整qRgba,qRed,qGreen,qBlue之后，大部分代码可以直接复制Qt的，略作修改即可。更麻烦的是整合进lib_webgl。需要考虑内存使用量问题，以及同步代码导致主线程阻塞的问题。对了，当前的PngReader和ImageData的接口设计，给typescript使用的时候，感觉有点繁琐。
