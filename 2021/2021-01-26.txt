@@ -1,0 +1,29 @@
+2021年01月26日，星期二，杭州
+
+有同事在Style3d cloud问题反馈群里报告了ssao特效在小米9手机的微信内嵌浏览器上查看会出现黑屏。只要画面停止滑动，就会黑屏。
+我参照这篇文章的指导 https://blog.csdn.net/monoplasty/article/details/91850603 ，成功安装了tbs调试工具，也成功在我的华为荣耀7上配置微信x5内核的调试模式，但是点击inspector按钮，出来的以 chrome-devtools://devtools/remote/serve_rev/@${id}/inspector.html?remoteFrontend=true&dockSide=undocked 为标题的调试窗口画面全白，什么也看不到。
+使用Android Studio的logcat查看的话，能看到webgl相关的报错，然后并不知道哪一行出错。
+
+结合log里webgl报告glDrawElements incomplete framebuffer以及texture unit 0 not renderable, not pot size。lib_webgl里的提交记录，怀疑是fix render target尺寸调整引起的问题。使用最新版的dev测试，在android机上可以复现。将版本退回到fix render target尺寸调整之前的一个版本，ssao黑屏的问题就消失了。
+
+我将这个发现反馈给罗元雷。随后他找到了真正的原因：fbo size在低端机器上超出了 gl.MAX_TEXTURE_SIZE 。
+
+----
+
+罗元雷叫上我，两个人单独会谈，做了本年度的绩效面谈。他告诉我，上面给出的结果是B。
+
+大部分时候都是他在讲故事、经验、看法。我反馈了一下我的问题，关于激情，被他修正为兴趣。
+
+我遇到的很多人，都具有非常强烈的意愿、目标，以及为这个目标付诸行动的动力。我感觉我欠缺这些东西。
+
+我在最后请教他对于我的建议，他的看法是选定方向，深入研究和实践。
+
+我之所以没有深入是有原因的，可能是遇到困难就退缩了。又由于没有强烈的意愿和兴趣，很多东西都是泛泛地过一遍就结束了。缺少一个正向的反馈。
+
+事情的发展类似于这个样子：“有点意思 -> 粗浅的学习、应用 -> 稍稍深入 -> 遇到困难 -> 放弃 -> 失去一个兴趣点”。
+
+重复上面的过程，就会越来越感觉自己无论对啥都没兴趣。
+
+----
+
+MDN 给了普通方式传送数据和Transferable方式传送数据两种例子，见 https://developer.mozilla.org/en-US/docs/Web/API/Worker/postMessage 。所谓的Transferable，更像是对普通方式传送的额外标记。也就是message参数已经包含了Transferable对象了。如果不额外标记，这些Transferable对象就会以复制的方式传送到worker上。
