@@ -9,3 +9,11 @@ windows 10 自带的ssh.exe程序会受到windows文件的权限管理影响，�
 原因是我给windows 10添加了一个本地账户，并设置成管理员。然后登录此本地账户，长度读取hoxil的家目录下的数据。一开始是被拒绝的。在弹出的提示对话框里选择获取权限后，可以成功访问hoxil的数据。
 
 可以参考 https://blog.csdn.net/ai74583/article/details/102327271 的方案。先在文件、文件夹属性的安全里，高级，删除所有权限。然后因为owner是我自己，所以可以重新给它添加访问权限。然后就OK了。
+
+----
+
+我对LtTextureLoader.makeTexture方法做了拆分，使其函数体不至于这么庞大。但是罗元雷的意思是这还远远不够。它想要的不是LtTextureLoader这样的从url到Texture的直接等待获取方式。而是将加载与数据管理彻底分开的。不是说将makeTexture函数拆分成几个步骤的函数。而是对层次的划分。
+
+他的意思是存在一个 getTexture 方法，输入 url，立即返回 TextureProxy 对象。即使真正的纹理数据还没加载完成也没关系。加载操作是另一个层级要干的事情。
+
+然后由各个层级的对象的Manager，每帧去update，完成加载与创建。
