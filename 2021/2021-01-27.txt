@@ -1,3 +1,11 @@
 2021年01月27日，星期三，杭州
 
 今天早上，戴青青带着霏霏从仙居出发来杭州。
+
+----
+
+windows 10 自带的ssh.exe程序会受到windows文件的权限管理影响，报告 Bad owner or permissions on C:\Users\hoxil\.ssh\config 。
+
+原因是我给windows 10添加了一个本地账户，并设置成管理员。然后登录此本地账户，长度读取hoxil的家目录下的数据。一开始是被拒绝的。在弹出的提示对话框里选择获取权限后，可以成功访问hoxil的数据。
+
+可以参考 https://blog.csdn.net/ai74583/article/details/102327271 的方案。先在文件、文件夹属性的安全里，高级，删除所有权限。然后因为owner是我自己，所以可以重新给它添加访问权限。然后就OK了。
