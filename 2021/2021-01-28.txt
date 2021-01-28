@@ -1,0 +1,7 @@
+2021年01月28日，星期四，杭州
+
+三份代码。
+LtTextureLoader、DecodeMain、WorkerCode.workerjs
+对于LtTextureLoader，不管是交给DecodeMain来解析还是交给Worker来解析，它理应是不关心的。
+
+浙江凌迪《职业发展制度》培训在线直播。
