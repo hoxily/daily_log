@@ -1,0 +1,5 @@
+2021年01月29日，星期五，杭州
+
+MacBook Pro在长时间不操作之后，就会出现 update-my-ip.bash 工作不正常的情况。明明ping指令都能通。但是aliyun指令返回的JSON却是错的。
+
+使用macos上的safari调试iphone手机上的safari时，如果更新了lib_webgl的代码，那么需要关闭标签页，重新打开标签页才行。否则代码不会刷新。
