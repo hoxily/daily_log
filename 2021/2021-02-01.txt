@@ -1,0 +1,38 @@
+2021年02月01日，星期一，杭州
+
+主题：使用WebAssembly加速图像的处理
+摘要：WebAssembly原理。Emscripten工具与WebAssembly的关系。lib_webgl项目原来解析PNG的方式；使用WebAssembly后的性能提升效果。
+
+----
+
+提取了DecodeMain和Worker共享的Parsers.ts后，使用 tsc --outFile Parsers.lib.js --module amd --removeComments Parsers.ts 生成了AMD的模块文件。每个模块就是一个 define(id, deps, factory) {...} 。一开始使用 requirejs 库，结果报错了，在DracoDecoderModule那里出问题。因为requirejs要求这样子写代码：
+
+requirejs(["helper/util"], function(util) {
+    //This function is called when scripts/helper/util.js is loaded.
+    //If util.js calls define(), then this function is not fired until
+    //util's dependencies have loaded, and the util argument will hold
+    //the module value for "helper/util".
+});
+
+而 DracoDecoderModule 又不是一个AMD模块，直接追加在 requirejs 之后，造成奇怪的mismatch错误。
+
+结合tsc生成的AMD模块代码，发现依赖顺序是正常的顺序。那么就干脆自己写一个 define 函数了。
+
+let loadedModules = {};
+
+function define(id, deps, factory) {
+    let exports = {};
+    if (deps.length <= 2) {
+        factory(null, exports);
+        loadedModules[id] = exports;
+    } else {
+        let args = [null, exports];
+        for (let i = 2; i < deps.length; i++) {
+            args.push(loadedModules[deps[i]]);
+        }
+        factory.apply(self, args);
+        loadedModules[id] = exports;
+    }
+}
+
+然后在WorkerParser的代码之前，把依赖的各个Parser从loadedModules里面取出来即可。
