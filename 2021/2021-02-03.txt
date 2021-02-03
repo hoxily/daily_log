@@ -1,0 +1,31 @@
+2021年02月03日，星期三，杭州
+
+电脑端测试（因为手机端测试时发现因内存不足而造成页面崩溃），有如下的结果
+
+使用FixAlphaBleeding2分支与最近的dev分支，加载同一个透明glb模型进行对比，可以发现AlphaBleeding操作非常耗时，关掉之后，两者就是各自实现PNG图片解析和Mipmap生成两大操作。
+在排除掉AlphaBleeding的情况下：
+通过将FixAlphaBleeding2的png图片解析也换成跟dev分支一样的pngjs库来解析，而保持其他不变，可以发现WebAssembly版本的mipmap生成更加耗时一些。而使用WebAssembly版本的png图片解析，这时总体上耗时将会是dev的1/3左右。
+
+这说明，dev分支上被pngjs库的解析拖慢了。而WebAssembly版的mipmap生成，虽然使用Qt/QImage的缩放算法，提高了质量，但是耗时增加。
+
+以上都是耗时的讨论。对于内存使用量来说，每个Worker使用的内存从原来的17.6MB上涨到了37.4MB。由于有3个worker，总体上worker所消耗的内存多了60MB左右。
+
+不过最大的问题不是出现在这里，而是主线程的内存占用相比之前多了800MB左右。非常令人奇怪。
+两者都处于加载完成的状态，生成的DataTexture数量也是一样的。但是FixAlphaBleeding2的内存占用量多出800MB。点击DevTools里的Memory标签页里的垃圾桶按钮，做Collect Garbage操作也没用，HEAP SNAPSHOTS占用量维持恒定。
+
+怀疑是Worker系统传递数据的过程中，有一些临时的对象没有解除引用，导致一直占用着内存。
+
+FixAlphaBleeding2    dev
+ArrayBuffer数量      ArrayBuffer数量
+1841                 1677
+
+两者的总内存差异正好接近总体的内存消耗差异。所以问题应该就是出在这些多出来的ArrayBuffer上。经过比对发现，问题出在DataTexture.image和DataTexture.mipmaps[0]没有共享同一个Uint8ImageData对象。调整后，FixAlphaBleeding2的主线程内存消耗量与dev的主线程内存消耗量接近相等。
+
+这算是代码上的bug。
+
+----
+
+在手机端测试发现，Safari的浏览器远程调试功能竟然没有chrome那样的内存分析工具。尝试使用macos上的safari来打开dev分支，发现其加载png图片的速度比chrome快得多。也就是说，pngjs库会受到不同浏览器的影响，呈现出不同的性能特征。
+考虑到iPhone手机也是safari，那么相当于pngjs库在iPhone上本来就工作良好，并不需要worker+webassembly加速。
+
+试了下windows上的firefox，其pngjs的处理速度与macos上的safari接近。反正比chrome要快得多。firefox的开发者工具给出的内存使用量明显不准。才275MB。远低于Chrome给出的1270MB。而且在Windows的任务管理器里查看firefox的内存使用量，也不止275MB。
