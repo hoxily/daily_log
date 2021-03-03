@@ -1,1 +1,13 @@
 2021年03月03日，星期三，杭州
+
+javascript里console.log, console.warn, console.error是三种不同级别的日志。并且warn级别和error级别可以看到调用栈，但是console.log看不到。
+
+找到Fabric.SetDiyColor，在新换色算法下设置了换色后无法还原的问题了。问题出在LtMaterial.front和back可能引用的是同一个LtMaterialSingle。这样一来，我在换色操作时先记录front的原始ColorBlendMode，并设置front为ColorBlendMode.Color；随后紧跟着是back方向的处理。但是因为back引用的LtMaterialSingle对象跟front引用的LtMaterialSingle对象其实是同一个，这时本意是记录back的原始ColorBlendMode，就变成记录了前面强制设置的ColorBlendMode.Color。
+
+于是在换色还原时，front处理正常，但是back处理恢复到了错误的ColorBlendMode。而因为front与back其实是同一个对象，从而造成还原失败。
+
+javascript 的 == 和 === 在判断基本的数值类型时以值方式判断。在object这种引用类型时，== 和 === 判断的都是引用是否相等。
+
+----
+
+发生了一个很奇怪的现象。在 http://3d.linctex.com:59090/ 测试服务器上可以复现我按照代码逻辑推测出来的原始纹理和whitemap纹理都dispose掉，从而出现白模效果。但是同样的UserProduct数据，由邹静磊拿到Lt3DGUI测试环境下测试，设置DiyColor后，再设置null参数的DiyColor，并没有出现白模效果，只是保持在whitemap灰度效果。这里面肯定哪里有差异。
