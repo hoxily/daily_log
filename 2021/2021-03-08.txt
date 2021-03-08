@@ -1,3 +1,7 @@
 2021年03月08日，星期一，杭州
 
 有雾。绵绵细雨。骑车会打湿衣服和裸露的头部和手。
+
+编译GLFW库时使用了Release配置，生成了lib文件和include文件。这时在使用GLFW库的工程里，配置为Debug模式，会出现LNK4098号错误（ https://docs.microsoft.com/zh-cn/cpp/error-messages/tool-errors/linker-tools-warning-lnk4098?view=msvc-160 ）。
+相当于我需要分别针对Debug配置和Release配置分别生成两套库。
+反正暂时不需要高性能运行，也为了方便调试，干脆给编译出来的GLFW配置成Debug模式。
