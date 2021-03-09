@@ -1,1 +1,40 @@
 2021年03月09日，星期二，杭州
+
+在C++中使用nullptr作为空指针常量会比较好。因为C++中使用了0作为NULL常量的定义值，而C中使用((void*)0) 作为NULL常量的定义值。
+另一个更大的原因则是C++中有函数重载，当同时有
+f(int x);
+f(int* ptr);
+这样的2个重载函数时，使用 f(NULL); 调用的将是第一个函数，而不是预想中的接受指针参数的第二个函数。使用 f(nullptr); 就不会有歧义了。
+
+如果仅仅删除工程根目录下的out文件夹，那么visual studio 反而不能正常工作。需要将隐藏的 .vs 文件夹也一起删除才行。
+
+由于shader文件作一个独立的资源文件，需要复制到编译目录，才能正常运行。这时可以使用 configure_file 指令。比如下面的例子。
+
+configure_file(
+    "${CMAKE_CURRENT_SOURCE_DIR}/resource/vertex-shader.glsl"
+    "${CMAKE_CURRENT_BINARY_DIR}/resource/vertex-shader.glsl"
+    COPYONLY
+)
+
+这种情况下，只要改动源码目录里的着色器，visual studio就会自动同步到编译目录下。
+
+----
+
+threejs刚好兼容setValueV1f(gl, v)参数v为undefined时的情况。但是对于
+setValueV3f(gl, v) 参数v为undefined时，代码里做了v.x !== undefined 的判断，所以出现了不能从undefined里取x属性的TypeError异常。
+
+本质原因还是Style3DDecalMaterial共享了Style3DMaterial的着色器代码。而在着色器代码里，总是会要求输入 
+int diffuseBlendMode; //颜色混合模式
+vec3 diffuseMeanColor; //diffuse纹理平均颜色
+这两个Uniform值。由于恰好兼容了没有传diffuseBlendMode的缘故，所以之前添加diffuseBlendMode时，并没有正常传递参数，而是忽略了对Style3DDecalMaterial的处理。但是对于vec3类型的diffuseMeanColor，直接报错了。
+
+所以threejs能从shader代码反推出Uniform需要传递哪些东西？
+
+----
+
+使用glGetShaderiv和glGetShaderInfoLog函数获取glCompileShader的错误信息时，遇到报错的情况。但是检查vertex-shader.glsl文件，看起来并没有错误。
+
+error C0000: syntax error, unexpected $undefined at token "<undefined>"
+
+重复多次运行，有时候会在读出来的vertex-shader.glsl文本末尾看到一些多余的字符。
+经过排查，原因是我用了fread函数，只读取了字符串的有效内容，但是没有正确地添加字符串结束符 '\0'。
