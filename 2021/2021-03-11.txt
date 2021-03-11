@@ -1,0 +1,37 @@
+2021年03月11日，星期四，杭州
+
+Style3D Fabric相比Style3D，缺少了给baseColor褪色的选项。
+
+另外还发现了一个平台面料库的bug。使用Style3D Fabric制作一个黄色diffuse颜色+ColorBlendMode.Color的sfab面料，在新增面料页面，加载出来的模型显示的面料是正常的换色状态，与Style3D Fabric软件中看起来差不多。但是点击保存后，从面料列表页进去详情看到的则是彩色的换色状态（有点像是ColorBlendMode.Multiply，或者没有执行getWhiteMap处理）。
+
+从软件的换色->平台的换色，是一个多对一的过程。进了平台之后，可以进一步加载MaterialDiyState。所以这里会有两个问题。
+
+1. 从sco和sfab加载出来的效果，是否正确映射到软件里的效果；
+2. 在上一步的配置情况下，平台的MaterialDiyState里的换色、取消换色是否能正常工作。
+
+软件换色到平台映射
+    叠加ColorBlendMode.Multiply
+        Diffuse为(1.0, 1.0, 1.0)
+            无换色感觉
+                使用平台DiyColor（强制转为ColorBlendMode.Color方式）
+                    有换色感觉1
+                不使用平台DiyColor（保持sco原始ColorBlendMode）
+                    无换色感觉
+        Diffuse非(1.0, 1.0, 1.0)
+            有换色感觉1
+                使用平台DiyColor（强制转为ColorBlendMode.Color方式）
+                    有换色感觉2
+                不使用平台DiyColor（保持sco原始ColorBlendMode）
+                    有换色感觉1
+    换色ColorBlendMode.Color
+        Diffuse为(1.0, 1.0, 1.0)或者非(1.0, 1.0, 1.0)
+            有换色感觉1
+                使用平台DiyColor（已经是ColorBlendMode.Color方式）
+                    有换色感觉2
+                不使用平台DiyColor（保持sco原始ColorBlendMode）
+                    有换色感觉1
+    结论
+        注意到“有换色感觉1”都是sco原始色，所以是否使用DiyColor确实符合有没有起作用的逻辑。
+
+穷举了一下颜色混合模式与初始颜色值的组合情况。看起来在逻辑上都是能正常在平台进行DIY换色和还原原始色的。
+更大的问题可能在于是否允许平台从“有换色感觉1”褪到“无换色感觉”这样的级别。但是受到sco优先级的限制，暂时是做不到。
