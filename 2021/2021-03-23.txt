@@ -1,0 +1,27 @@
+2021年03月23日，星期二，杭州
+
+宋之一又报告了图案边缘黑边的问题。我原本想帮他临时处理一下这张png图案，做个alpha bleeding。但是随后发现，原始图本来就是白底的。只是因为经过aliyun oss的缩放到POT大小，才导致底色为黑色。也就是说，即使我做了alpha bleeding预处理，经过aliyun oss缩放，因为溢出的像素区的alpha为0，缩放后依然会变为黑边。这个临时alpha bleeding的方案是不可行的。
+
+----
+
+今天下午尝试PremultiplyAlpha的纹理方案时，找到了一个非常完美解决图案边缘杂色问题的方案。不需要手动生成mipmaps，用WebGL自带的generateMipmaps就行。
+有三大关键点：
+1. THREE.Texture.premultiplyAlpha = true，这样可以让THREE上传纹理时，在显存里存储PMA格式的纹理；
+2. 使用THREEJS默认的加载方式，然后使用自动生成mipmaps，即WebGL的generateMipmap；
+3. 在shader中使用texture2D采样到的vec4颜色值，需要除以alpha来还原；
+
+这种情况下，可以让THREE.Texture.minFilter = THREE.LinearMipmapLinearFilter，达到最高质量的三次线性过滤。
+
+有一个小bug需要提醒一下，如果upload纹理时提供了各个mipmapLevel的纹理数据，但是filter模式没有使用以下四种，就会被认为不使用mipmap，那么就相当于总是从mipmapLevel 0 做纹理采样：
+NearestMipmapNearestFilter,
+NearestMipmapLinearFilter,
+LinearMipmapNearestFilter,
+LinearMipmapLinearFilter。
+
+GL_<FILTER>_MIPMAP_<SELECTOR>，这里的<SELECTOR>指定了mip level如何被选择。比如，NEAREST会选择最靠近的mip level的图片。如果设置LINEAR，则 表示从最近的两个mip level的图片上进行线性插值，图片选择完毕后，然后才开始被filter的参数进行影响。
+
+由于LtTextureLoader里纹理加载比较复杂。虽然想干掉png的特殊加载逻辑，全部替换成PMA纹理方案，但是还是需要验证一下，从长计议。暂时先只处理图案的baseMap吧。
+
+----
+
+岗位匹配的结果出来了。杨敏的评级是p5.薪资增长11%，触到了2.0万。加油。
