@@ -25,3 +25,7 @@ GL_<FILTER>_MIPMAP_<SELECTOR>，这里的<SELECTOR>指定了mip level如何被�
 ----
 
 岗位匹配的结果出来了。杨敏的评级是p5.薪资增长11%，触到了2.0万。加油。
+
+----
+
+正愁分享ppt讲什么好。既然图案采用PMA纹理解决了多年的老问题。可以根据这个解决方案讲讲原理，讲讲过去走过的弯路——自行生成mipmap、移植QtQImage scale缩放算法、WebAssembly加速PNG图片解析等。
