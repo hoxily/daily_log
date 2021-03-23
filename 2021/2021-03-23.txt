@@ -29,3 +29,5 @@ GL_<FILTER>_MIPMAP_<SELECTOR>，这里的<SELECTOR>指定了mip level如何被�
 ----
 
 正愁分享ppt讲什么好。既然图案采用PMA纹理解决了多年的老问题。可以根据这个解决方案讲讲原理，讲讲过去走过的弯路——自行生成mipmap、移植QtQImage scale缩放算法、WebAssembly加速PNG图片解析等。
+
+奇怪的是，我曾经尝试过PMA的方案。只不过是自行计算mipmap，并直接将PMA格式的纹理当作正常纹理上传，然后在shader里做一个unpremultiply还原。为什么当时结果不对呢？
