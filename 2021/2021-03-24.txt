@@ -1,3 +1,11 @@
 2021年03月24日，星期三，杭州
 
 全家的吸管是纸做的。厉害了。
+
+使用Google的Chrome Remote Desktop，访问局域网里的hoxily-mbp电脑非常流畅，堪比使用TeamViewer。相比macos自带的屏幕共享功能，时不时的卡住无响应要好太多。
+网址是 https://remotedesktop.google.com/access
+需要使用Chrome浏览器，并且需要安装插件。登录Google账号后，可以配置某个设备专门用于远程访问。在这个网页的Remote Access标签页下，会列出在线的设备。虽然很好。但是Google的东西都需要翻墙才能使用，可惜了。
+
+尝试把learn opengl的init与main loop做成一个基类，然后在子类里面实现关心的初始化与OnRender处理。结果发现C++的成员函数不能直接丢给glfw的回调函数。搜了一下，发现还挺复杂的。根本原因是C++的成员函数有一个隐含的当前对象this指针，而c里的函数都是全局的。
+
+好麻烦。没必要纠结这些与opengl核心概念不相干的东西。简单实现就好了吧？抽象得再好的基类，这些代码也用不上，没必要把时间浪费在这上面。
