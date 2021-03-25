@@ -1,1 +1,9 @@
 2021年03月25日，星期四，杭州
+
+OpenGL 3.3 里有一个很神奇的特性。fragment着色器里定义了uniform sampler2D ourTexture。但是代码里不需要设置这个uniform变量。仅需要glBindTexture就能使用。
+
+罗元雷给了一个style3d软件内置图案（geometry的type为graphic的东西）模型，跟其他版片冲突的问题。我仔细研究了一下，其实泳衣也是半透明的，可以隐隐看到肚脐和乳头。所以泳衣、左半图案、右半图案其实这三样东西都是透明的。这时渲染的排序因为整体是一个LtGeometry，所有的z都一样。排序就乱掉了。https://www.sukuan3d.com/admin/style/75098?share_state_id=22787&func=wswpmyproduct&is_share_page=0&share_lang=zh-CN 令我感觉好奇的是，为什么开启透明渲染，顺序就又正常了呢？
+
+除此之外，还有另一个问题则是style3d软件内置图案与衣服是分开的两块板。但是当衣服的版片切换成半透明的面料时，因为z都一样，排序又乱掉了。图案被半透明的面料挡住了。理应是图案挡住半透明的面料。https://www.style3d.com/style/67921?share_state_id=22304&func=wswpmyproduct&is_share_page=0&share_lang=zh-CN
+
+看起来上面两个是同一个问题。只不过第一个衣服版片的面料出厂即是半透明。而第二个问题是因为在平台上用户给衣服版片换上了半透明的面料。
