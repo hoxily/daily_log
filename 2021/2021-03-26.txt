@@ -1,1 +1,31 @@
 2021年03月26日，星期五，杭州
+
+不能使用Group的renderOrder，也不能使用Object3D的renderOrder。因为对于拥有多个geometry的LtCloth来说，它们都是同一个LtMesh物体，共享同一个renderOrder字段。
+
+唯一能区别它们的只是各个子geometry引用的Material有区别。
+
+又因为只在半透明情况下才会有问题。所以主要解决transparent列表的排序顺序问题。给Material添加了一个transparentRenderOrder字段。仅在transparent为true时才起作用。
+
+transparentRenderOrder越大，越在后面绘制。
+
+/**
+ * 半透明物体renderOrder规则定义。
+ */
+export enum TransparentRenderOrder {
+  /**
+   * 默认
+   */
+  Default,
+  /**
+   * geometry.type为graphic的物体
+   */
+  GraphicTypeGeometry,
+  /**
+   * 平台的印花
+   */
+  Decal,
+  /**
+   * 印花位置指示线
+   */
+  DecalCoordinateLine,
+}
