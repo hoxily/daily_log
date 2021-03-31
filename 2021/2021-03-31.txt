@@ -1,0 +1,12 @@
+2021年03月31日，星期三，杭州
+
+第一次遇到glsl shader代码里好好地使用 gl_FrontFacing，结果在Android Andreno GPU机型上出错的情况。
+不过终于在Google上搜到了解决方案。正好是threejs的一个pull request。
+
+ShaderChunk: Bring gl_FrontFacing back by mrdoob: https://github.com/mrdoob/three.js/pull/21205
+
+Issue 1154842: GLSL gl_FrontFacing has random value on Adreno GPUs： https://bugs.chromium.org/p/chromium/issues/detail?id=1154842
+
+Issue 1154842 提供的一个最小化的测试用例：https://playground.babylonjs.com/#HKCD9U#107  在Android机与PC电脑上显示的正反面颜色不一致。
+
+大致的意思就是在片元shader的main函数之外的函数里访问gl_FrontFacing，容易导致出现随机结果。建议仅在main函数里访问gl_FrontFacing。或者在main函数开头将gl_FrontFacing缓存下来，放到全局变量里，以后需要用到gl_FrontFacing的地方就用这个全局变量代替。
