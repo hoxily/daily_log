@@ -1,3 +1,13 @@
 2021年04月01日，星期四，杭州
 
 本以为Style3DMaterial使用的shader多处引用gl_FrontFacing也会出现错误。结果好像并不影响。那就算了，暂时没有错误就不去修改它了。
+
+当前ScoReader读出来的模型，其使用的材质只能从ThreeMaterial、Style3DMaterial、Style3DGltfMaterial三者中选一个。并且今后在更换面料操作中，依然保持为原先的XXXMaterial，也就是Shader不变。
+
+所以如果想要测试baseColor PMA化的影响，只需要测试这3种Material在JPG不透明图与PNG半透明图的材质情况下，与老版本的结果是否一致即可！一共是6种情况，需要分别在老版与PmaForBaseColorMap版做验证。
+
+可以反过来，在ScoReader里强制设置pattern的Material为需要测试的三种Material中的一种。然后使用半透明图案的logo模型。可容易就发现Legacy的ThreeMaterial的shader漏了unpremultiply处理。
+
+----
+
+LtTextureLoader.getWhiteMap再处理一下。需要设置成premultiplyAlpha=true，并设置generateMipmaps=true来使用 gl.generateMipmap 来生成mipmaps。
