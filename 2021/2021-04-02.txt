@@ -1,3 +1,9 @@
 2021年04月02日，星期五，杭州
 
-现在面临两个抉择：1. 直接粗爆地修改各个XXXMaterial对应的shader代码，让它们对baseColor纹理做unpremultiply处理。2. 添加shader sampler的附加信息，类似unity3d shader lab里定义一个sampler2D，不仅有这个采样器，还会提供这个纹理的ST缩放平移信息、纹理的Texel_size等，我们可以附加一个该sampler是否为预乘alpha的标记。然后在shader里调整texture2D函数为自定义函数ltTex2D，内部根据输入的纹理是否标记预乘alpha来做相应处理。改动量更大，但感觉更统一一些。不至于出现shader代码与实际纹理不匹配的问题。
+现在面临两个抉择：1. 直接修改各个XXXMaterial对应的shader代码，让它们对baseColor纹理采样结果做unpremultiply处理。2. 添加shader sampler的附加信息，类似unity3d shader lab里定义一个sampler2D，不仅有这个采样器，还会提供这个纹理的ST缩放平移信息、纹理的Texel_size等，我们可以附加一个该sampler是否为预乘alpha的标记。然后在shader里调整texture2D函数为自定义函数ltTex2D，内部根据输入的纹理是否标记预乘alpha来做相应处理。改动量更大，但感觉更统一一些。不至于出现shader代码与实际纹理不匹配的问题。
+
+见 https://docs.unity3d.com/Manual/SL-PropertiesInPrograms.html Special Texture properties
+
+虽然第2个方案更统一，但是对于texture2DDecalX, texture2DDecalY, texture2DDecalNone函数不太适用。因为它内部做了一个采样结果与边缘平滑颜色mix的操作，这里要求mix的两个颜色是预乘alpha格式才行。当然也可以把ltTex2D结果做premultiply再mix也可行。
+
+这些特例让人感觉不舒服。如果能形成规范，baseColor纹理总是预乘alpha格式，那好像也行。写shader和上传纹理的时候注意一下就行。
