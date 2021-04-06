@@ -1,3 +1,9 @@
 2021年04月06日，星期二，杭州
 
 4月3日~4月5日清明节放假。我去了仙居，看戴青青和杨萱霏。
+
+凌迪价值观评分弄错了。每项评分只能是1、3、5这三个里面之一。上面的绩效自评才是最小分数0.25.
+
+使用磊哥的“换色替换辅料”，查出了UpgradeChangeColor在loadInDiy里的一个bug。也就是当设置diy.color为null时，并不应该影响diffuseMeanColor的流程。是否走diffuseMeanColor的流程，只应跟colorBlendMode和mainTexture是否存在有关。这样才能正确地还原materialConfig里所替换的颜色。这个颜色被当作模型的固有颜色。
+
+另外还有一个bug则是ThreeMaterial并不兼容Color换色。它兼容getWhiteMap褪色那种换色。
