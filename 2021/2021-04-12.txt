@@ -1,1 +1,5 @@
 2021年04月12日，星期一，杭州
+
+很奇怪。同样的代码，在我的macOS下，显示起来就是发暗。通过调整shader代码，发现是diffuseEnvColor不对。当强制把这个diffuseEnvColor设置成一个固定值后，PC与macOS下的效果一致了。textureCube得出的结果不一样？
+检查了loadBuiltinEnvMapDiffuse函数，不管强制加载d.bin还是Intd.bin，结果都是发暗的。
+可能THREE.CubTexture在上传过程中出问题了。或者shader代码中的textureCube函数有差异。
