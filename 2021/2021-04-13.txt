@@ -1,0 +1,16 @@
+2021年04月13日，星期二，杭州
+
+经过排查，问题不是出在textureCube采样函数的结果，而是在于frontAttenuation这个衰减系数。也就是正反面判断出错了。跟之前Andreno的gl_FrontFacing bug有点类似。
+
+当固定envDir为(1.0, 0.0, 0.0)时，使用钉钉的截图功能，提取画面上的RGB值，就会发现Mac电脑上的RGB值大约只有windows上的一半。
+
+当片元着色器只使用下面这样的简短代码时，我的mac电脑显示成红色，而windows电脑显示成绿色。
+
+gl_FragColor = !gl_FrontFacing ? vec4(1.0, 0.0, 0.0, 1.0) : vec4(0.0, 1.0, 0.0, 1.0);
+return;
+
+但是将 !gl_FrontFacing 换成 int(gl_FrontFacing) <= 0 或者 float(gl_FrontFacing) < 0.5 ，结果就跟windows上的效果一致了。或者将三元运算符的条件取反（也就是没有逻辑取反运算符）并将两个结果对调，那么最终的显示效果也能与windows上一致。
+
+还有一种 if (gl_FrontFacing == false) 的方式也可以。只要不是 !gl_FrontFacing 形式就行。
+
+另外还发现那台Macmini也是有同样的bug。我的MacBook Pro与那台macmini唯一的共同点就是macOS系统版本都升级到了最新的macOS 11.2.3。如果说GPU硬件不是那么容易出问题的话，那很可能是macOS系统的驱动有bug。
