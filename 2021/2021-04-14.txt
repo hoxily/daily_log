@@ -1,0 +1,5 @@
+2021年04月14日，星期三，杭州
+
+今天遇到两个问题。一个是秦俊岭要求Style3DFabric软件，输入正反两张baseColorMap，就要在3D视图里得到与平面图一致的效果。这感觉不太可能。如果使用无光照材质，那就完全没有立体感了。另外背面backAttenuation参数好像是记录在模型上的。同一个面料应用在backAttenuation为0.5的模型上，背面看起来就会发暗。见钉钉。
+
+另一个问题是有一个明线辅料，加载完成后是红色状态。如果给它换成其他颜色是ok的。但是换完后，点击“辅料无换色”，辅料会变为灰黑色，接下来再换色，效果就非常不明显了，感觉只剩下明暗的变化，没有色彩的变化了。分享链接：http://3d.linctex.com:59090/style/19168?share_state_id=2756&func=wswpmyproduct&is_share_page=0&share_lang=zh-CN
