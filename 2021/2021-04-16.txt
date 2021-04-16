@@ -1,0 +1,11 @@
+2021年04月16日，星期五，杭州
+
+优化了Color换色算法在面对半透明面料时的效果。结果平台的改动先上线了。与软件造成差异。话说回来，就算没有这个改动，由于oss缩放的缘故，全透明区的RGB也会变为(0,0,0)，很可能跟软件的meanColor计算结果还是有差异。
+
+参见这个半透明的裙子，换了色：https://www.style3d.com/product/182534?share_state_id=13308&func=resproduct&is_share_page=1&share_lang=zh-CN
+
+----
+
+找到齐色方案无法切换回第一个方案的原因了。LtCache.getJson缓存的不是JSON字符串，而是JavaScript对象。而每个齐色方案都需要原始sco.json+materialConfig材质替换才能加载出该方案来。由于第一个方案只在sco.json里描述了材质信息，其对应的materialConfig没有renderConfig配置。那么首次加载第一个方案当然是OK的。但是切换到第二个方案后，由于缓存的sco.json对象已经被修改了，而第一个方案的materialConfig并没有renderConfig替换配置，那么永远也回不去第一个方案的状态了。
+
+既然LtCache.getJson返回的对象有可能被修改，使用者应该复一份数据。保持Cache的稳定性的责任应该谁来负责呢？当然也可以是LtCache.addJson内部存储字符串对象，每次getJson时重新JSON.parse创建新的对象。但是还是应该明确责任。
