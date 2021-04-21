@@ -1,1 +1,3 @@
 2021年04月21日，星期三，杭州
+
+看threejs的源代码（WebGLUniforms和WebGLTextures），会发现里面很多私有的实现函数定义都是没有类型的。function里传入个参数，并不知道它是什么。罗元雷建议可以运行起来，下断点或者console日志来查看它的类型。
