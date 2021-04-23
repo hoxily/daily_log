@@ -1,0 +1,14 @@
+2021年04月23日，星期五，杭州
+
+使用PadToPotTexture方案之前，其实还可以再证明一下这个方案比直接ceilPowerOfTwo更优秀。
+
+从扩展后的纹理大小来看，两者的内存使用量是相同的。因为PadToPotTexture也只能往大了扩。如果ceilPowerOfTwo就已经能达到想要的清晰度要求，就没有必要去实现那么复杂的PadToPotTexture方案了。
+
+问题是，我想要对比两者的清晰度，本身就要先实现PadToPotTexture。矛盾。
+
+换个思路，PadToPotTexture本质上是人工实现NPOT扩展。所以其实拿平台3D的ceilPowerOfTwo跟Style3D Fabric软件对比清晰度就行。妙啊。
+
+PadToPotTexture方案所能达到的清晰度上限不正是软件里早就支持的NPOT纹理嘛。
+
+相当于找出几个ceilPowerOfTwo与Style3D Fabric软件差异比较大的例子，这样的话如果能做到PadToPotTexture，就能达到这样大的提升。否则就没必要花这么大的代价。
+
