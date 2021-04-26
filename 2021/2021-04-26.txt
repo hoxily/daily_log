@@ -1,1 +1,11 @@
 2021年04月26日，星期一，杭州
+
+罗元雷给了一个VS导出的glb有白边的问题。原因就是它使用的diffuseTexture是白底的。采样的时候就会采到白底。
+
+尝试了一下结合diffuseTexture和specularGlossinessTexture两张图，做差找出有效区域来。但是specularGlossinessTexture里明线区域的specularGlossiness是空的。这样子做差会导致diffuseTexture里的明线消失了。
+
+还有一种思路，是根据三角面的UV坐标，结合原始diffuseTexture图，找出没有使用到的像素，置为(0,0,0,0)透明。这样的话，也不会出现白边。也就是我手动执行栅格化流程，找出覆盖区域。
+
+其实这里的手动栅格化可以用WebGL代替，相当于用三角面的uv坐标在[-1, 1]之间画三角形，背景色与前景色用受控的颜色。
+
+这样做出来的mask，需要设置antialised: false，然后做一个透明区域的上、下、左、右、左上、右上、左下、右下移动一个像素的扩展，合并为最终的mask图层。这样子试验的结果，仅会有少量的白色边缘。以及奇怪的穿出来的细长三角形。
