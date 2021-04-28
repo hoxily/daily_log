@@ -1,0 +1,29 @@
+2021年04月28日，星期三，杭州
+
+昨天将前天晚上的测试代码和处理流程写成了BakingTextureBackgroundPeeling工具类。写完后，尝试了一下发现处理起来，在上方和右方边缘有两道直直的边。相当于无中生有多出来的UV三角形占据了这两块区域。
+
+今天尝试将每一步产生的图像都输出来看看。定位到BakingTextureBackgroundPeeling内部的render结果就是有这两块区域。尝试调整输入的数据，甚至使用了WebGLPlayground里的mesh109.json一模一样的json数据都不行。
+
+总不能是render函数里的gl函数调用问题吧。就只有那么几行而已。
+
+当我把drawElements函数注释掉，只剩下clear时，竟然生成的canvas依然有那两个透明区域。
+
+而当调用gl.viewport的宽高减半时，生成的透明区域依然没有发生变化。
+
+而viewport调用的参数与重新使用gl.getParameter(gl.VIEWPORT)得到的是同一个值。
+
+在mdn上查到一个scissor函数，
+gl.enable(gl.SCISSOR_TEST);
+gl.scissor(x, y, width, height);
+
+难道是默认的scissor大小刚好小于我设置的宽高，导致出现了透明区域？测试结果表明不是这个问题。默认的scissor box大小只有300x150.要是真的启用了scissor框，绝对画不了6000多那么大的图。
+
+把getContext("webgl")推迟到设置canvas的宽高之后就OK了。这说明拿到webgl后，再去改canvas的宽高，然后立即设置viewport，并不能立即生效。里面的某些状态没有同步。而在WebGLPlayground里是requestAnimationFrame，每帧都刷新所以看不出问题。
+
+试试用最少的代码，复现这个BUG。
+
+----
+
+在baseColorMap上应用白底剔除处理，把从glb生成的sco文件上传到平台，版片的效果好了很多，几乎看不到白边了，即使是看西装的内部。
+
+但是钮扣坏掉了。还在肩上的版片边缘位置看到一个黑黑的块，感觉不像正常的版相接。
