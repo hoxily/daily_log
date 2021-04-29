@@ -1,0 +1,55 @@
+2021年04月29日，星期四，杭州
+
+昨天遇到的viewport不起作用，看到透明区域的问题并不是canvas与gl状态不同步的问题。即使我用setTimeout等待也没有用。
+
+在firefox上尝试了一下这个bug。从canvas保存下来的图片整个儿都是全透明的。
+
+奇怪的是这些HTMLCanvasElement在firefox或者MSEdge上都是能正常渲染看到的。保存它们却会出错了。昨晚罗元雷一起查看这个bug时，他说关键原因可能是从GPU读取数据到CPU时出错了。
+
+----
+
+想在macOS下试一下。结果发现macOS下不管是Google Chrome还是Safari，对着canvas点击右键菜单都不会弹出另存为图像的菜单。而且右侧和下方的滚动条也没有出现。
+看起来得调用saveFile自动保存才行。
+我看到磊哥调用saveAs传过去的就是一个blob，结果我用canvas.toBlob产生的数据放进去后，报了错误：
+
+Uncaught TypeError: Failed to execute 'createObjectURL' on 'URL': Overload resolution failed.
+  at get_object_url
+  at new FileSaver
+  at saveAs
+  at eval
+
+找到原因了，saveAs函数的第1个参数是blob对象，第2个参数是string文件名。而我写反了。
+
+----
+
+其实调整viewport大小，不是我一开始想的那样，去调整gl端的buffer大小。而且执行gl.clear时清除的是整个drawingBuffer。所以测试代码里设置成随机的viewport大小都不起作用。因为我一直在用clear来画东西。
+viewport影响的是drawArrays和drawElements的结果。
+
+所以真正的因果关系是下面这样子的：
+
+1. 调整canvas的width和height;
+2. gl.drawingBufferWidth和gl.drawingBufferHeight自动发生变化。理想情况下，这两个值应该要跟canvas.width和canvas.height一致。但是MDN的文档上说，允许它们不一致；
+3. 使用viewport函数，viewport会影响调用drawXXX指令在drawingBuffer的绘制区域；
+4. clear总是clear整个drawingBuffer，不受viewport设置影响；
+
+如果这样的话就说得通了。
+
+不过不得不提出一个新的问题。为什么
+
+let canvas = new HTMLCanvasElement();
+canvas.width = 6193;
+canvas.height = 6193;
+let gl = canvas.getContext("webgl");
+
+允许gl.drawingBufferWidth和drawingBufferHeight达到6193，而
+
+let canvas = new HTMLCanvasElement();
+let gl = canvas.getContext("webgl");
+canvas.width = 6193;
+canvas.height = 6193;
+
+这种情况下却不允许 drawingBufferWidth和drawingBufferHeight达到 6193.
+
+----
+
+当gl.drawingBufferWidth和gl.drawingBufferHeight与gl.canvas.width和gl.canvas.height不一致时，bug就出来了。需要尽量避开这种情况。
