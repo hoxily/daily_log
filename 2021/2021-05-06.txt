@@ -2,3 +2,22 @@
 
 公司的gitlab添加了域名。以前是IP直接访问。 https://gitlab.linctex.com/ 
 我添加的 linctex-git.hoxily.com 没用了，可以删除了。
+
+发现了vscode的terminal在显示汉字时的bug，使用的字体是Hack和宋体。在terminal里使用cmd，输入systeminfo并回车，在打印出来的系统信息文字里看到“作”字有一块区域完全被盖住，但是用鼠标选中这个“作”字，就又显示正常了。于是想去github上vscode项目提交issue。我想再复现一遍这个bug，于是把terminal的字体大小改成16，然后又重新改回14，结果发现这个bug消失了。重启vscode，再尝试systeminfo命令，这次显示出问题的字符是“立”字，只有很小一块区域被盖住。再次重启vscode尝试了一下systeminfo，一眼看过去，找不到会出问题的字符了。
+
+----
+
+解决VSCode的PROBLEMS栏提示Cannot write file xxx.js because it would overwrite input file。
+原文地址：https://blog.csdn.net/weixin_43459866/article/details/116356968
+“
+出现这个问题基本是因为开启了allowJs。因为allowJs即允许Typescript编译器去编译js。而编译之后的输出文件也就是xxx.js与源文件是一样的。所以就会报出“会覆盖输入文件”这样的错误。
+
+事实上，我们日常开发使用第三方打包工具比如webpack。编译输出是由ts-loader负责的，所以不必关心每个TS文件的输出。此时可以设置noEmits为true
+
+No Emit -
+Do not emit compiler output files like JavaScript source code, source-maps or declarations.
+This makes room for another tool like Babel, or swc to handle converting the TypeScript file to a file which can run inside a JavaScript environment.
+You can then use TypeScript as a tool for providing editor integration, and as a source code type-checker.
+
+此外还可以指定输出目录，来避免冲突。
+”
