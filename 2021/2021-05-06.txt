@@ -1,0 +1,4 @@
+2021年05月06日，星期四，杭州
+
+公司的gitlab添加了域名。以前是IP直接访问。 https://gitlab.linctex.com/ 
+我添加的 linctex-git.hoxily.com 没用了，可以删除了。
