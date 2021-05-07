@@ -1,0 +1,18 @@
+2021年05月07日，星期五，杭州
+
+产品经理童瑞娜来找我们小组讨论印花的定位线与坐标的时候，我告诉她早就已经有这个功能。结果上平台网站上演示时，发现只有坐标数值，却看不到那两根黄黄的坐标线。
+
+使用小乌龟在log里reset到特定的commit，发现
+
+Revision: 94d1027081f4cdf01f2ea1b5b01b73f838bf7b16
+fix: 部分android Andreno GPU机型正反面错乱bug：http://3d.linctex.com:58080/browse/SC-683
+
+提交以及以前是OK的。而后续跟着的大片辅料功能提交，随机定位一个commit，typescript编译会报错，少了一个花括号。但是当我把花括号加上，它又出现了加载错误。
+
+Revision: a87c0903464ce969955bf2d1438d0a5d49f9cc9d
+fix: simpleAccessory 合并 dev 分支.
+这个分支是默认加载了一个包包，印花坐标线已经消失了。
+
+要不试试比较这两个commit之间的差异吧。
+
+找到原因了。磊哥添加的uniform float blendOpacity 变量没有初始化为1.0。在DecalMaterial的初始化里加上就OK了。
