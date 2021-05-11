@@ -1,0 +1,17 @@
+2021年05月11日，星期二，杭州
+
+通过肉眼定位那个钮扣云渲染颜色不对material id，其实在material数据特别多的情况下是不合适的。
+
+磊哥提出了在Lt3DGUI里加载这个款式，然后使用鼠标点选，打印material id的方案。这个更靠谱一些。
+
+收到罗元雷送的一本书，书名叫《知行，技术人的管理之路》，刘建国著。罗元雷说他已经买过一本，所以公司送的这本就转送给我了。
+
+经过一番排查，定位到非常可疑的语句：
+let userColor = new Color(singleFace.value).toArray();
+
+由于这里的singleFace.value是一个[r,g,b]格式的数组，而THREE.Color的constructor只接受
+1. 0xrrggbb 的整数
+2. "#rrggbb" 的字符串
+3. THREE.Color 对象
+4. r, g, b 三个参数
+所以上面的代码创建出来的userColor对象其实是默认Color，即(1,1,1)，所以造成钮扣的云渲染颜色不对。
