@@ -2,3 +2,7 @@
 
 用c#写了个非常简单的文件、文件夹打包程序。远远没有7zip好用。
 不如去研究一下gltf、glb文件的格式解析？
+
+----
+
+lib_webgl项目的package.json引用了一个老旧的公司git地址，需要更换成最新的gitlab.linctex.com地址才行。另外这个git仓库是WeiChangHua创建的，还需要他添加开发者权限才能访问。
