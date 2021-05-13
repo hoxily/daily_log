@@ -9,3 +9,7 @@ overflow: hidden;
 一哥和磊哥说是浏览器默认样式的padding原因。但是我没法在Styles或Computed里找到html和body元素的padding样式。
 
 不过这个问题并不影响canvas占满整个窗口。
+
+----
+
+如果想删除gitlab上的远程分支，不需要hack般地调用git的指令。可以上https://gitlab.linctex.com/，在project的Repository->Branches下看到远程的所有分支。每个分支最右边有一个红色的垃圾桶按钮，点击它就行了。
