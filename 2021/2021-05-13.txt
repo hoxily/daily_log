@@ -1,0 +1,11 @@
+2021年05月13日，星期四，杭州
+
+在WebEngineLab项目里遇到一个很奇怪的事情。
+
+一个canvas元素添加到document.body里，并且将canvas的宽高、设置成window.innerWidth和window.innerHeight。一开始是会出现滚动条和左侧、上侧的边距。参考webgl-playground项目，给body元素添加
+margin: 0;
+overflow: hidden;
+两个样式，就可以消除了。但是在DevTools的Elements面板的右侧展示的盒子模型里，canvas的父元素body和body的父元素html，它们两个的宽高却是比canvas多了4个像素。
+一哥和磊哥说是浏览器默认样式的padding原因。但是我没法在Styles或Computed里找到html和body元素的padding样式。
+
+不过这个问题并不影响canvas占满整个窗口。
