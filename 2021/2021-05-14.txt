@@ -1,0 +1,12 @@
+2021年05月14日，星期五，杭州
+
+结合Style3DDecalMaterial，分析shader里最终的matrix运算，最后发现印花的纹理呈现的uv坐标为
+
+vec2 uvTex = (uvMatrixNormal * vec3(vUv, 1.0)).xy;
+
+进一步分析发现，本质上就是需要抵消掉构造PatternDecalGeometry时对uv做的变换，这样才能结合_fabricNormalMatrix 计算得用于采样底部面料法线纹理的uv坐标。
+
+原先的代码是尝试通过给旋转角取相反数，构造逆向旋转的rotateMatrix；
+构造逆规一化矩阵。然后把这两个矩阵相乘。但是仅适用于印花宽高1:1的情况。
+
+使用矩阵求逆，可以得到更加彻底的结果。也就不需要给旋转角取相反数了。
