@@ -1,0 +1,52 @@
+2021年05月17日，星期一，杭州
+
+// ScoReader 设置side的代码片段
+material.geoInfo = {
+  part: part == "front" ? GeoPart.front : part == "back" ? GeoPart.back : part == "side" ? GeoPart.side : GeoPart.whole
+};
+if (geometryJson.type == "piping") {
+  material.side = FrontSide;
+} else {
+  switch (material.geoInfo.part) {
+    case GeoPart.whole:
+      material.side = DoubleSide;
+      break;
+    case GeoPart.side:
+    case GeoPart.front:
+      material.side = FrontSide;
+      break;
+    case GeoPart.back:
+      if (BackNeededTypes.includes(geometryJson.type)) {
+        material.side = DoubleSide;
+      } else {
+        material.side = FrontSide;
+      }
+  }
+}
+
+// LtMaterial 根据GeoPart传递面料正、反面属性的代码片段
+apply() {
+  for (let mat of this.materials) {
+    switch (mat.geoInfo.part) {
+      case GeoPart.front:
+        mat.loadInLtMat(this.front, null);
+        break;
+      case GeoPart.back:
+        mat.loadInLtMat(this.back, null);
+        break;
+      case GeoPart.side:
+        mat.loadInLtMat(this.side, null);
+        break;
+      case GeoPart.whole:
+      default:
+        mat.loadInLtMat(this.front, this.back);
+        break;
+    }
+  }
+}
+
+今天遇到Style3D CLOUD问题反馈群里的问题报告模型背面变暗问题。我一开始定位是backAttenuation衰减问题。但是发现它只在sco.json的geometry里定义。进一步对比背面变暗的模型与背面不会变暗的模型，发现它们都设置了backAttenuation。就算没有设置，默认值也是0.5。进一步分析，可以发现backAttenuation只在gl_FrontFacing为false时才起作用。也就是说，出现这种情况说明这个背面变暗的褶皱模型是一个单面三角面片构成的。其geometry只有一份。type为trim，typePart为空。而作为对比的另外三个模型，它们的type为pattern，typePart分front、back、side。最有意思的是，geometry里出现faceCount数量相同的成对的几何体，正好为front、back；
+
+所以这个问题的结论就是，模型如果是薄的（单面三角面构成），这时backAttenuation就开始起作用，背面亮度衰减50%。而如果模型是厚的（成对的front、back三角面构成），这时根本用不上backAttenuation，因为在ScoReader里将THREE.Material.side 设置成了 THREE.Side.Front，仅渲染三角面的正面。也就是不会出现背面亮度衰减的问题。
+
+总而言之，SCO业务上的厚的正面、背面或者薄的面，在网页端渲染做了一个映射处理。从而能正确应用面料的正反面材质。
