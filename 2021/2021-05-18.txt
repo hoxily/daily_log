@@ -1,6 +1,58 @@
 2021年05月18日，星期二，杭州
 
+bug: 加载完成后看不见款式。误以为加载失败。
 分享链接：https://www.style3d.com/product/83559?share_state_id=14720&func=resproduct&is_share_page=1&share_lang=zh-CN
 问题描述：在PC网页端打不开。在手机上可以显示。
 排查经过：在PC上加载时，console面板没有错误输出。等待大量纹理图加载完成，不再有网络请求后，点击菜单上的“一键归位”按钮，可以观查到网页端卡住一段时间，然后该款式正常显示，剩下的拖动交互也没有问题。黄宁海提出假说，可能是保存款式状态时，相机飞了。这也正好可以解释，为什么点击一键归位按钮可以恢复显示。之所以会卡住一段时间，是因为一开始像机看不见款式，也就没有执行render操作，一旦归位，像机看见了款式，那些shader、纹理都需要上传到GPU，所以卡了一段时间。
 解决方案：点击一键归位，重新保存款式状态，然后分享即可。
+疑惑点：为什么同样的分享状态，在手机端可以正常加载并查看。到了PC浏览器端，反而就看不见了呢？
+
+----
+
+bug：全景模块的添加场景模型功能，在特定数据情况下初始化的像机视角不正确。
+复现步骤：
+  1. 开启全景功能：
+    Lt3D.setPanorama(true); 
+  2. 添加场景模型：
+    Lt3D.loadPanoramaEditScene({
+      "id": 11,
+      src: "https://lt3d.oss-cn-hangzhou.aliyuncs.com/Fashion/Company/files/0514/sco.json"
+      type: "sco"
+    });
+  可以观察到加载出来的盒子模型巨大无比，视角处理一个很奇怪的位置，像是处在盒子外面。
+排查经过：经过罗元雷排查，发现是全景的场景模型约束问题。当前代码里写死了像机的position (0, 170, 0)。其中的170可以理解为站在地面上，高于地面1.7m的高度观察场景。由于相机位于水平面的原点位置，一旦场景模型本身的局部坐标系(0, 170, 0) 不是合适的观察点，那么就会出现bug里那样的奇怪画面。虽然我们也可以在模型加载完成后，根据模型的包围盒计算像机的位置。但是依然有很多不确定性。
+解决方案：明确场景模型的约束要求，比如包围盒的长、宽、高，模型的包围盒的最小y坐标是否为固定为地平面，即minY = 0，等。这样的好处是，建模人员在建模软件里调整时，可以有一个固定的相机位置。
+
+----
+
+bug：用户今天使用Style3D Fabric软件以sfab格式上传的驳头扣钮扣辅料，在款式设计中应用该辅料发现背景为黑色而不是透明。
+分享链接：https://www.style3d.com/style/100127?share_state_id=32618&func=wswpmyproduct&is_share_page=0&share_lang=zh-CN
+排查经过：
+  首先下载该贴图，是一个png文件，在GIMP里打开，背景确实是透明的像素(0, 0, 0, 0)。
+  复制该UserProduct数据到本地Lt3DGUI测试环境，定位该LtMaterial，可以发现它使用了ThreeMaterial老材质渲染的。修改该材质的shader代码，令gl_FragColor输出结果为(1.0, 0.0, 0.0, 0.0)，结果依然不正确。可以观察到该ThreeMaterial的transparent属性为false。理论上它应该是true才能正确渲染。
+  碧落使用客户的账号登录平台，在辅料库里找到该钮扣，进入编辑页面，加载3D模型预览是正常的。点击下载模型，得到一个sfab文件。碧落将这个sfab文件发给了我。我在我的电脑上解包这个sfab文件，查看其中的fabric.json文件，可以看到其isTransparent属性确实是false。
+  将碧落传来的sfab文件在Style3D Fabric软件中打开，并导出为新的sfab文件。解包查看fabric.json，可以发现其isTransparent标记是正确的true值。
+  对于Lt3D的代码，一个THREE.Material.transparent属性是否为true，是如下的规则：
+  // LtMaterialSingle.makeByJson函数:
+  ...
+  // 判断透明
+  if (
+    /png/i.test(json.baseColor.texture && json.baseColor.texture.path && json.baseColor.texture.path.split(".").pop()) ||
+    (json.alpha && json.alpha.texture && json.alpha.texture.path) ||
+    (json.alpha && json.alpha.value < 1)
+  ) {
+    if (json.hasOwnProperty("isTransparent")) {
+      singleMat.isTransparent = json.isTransparent;
+    } else {
+      singleMat.isTransparent = true;
+    }
+  } else {
+    singleMat.isTransparent = false;
+  }
+  ...
+  可以看到，虽然检查了url中的文件扩展名确实为png，但是在内部优先遵守renderConfig里的isTransparent字段。去除json.hasOwnProperty("isTransparent")判定，该钮扣确实能正常显示了。但是老代码没道理突然坏掉，还是得查查真正的原因。
+  报告给骆盼盼，她让我转给田唐昊。昊哥看了一眼里面的fabric.json，发现是挤在一起的json，而不是正常优雅缩进的格式的json，于是提醒我可能是在平台上被修改过。
+  我把这个二次导出的sfab上传到了2020账号下的辅料库。后面找到郑强协助，他操作了一遍辅料编辑页，查看了DevTools的网络请求。发现加载3D模型时，使用的材质其实是原始的sfab文件。里面的数据确实是对的。而点击下载模型按钮，下载来的sfab数据,isTransparent属性是不对的。
+  问题进一步转给了吴嘉烽。
+解决方案：吴嘉烽修复了这个bug。但是已经保存到UserProduct里的辅料的renderConfig数据还是老的。需要客户重置款式，重新修改驳头扣，重新保存款式。
+总结：出现问题，不要立即去修改Lt3D的代码。还需要排查一下其他因素。代码之所以这么写，并且一直以来都没有出错，是有历史原因的。
