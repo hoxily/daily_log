@@ -1,1 +1,11 @@
 2021年05月20日，星期四，杭州
+
+接口 async loadPanoramaEditScene(sceneInfo: INTERFACE.PanoramaEditSceneInfo, progressReport?: (arg0: number) => any)
+的progress很有问题。里面有三种类型的东西允许加载。但是其中的progress报告却有两种模式。
+1. 每次回调时，传递一个进度的增量值，调用方自己去累积进度；
+2. 每次回调时，传递一个0.0 ~ 1.0 的进度指标；
+简直绝了。
+感觉progressReport这里可以统一下。不然前端用起来没有一个统一性。
+另外则是跟杨雅茹交流时，发现她根本看不到我们这边typescript那样的函数类型提示，所有的东西都是any。问她有没有api文档，她也说没有。
+完全可以针对Lt3D的接口，写一个文档注释，然后在build时自动生成.d.ts声明文件给前端开发者使用。
+如果说短时间来不及调整，保留这两种progress更新模式也可以，但是在Lt3D的接口声明上，最好能用type关键词，明确区分出两种progress回调模式。这样对看代码的人也是一种提示。
