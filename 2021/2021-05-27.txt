@@ -1,1 +1,24 @@
 2021年05月27日，星期四，杭州
+
+早上02:42，收到了许允辽的面料sfab文件，名叫 TP02066.sfab。
+才发现，原来他请了长假，05/24~06/07，差不多15天，难道是陪产假？
+将localhost测试效果与线上的效果截图发给了们。看起来没有异议。那应该是OK了。
+
+----
+
+http://3d.linctex.com:53084/public/style/18752?func=desdpskproduct
+这是一个vstithcer导出的glb模型。上传到平台会先经历一个glb转sco的过程。
+实时渲染的效果看起来没有问题。但是在线渲染（云渲染）的结果有问题。能看出基本颜色，但是感觉像是变成了点点构成的表面。而且那几个黑色的拉链头完全看不见了，只有银色的那个拉链头还能看出来。看起来就像是打了码一样。像是实体广告印刷的像素点，因为DPI太过稀疏而透露出底部的白底。
+
+无论如何，平台的云渲染代码里也不可能去处理纹理图像。所以更像是云渲染的参数出问题了，或者云渲染哪里出错了。
+
+检查了一下生成的scr.json，里面的renderConfig.front.baseColor.texture的宽与高都是0. 如果把它当作一个很小的值的话，那么就相当于在geometry上重复很多很多遍。而vstitcher导出的glb数据特点就是版片的纹理含有大块的空白，也就是白底，版片真正用上的区域只有一小块。如果云渲染真的按照很小的宽高来计算，将会得到很大的平铺数。也就会呈现出那种像素点构成的感觉。
+
+有3种方案解决这个问题：
+1. 平台在生成scr时，生成baseColor.texture的正确的width与height；
+2. 让云渲染支持baseColor.texture的宽与高为0的特例；
+3. 在Glb2Sco里，正确生成baseColor.texture的width与height（但是用户已经上传到平台的数据改不过来了。）；
+
+1与3需要处理一个Geometry:Material 多对一的问题。
+在Style3DMaterial里，一个Style3DMaterial对应一个Geometry，所以有各自的matInfo.uvSize数据。当遇到renderConfig里的baseColor.texture的宽与高为0时，会使用matInfo.uvSize作为除数，即想办法得到一个uvScale为1的值。
+一旦决定在生成scr时，调整某个material的baseColor.texture的宽与高设置为geometry.uvSize，那么就需要将Material做复制拆分。因为同时使用这个Material的geometry，它们各自的uvSize不一定相等。
