@@ -1,0 +1,22 @@
+2021年05月28日，星期五，杭州
+
+遇到很奇怪的事情。昨天发现公司的网很卡。访问钉钉的工作台里的OA系统，加载网页出错很多次都加载不出来。换成手机也是一样的。当把手机的wifi切换成4g网时，加载就没有问题。于是尝试了更换dns 114.114.114.114 和 8.8.8.8，并且执行了 ipconfig /renew 重新获取dhcp配置。钉钉也重新启动了，但是还是卡，网页加载很困难。
+
+因为prepublish里的绒类面料侧面光效果已经发到线上，于是将许允辽提供的sfab面料上传到线上的测试账号2020，尝试看看效果。但是很奇怪的是，访问 https://www.style3d.com/public/fabric/493469?func=resfabric 时Remote Address为47.242.255.100，这个地址是美国加利福尼亚圣克拉拉阿里巴巴。从而后续对OSS的请求都变成了file-de.style3d.com，而不是file.style3d.com，导致下载资源时候，速度很慢。
+
+换成firefox是正常的。关掉msedge，重新打开该网页，访问的IP地址正常了。
+
+公司有线网在某些情况下会出bug。全贺菁建议连接 HZ Linctex Wifi，这个无线网不带翻墙。但是我用的是有线网，怎么才能连接无线网？
+
+有意思的是，请求 file-de.style3d.com 时看到的绒类材质效果还是老的。但是请求 file.style3d.com 时看到的绒类材质效果是最近同步的绒类侧面光加载效果。看起来外国用户看到的网站内容会比国内晚一些。
+
+----
+
+本以为在loadUserProduct调用之前，给LtCache.addJson存入一个我想要让它生效的json数据。结果发现并不生效。总是发起了网络请求，而没有使用我提供的json数据。仔细检查了url地址，甚至直接复制userProduct里的ClothInfo的src地址也不行。
+仔细想了一下，估计是loadUserProduct函数里面对LtCache缓存做的清理。我存进去的东西又被清理掉了。
+
+那么对LtCache动手脚的方案是不行。难道要对网络请求动手脚？要不直接把sco.json数据拼接到ClothInfo.data上去吧。
+
+----
+
+写TransparentRenderOrderMapper工具类，对depth3DOrder进行重新映射，以满足TransparentRenderOrder枚举定义的排序值。在区间长度无效时，返回了0.但这不是一个正确的值。而应该返回TransparentRenderOrder.GraphicTypeGeometry才对。思考还需要再仔细一些呀。
