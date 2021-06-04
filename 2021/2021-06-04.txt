@@ -7,3 +7,42 @@
 想给htpc机器安装一个vncserver，参照这篇 https://wiki.archlinux.org/title/TigerVNC#Initial_setup 成功启动了service，VNC Viewer也能正常连接，但是看到的画面是全黑的，只有一个鼠标光标可以移动。
 
 搜索之后发现，tiger vnc有一个限制说明（参见 https://src.fedoraproject.org/rpms/tigervnc//blob/rawhide/f/HOWTO.md ），就是当 hoxily 用户已经登录进一个图形会话后，就不能再使用 tigervnc server开启一个新的会话了。应该是上次我设置成 hoxily 自动登录桌面的缘故。
+
+继续搜索，在 https://github.com/TigerVNC/tigervnc/issues/1240 上找到一个人有类似的问题。下面的回答提到vncserver是用于没有显示器的情况下，完全控制一个server的多人共享屏幕。如果想控制已经登录的屏幕，那么需要使用x0vncserver，也就是wiki上紧跟着的这一小节 https://wiki.archlinux.org/title/TigerVNC#Running_x0vncserver_to_directly_control_the_local_display 。
+
+虽然能成功运行，但是太卡了。比连接macos还卡。这可是1000M的局域网连接啊！
+
+----
+
+使用苏聪俊提供的水洗牛仔裤工程，测试发现ceilPowerOfTwo并不是万能的。还需要考虑到缩放前的宽高比跟缩放后的宽高比之间的比值是否接近1.0。越接近1.0，就越不会出现摩尔纹。
+
+比如一张 411x533 大小的水洗图案，它表面能看出斜向的条纹纹路。如果是之前使用nearestPowerOfTwo的方式，就会得到 512x512 大小，高度方向被缩小了，损失了信息，看起来会模糊一些。
+如果是ceilPowerOfTwo的方式，会得到 512x1024 大小，虽然两个方向都是放大，但是高度方向放大的倍数远大于宽度方向，虽然不模糊，但是会观察到很明显的摩尔纹。
+可以用GIMP，用线性方式缩放图像就能观察到。
+
+如果综合考虑信息损失问题和摩尔纹问题，那么就相同时满足两个条件：
+1. ceilPowerOfTwo，总是向上放大；
+2. 如果宽高比剧烈变化，那么需要放大较小的那一个方向，使其宽高比与原来基本一致；
+
+用算法来描述就是，
+1. 找出width 与height中的较大者 max;
+2. 假如是width较大，那么求取 newWidth = ceilPowerOfTwo(width); scale = newWidth / width;
+3. newHeight = ceilPowerOfTwo(scale * height);
+
+上面这个算法对于 257x513 不成立。解释如下：
+height更大，513;
+因为height是较大者，于是求取 newHeight = 1024; scale = 1024 / 513;
+newWidth = ceilPowerOfTwo(1024 / 513 * 257) = 1024;
+显然，宽度放大的倍数过大了。合适的放大后宽度应该是 512 ，而不是1024；
+
+这说明上面的算法有bug。
+可以换成这样：
+1. 找出width 与 height中的较大者；
+2. 假如width较大，那么求取 newWidth = ceilPowerOfTwo(width);
+3. 记 ch = ceilPowerOfTwo(height)，列出目标高度的候选列表： [ch, ch * 2, ch * 4, ch * 8, ..., newWidth];
+4. 迭代高度候选列表，找出 deltaScale = abs(newWidth / newHeight - width / height) 最小的那一个，也就是宽高比最接近原始宽高比的那一项。
+
+这个算法会遇到一个问题：
+当宽高中的较大者已经是powerOfTwo时，而较小者不是powerOfTwo，这时最优解可能需要进一步放大较大者。
+
+可以写一个函数，把计算bestPotSize的算法包进去，传入w,h,maxTextureSize。输出(w',h')。
