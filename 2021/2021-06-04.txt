@@ -1,0 +1,9 @@
+2021年06月04日，星期五，杭州
+
+昨天提到的安装windows 10提示缺少介质驱动程序，安装不能继续进行。其原因看起来是U盘的缘故。当换成很老的toshiba u盘时，它就能正常进行安装。
+
+----
+
+想给htpc机器安装一个vncserver，参照这篇 https://wiki.archlinux.org/title/TigerVNC#Initial_setup 成功启动了service，VNC Viewer也能正常连接，但是看到的画面是全黑的，只有一个鼠标光标可以移动。
+
+搜索之后发现，tiger vnc有一个限制说明（参见 https://src.fedoraproject.org/rpms/tigervnc//blob/rawhide/f/HOWTO.md ），就是当 hoxily 用户已经登录进一个图形会话后，就不能再使用 tigervnc server开启一个新的会话了。应该是上次我设置成 hoxily 自动登录桌面的缘故。
