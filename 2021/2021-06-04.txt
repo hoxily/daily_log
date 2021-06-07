@@ -44,5 +44,6 @@ newWidth = ceilPowerOfTwo(1024 / 513 * 257) = 1024;
 
 这个算法会遇到一个问题：
 当宽高中的较大者已经是powerOfTwo时，而较小者不是powerOfTwo，这时最优解可能需要进一步放大较大者。
+补充，当宽高中的较大者不是powerOfTwo时，而较小者也不是powerOfTwo，这时最优解有可能要求对较大者放大两次。比如宽高为(33,511)这样的值时，先找出了512作为newHeight，但是cw起始就是64，高度上的放大倍数是与宽度上不匹配的。这时，deltaScale想要最小，需要将高度再放大一倍，也就是最终结果为(64, 1024)；
 
 可以写一个函数，把计算bestPotSize的算法包进去，传入w,h,maxTextureSize。输出(w',h')。
