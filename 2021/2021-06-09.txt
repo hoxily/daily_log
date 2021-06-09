@@ -1,1 +1,18 @@
 2021年06月09日，星期三，杭州
+
+当遇到如下的代码结构的时候，VisualStudio调试会无法在断点停下来：
+
+(无断点)  if (Win32ApiReturnBoolValue(...))
+(无断点)  {
+(有断点)    if (buffer)
+(无断点)    {
+(无断点)
+(无断点)    }
+(无断点)  }
+
+这里的 if (buffer) 判定会停不下来。让我误以为这个windows api调用出错了。为了能让断点停下来，可以给if的body加一个log输出，就能停下来了。
+
+----
+
+https://www.tapd.cn/37349361/bugtrace/bugs/view?bug_id=1137349361001013366 罗元雷转了一个bug给我。向下定位问题时候，发现是 CoLoader.createDrc 没有回调传入的callback函数。继续往里面跟踪，就发现了一堆静态类，比如 DecodeQueue、LtDRACODecoder等。
+显然在new Lt3D或者 Lt3D.dispose时没有很好地清理这些类的状态导致的bug。具体在哪里还没找到。但是感觉静态类不是一个好主意。也就是一方面使用了很多静态类。另一方面最外层的Lt3D却又允许创建多个实例。
