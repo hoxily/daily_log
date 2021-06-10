@@ -1,1 +1,8 @@
 2021年06月10日，星期四，杭州
+
+当把lib_webgl嵌入lt_style_front项目之后，已经是typescript编译后的代码。不方便进一步调试。
+其实完全可以把lt_style_front运行时调用Lt3D函数的数据抓下来，在lib_webgl这边自己模拟即可。
+
+这样干，真的复现了。
+
+看着罗元雷写的 engine/parse 的代码，好想重构一下。太绕了。当时写PngDecode功能的时候就感觉很复杂。
