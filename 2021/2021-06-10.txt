@@ -6,3 +6,11 @@
 这样干，真的复现了。
 
 看着罗元雷写的 engine/parse 的代码，好想重构一下。太绕了。当时写PngDecode功能的时候就感觉很复杂。
+
+----
+
+test eax, eax
+jl loc_xxxx
+
+test加jl的组合表示的是如果符号位为1，则跳转。也就是检测 eax 是否小于 0.
+参见 https://stackoverflow.com/questions/10855296/jl-after-test-in-assembly
