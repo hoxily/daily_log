@@ -1,0 +1,15 @@
+2021年06月14日，星期一，杭州
+
+原来d2loader.exe 还支持从配置文件里读取命令行参数。
+比如以前写的 d2loader -w -direct -locale chi，可以拆成
+
+d2loader -cfg d2loader.cfg
+
+然后在d2loader.cfg文件里写入
+
+-w
+-direct
+-locale chi
+
+----
+
