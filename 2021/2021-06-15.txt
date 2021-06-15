@@ -1,1 +1,16 @@
 2021年06月15日，星期二，杭州
+
+lib_webgl项目里出现了setTimeout函数的返回值被typescript解析为NodeJS.Timeout。但是实际上Web DOM环境下的API其实是返回一个number。
+
+从lib_webgl项目的运行环境来说，其实是真正引用的是web上的setTimeout，而不是nodejs的setTimeout。
+感觉可以在tsconfig.json里做一个配置。
+
+除了这个问题，还有混用nodejs的Buffer这个类的问题。在Chrome环境下，Buffer这个类型根本不存在。
+但是lib_webgl却可以编译通过。这说明当前的webpack配置了什么东西。可以兼容模拟nodejs的一个部分类型。
+
+尝试在tsconfig.json里添加 compilerOptions.types 数组，但是并没有效果。
+
+----
+
+虽然没有办法在tsconfig.json中做配置，来达到剔除nodejs的类型。但是可以归纳总结一下Buffer、NodeJS.Timeout，fs.readFileSync等东西在web上的兼容性测试结果。以做到避开滥用nodejs api的目的。
+出错时，typescript编译并不会报错。而是在web浏览器上运行时才会报错。
