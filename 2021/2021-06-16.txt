@@ -1,3 +1,16 @@
 2021年06月16日，星期三，杭州
 
 参照这篇指导文章 https://www.unrealengine.com/zh-CN/ue4-on-github ，将epic账号与github关联起来以后，就能加入github上的EpicGames组织，看到UnrealEngine源代码。
+
+----
+
+通过给 MTLLoader 添加 .d.ts 类型约束，在 Obj2scoOperator 里找到了一处拼写错误。将 offset 写成了 offest。
+
+----
+
+使用 @microsoft/api-extractor 以及 @microsoft/api-documenter 成功自动化生成了API文档。
+只需要在类型、函数、字段添加特殊的文档注释标记即可。
+
+另外，在Lt3D里需要将外界需要用到的类型都进行export，否则生成的文档里只有Lt3D这个类型。
+
+详细使用方法参考官方文档：https://api-extractor.com/
