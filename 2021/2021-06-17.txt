@@ -18,3 +18,14 @@ fs.stats函数返回的Stats对象有一个isDirectory函数，但是我以为�
 ----
 
 Array.concat 会返回一个新的拼接结果，原数组保持不变。所以如果想得到拼接结果，需要重新赋值一下，让变量指向这个新生成的数组。
+
+----
+
+尝试删除之前备份到macbookpro上的shared文件夹，然后发现filezilla报了一些错误，一些文件无法删除。原来是macos有一种Lock机制。在给文件或者目录上锁后，就不能再改动它们，以免误删珍贵的资料。
+可以使用
+chflags -R nouchg <directory-name>
+来解除uchg锁定标志。
+
+奇怪的是，我应该没有特意去锁定里面的这些文件。怎么会被自动上锁的？
+
+https://ss64.com/osx/chflags.html
