@@ -3,3 +3,18 @@
 我想到一个不用弄脏src目录的办法了。
 
 只需要在outDir设置为dist的同时，追加一个保留原始目录结构地复制src下的.d.ts文件即可。这样就不用在 src 下的ts源代码边上生成。
+
+----
+
+之前做 build_wrapper 就写了一个很复杂的script命令。如果我想用ts写devtools，意味着我每次执行这个ts之前，需要将它编译为js，然后交给nodejs执行。
+那么可以写一个tsloader，让tsloader去加载执行devtools目录下的ts工具类。然后在package script里启动 tsloader。妙啊。
+
+果然可行。这下src目录干净了。
+
+----
+
+fs.stats函数返回的Stats对象有一个isDirectory函数，但是我以为是boolean属性，没有以函数调用的形式访问它，结果 javascript 的 if (someFunctionName) 判断永远断定为true，因为这个函数对象存在。比较神奇是，这种情况下，typescript并没有给出任何警告提示。查了半天，才发现调用姿势不正确。
+
+----
+
+Array.concat 会返回一个新的拼接结果，原数组保持不变。所以如果想得到拼接结果，需要重新赋值一下，让变量指向这个新生成的数组。
