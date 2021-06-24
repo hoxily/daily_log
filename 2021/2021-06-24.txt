@@ -1,0 +1,10 @@
+2021年06月24日，星期四，杭州
+
+今天早上起来，头已经不疼了。开始能感觉到左臂打针的部位疼。
+
+----
+
+为了修这个bug：https://www.tapd.cn/37349361/bugtrace/bugs/view?bug_id=1137349361001013541
+我在 Gltf2scoOperator 里找到了越来越多的bug代码。
+
+transparent类型的材质如果用opaque方式渲染，就有可能看到黑色的效果。总是正常不是黑色的地方出现了黑色，先排除一下是不是没有正确开启transparent渲染。
