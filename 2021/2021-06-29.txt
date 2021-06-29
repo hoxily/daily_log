@@ -1,2 +1,20 @@
 2021年06月29日，星期二，杭州
 
+ISO C99 和 ISO C++11 开始支持 __func__ 预定义的标识符。这是一个没有命名空间限定的、没有名称矫正的名字，它是当前所处函数的局部的static const修饰的char数组。
+参见 https://docs.microsoft.com/en-us/cpp/preprocessor/predefined-macros?view=msvc-160#standard-predefined-identifier
+
+利用这个标识符可以更加方便地打印log，而不需要麻烦地把函数名重复很多遍。
+
+----
+
+想到一个让伪 d2loader.exe 链接上 storm.dll 的笨办法了。这样可以不用GetProcAddress来取函数指针。而是直接集成在PE的导入表里。可以与原始的 d2loader.exe 保持一致。
+具体做法就是造一个storm.dll 工程，用 ordinal 方式导出一些函数，对应于原始 d2loader.exe 导入的函数。这个storm.dll工程就能生成假的storm.dll以及.lib文件，就可以用来链接dll了。等到实际运行的时候，再把假storm.dll换成真storm.dll，妙啊！
+
+遇到一个暂时无法理解的东西：
+mov eax, fs:30h
+
+还有则是有一些函数，函数体里面有许多连续的nop指令，不知道干什么用的。
+还有一个函数，进入的时候，用的call指令。但是该函数体内部却不是ret出来，是直接jmp出来，跳到了另一个函数的中间部位。导致该函数末尾出现 sp-analysis fail.
+看得头晕也没看懂。
+
+需要休息一下。指不定哪天突然想通了。
