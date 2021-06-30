@@ -1,0 +1,26 @@
+2021年06月30日，星期三，杭州
+
+经过代码执行逻辑分析以及IDA动态调试验证，那个以jmp方式返回的函数确实是能正常正常工作的。只是log输出的时候，执行了2遍而已。我们把这个问题简化一下，就是如下所示的调用函数以及被调用函数：
+
+functionA:
+  call functionB
+onBeforeTest:
+  test eax, eax
+  jnz onOk
+  ...; log 输出错误信息
+  xor eax, eax
+  retn
+onOk:
+  ...; functionB返回非零时的处理
+  retn
+
+functionB:
+  pusha
+  ...; 执行一些操作
+  popa
+  jmp onBeforeTest
+
+如果functionB只被functionA在固定的位置使用，那么functionB结尾的jmp onBeforeTest指令就是有意义的。可以认为functionB依附于functionA。
+当functionB的返回值为0时，首先输出一遍错误信息日志。retn指令返回的是刚刚call functionB存入栈里的onBeforeTest地址。相当于再次执行一遍返回值测试。于是再次输出一遍错误信息日志。最后执行retn，这时栈里的返回值已经正常，就是调用functionA时的返回地址。functionA函数正常结束。
+
+怀疑functionB是具有特殊属性的函数。比如inline。但是暂时没法验证。
