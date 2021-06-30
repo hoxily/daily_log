@@ -24,3 +24,11 @@ functionB:
 当functionB的返回值为0时，首先输出一遍错误信息日志。retn指令返回的是刚刚call functionB存入栈里的onBeforeTest地址。相当于再次执行一遍返回值测试。于是再次输出一遍错误信息日志。最后执行retn，这时栈里的返回值已经正常，就是调用functionA时的返回地址。functionA函数正常结束。
 
 怀疑functionB是具有特殊属性的函数。比如inline。但是暂时没法验证。
+
+----
+
+尝试了一下罗元雷所说的android端的opengles以及vulkan，用了google的samples工程，跑起来没问题的。
+配置android studio的时反而遇到了点麻烦。本来以为android ndk需要单独安装。结果先安装了ndk，再装android studio，发现android studio并不能识别之前安装的ndk，必需要在android studio的sdk设置里安装的ndk才行。另外包括cmake都是sdk设置里包办了。
+打开工程的时候，除了gradle sync时下载多次出错，耐心地多试几次，总会下载下来的。
+
+vulkan要求android 7.0，我的华为荣耀7只有6.0，弄不了。但是可以跑OpenGLES 2.0 和 OpenGLES 3.0.
