@@ -1,2 +1,17 @@
 2021年07月01日，星期四，杭州
 
+从骆盼盼那里借到一个iPad。正好缺个iPad测试。
+
+凭着记忆摸iPad项目的工程代码。最后在xcode 编译的时候报错了。如下三个错误：
+
+Cannot initialize a parameter of type 'NSArray<id<RCTBridgeModule>> *' with an rvalue of type 'NSArray<Class> *'
+Cannot initialize a parameter of type 'NSArray<Class> *' with an lvalue of 'NSArray<id<RCTBridgeModule>> *__strong'
+Cannot initialize a parameter of type 'NSArray<id<RCTBridgeModule>> *' with an lvalue of type 'NSArray<Class> *__strong'
+
+在网上找到一个解决方案 https://blog.csdn.net/sinat_31057219/article/details/116304386 ，里面借助CocoaPods的脚本，自动替换 node_modules 下的两个文件。
+
+----
+
+在全贺菁的指导，修好pod install，然后发现xcode里的build按钮不能点击了。提示lt_sukuan_hd这个scheme没有targets。图标的样式也变成了一个齿轮的样子。奇怪。
+
+算了。晚点再修。
